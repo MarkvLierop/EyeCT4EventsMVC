@@ -14,7 +14,14 @@ namespace EyeCT4EventsMVC.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.AlleMedia = rsms.AlleMediaOpvragen();
+            try
+            {
+                ViewBag.AlleMedia = rsms.AlleMediaOpvragen();
+            }
+            catch (Exception e)
+            {
+                ViewBag.Error = e.Message;
+            }
             return View();
         }
 
