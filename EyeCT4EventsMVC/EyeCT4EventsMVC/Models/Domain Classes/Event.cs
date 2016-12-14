@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EyeCT4EventsMVC.Models.Persistencies;
+using EyeCT4EventsMVC.Models.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,10 +14,26 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         public DateTime DatumVan { get; set; }
         public int ID { get; set; }
         public string Locatie { get; set; }
+        public int LocatieID { get; set; }
         public string Titel { get; set; }
-        
+        private RepositoryEvent RepoEvent;
         public Event()
         {
+        }
+
+        public Event(int locatieID, DateTime datumVan, DateTime datumTot, string titel, string beschrijving)
+        {
+            LocatieID = locatieID;
+            DatumVan = datumVan;
+            DatumTot = datumTot;
+            Titel = titel;
+            Beschrijving = beschrijving;
+        }
+
+        public Event EventAanmaken(Event events)
+        {
+            RepoEvent = new RepositoryEvent(new MSSQLEvent());
+            return RepoEvent.EventAanmaken(events);
         }
 
         public string GetEventData()
