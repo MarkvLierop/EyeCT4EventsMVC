@@ -135,11 +135,12 @@
     <Content Include="Views\Reservering\Registreren.cshtml" />
     <Content Include="Views\Reservering\Reservering.cshtml" />
     <Content Include="Views\Shared\_NoHeaderLayout.cshtml" />
-    <Content Include="Views\SocialMedia\Index.cshtml" />
+    <Content Include="Views\SocialMedia\SocialMedia.cshtml" />
     <Content Include="Views\SocialMedia\PlaatsReactie.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\GebruikerController.cs" />
     <Compile Include="Controllers\ReserveringController.cs" />
     <Compile Include="Controllers\SocialMediaController.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Models\Domain Classes\Gebruikers\Gebruiker.cs" />
     <Compile Include="Models\Domain Classes\Gebruikers\Medewerker.cs" />
     <Compile Include="Models\Domain Classes\Kampeerplaats.cs" />
+    <Compile Include="Models\Domain Classes\Locatie.cs" />
     <Compile Include="Models\Domain Classes\Materiaal.cs" />
     <Compile Include="Models\Domain Classes\Media.cs" />
     <Compile Include="Models\Domain Classes\Reactie.cs" />
@@ -163,18 +165,24 @@
     <Compile Include="Models\Exceptions\FoutBijUitvoerenQueryException.cs" />
     <Compile Include="Models\Exceptions\NoDatabaseConnectionException.cs" />
     <Compile Include="Models\Interfaces\IActiveDirectory.cs" />
+    <Compile Include="Models\Interfaces\IEvent.cs" />
     <Compile Include="Models\Interfaces\IGebruikerAdministratie.cs" />
     <Compile Include="Models\Interfaces\IKampeerplaats.cs" />
+    <Compile Include="Models\Interfaces\ILocatie.cs" />
     <Compile Include="Models\Interfaces\IMateriaal.cs" />
     <Compile Include="Models\Interfaces\ISocialMediaSharing.cs" />
     <Compile Include="Models\Persistencies\ActiveDirectory.cs" />
+    <Compile Include="Models\Persistencies\MSSQLEvent.cs" />
     <Compile Include="Models\Persistencies\MSSQLGebruiker.cs" />
+    <Compile Include="Models\Persistencies\MSSQLLocatie.cs" />
     <Compile Include="Models\Persistencies\MSSQLReserveren.cs" />
     <Compile Include="Models\Persistencies\MSSQLServer.cs" />
     <Compile Include="Models\Persistencies\MSSQLSocialMediaSharing.cs" />
     <Compile Include="Models\Repositories\RepositoryActiveDirectory.cs" />
+    <Compile Include="Models\Repositories\RepositoryEvent.cs" />
     <Compile Include="Models\Repositories\RepositoryGebruiker.cs" />
     <Compile Include="Models\Repositories\RepositoryKampeerPlaatsen.cs" />
+    <Compile Include="Models\Repositories\RepositoryLocatie.cs" />
     <Compile Include="Models\Repositories\RepositoryMateriaal.cs" />
     <Compile Include="Models\Repositories\RepositorySocialMediaSharing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -192,6 +200,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
+<<<<<<< HEAD
+    <Content Include="Views\SocialMedia\CategorieToevoegen.cshtml" />
+=======
+    <Content Include="Views\Event\Aanmaken.cshtml" />
+    <Content Include="Views\Event\AlleEvents.cshtml" />
+>>>>>>> 5610e0993b5759c6157bb6274004978b921c246d
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

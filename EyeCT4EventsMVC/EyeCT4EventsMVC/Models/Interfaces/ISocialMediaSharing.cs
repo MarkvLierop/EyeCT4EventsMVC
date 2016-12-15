@@ -12,7 +12,7 @@ namespace EyeCT4EventsMVC.Models.Interfaces
         Categorie[] AlleCategorienOpvragen();
         List<Media> AlleMediaOpvragen();
         List<Media> AlleGerapporteerdeMediaOpvragen();
-        List<Reactie> AlleReactiesOpvragen();
+        List<Reactie> AlleReactiesOpvragen(Media media);
         List<Event> AlleEventsOpvragen();
         void ToevoegenCategorie(Categorie cat);
         void ToevoegenEvent(Event ev);

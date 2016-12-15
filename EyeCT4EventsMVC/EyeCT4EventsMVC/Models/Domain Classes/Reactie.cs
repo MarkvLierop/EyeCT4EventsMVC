@@ -36,5 +36,9 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         {
             return "Geplaatst Door: " + rg.GetGebruikerByID(GeplaatstDoor).ToString() + " | Reactie: " + Inhoud;
         }
+        public string GeplaatstDoorGebruiker()
+        {
+            return rg.GetGebruikerByID(GeplaatstDoor).ToString();
+        }
     }
 }

@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 ﻿// <copyright file="Event.cs" company="Unitech">
 //     Company copyright tag.
 // </copyright>
+=======
+﻿using EyeCT4EventsMVC.Models.Persistencies;
+using EyeCT4EventsMVC.Models.Repositories;
+>>>>>>> f127336da0b3b241a4f71e24e5bcb7003423822c
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +15,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
 {
     public class Event
     {
+        public string LocatieNaam { get; set; }
         public string Beschrijving { get; set; }
 
         public DateTime DatumTot { get; set; }
@@ -19,11 +25,54 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         public int ID { get; set; }
 
         public string Locatie { get; set; }
+<<<<<<< HEAD
 
         public string Titel { get; set; }
 
+=======
+        public int LocatieID { get; set; }
+        public string Titel { get; set; }
+        private RepositoryEvent RepoEvent;
+>>>>>>> f127336da0b3b241a4f71e24e5bcb7003423822c
         public Event()
         {
+        }
+
+        public Event(int locatieID, DateTime datumVan, DateTime datumTot, string titel, string beschrijving)
+        {
+            LocatieID = locatieID;
+            DatumVan = datumVan;
+            DatumTot = datumTot;
+            Titel = titel;
+            Beschrijving = beschrijving;
+        }
+
+        public Event(int id,string locatieNaam, DateTime datumVan, DateTime datumTot, string titel, string beschrijving)
+        {
+            ID = id;
+            LocatieNaam = locatieNaam;
+            DatumVan = datumVan;
+            DatumTot = datumTot;
+            Titel = titel;
+            Beschrijving = beschrijving;
+        }
+
+        public void EventAanmaken(Event events)
+        {
+            RepoEvent = new RepositoryEvent(new MSSQLEvent());
+            RepoEvent.EventAanmaken(events);
+        }
+
+        public List<Event> AlleEvents()
+        {
+            RepoEvent = new RepositoryEvent(new MSSQLEvent());
+            return RepoEvent.AlleEvents();
+        }
+
+        public void EventVerwijderen(int EventID)
+        {
+            RepoEvent = new RepositoryEvent(new MSSQLEvent());
+            RepoEvent.EventVerwijderen(EventID);
         }
 
         public string GetEventData()
