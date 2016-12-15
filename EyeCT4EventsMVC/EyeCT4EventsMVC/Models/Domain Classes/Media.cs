@@ -31,17 +31,12 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         public string Pad { get; set; }
 
         public string Beschrijving { get; set; }
-
-<<<<<<< HEAD
-        Repositories.RepositorySocialMediaSharing smsr;
-        Repositories.RepositoryGebruiker rg;
-
-=======
+        
         private readonly List<Reactie> reacties = new List<Reactie>();
 
         RepositorySocialMediaSharing smsr;
         RepositoryGebruiker rg;
->>>>>>> f127336da0b3b241a4f71e24e5bcb7003423822c
+
         public Media()
         {
             smsr = new RepositorySocialMediaSharing(new MSSQLSocialMediaSharing());
