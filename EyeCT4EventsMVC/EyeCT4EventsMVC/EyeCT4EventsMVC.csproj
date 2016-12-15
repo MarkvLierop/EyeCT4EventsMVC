@@ -135,7 +135,7 @@
     <Content Include="Views\Reservering\Registreren.cshtml" />
     <Content Include="Views\Reservering\Reservering.cshtml" />
     <Content Include="Views\Shared\_NoHeaderLayout.cshtml" />
-    <Content Include="Views\SocialMedia\SocialMedia.cshtml" />
+    <Content Include="Views\SocialMedia\Index.cshtml" />
     <Content Include="Views\SocialMedia\PlaatsReactie.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -200,12 +200,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
-<<<<<<< HEAD
-    <Content Include="Views\SocialMedia\CategorieToevoegen.cshtml" />
-=======
     <Content Include="Views\Event\Aanmaken.cshtml" />
     <Content Include="Views\Event\AlleEvents.cshtml" />
->>>>>>> 5610e0993b5759c6157bb6274004978b921c246d
+    <Content Include="Views\Gebruiker\BeheerderAanmaken.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
