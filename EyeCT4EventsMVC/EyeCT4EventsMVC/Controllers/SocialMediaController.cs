@@ -29,5 +29,10 @@ namespace EyeCT4EventsMVC.Controllers
         {
             return View();
         }
+
+        public ActionResult GerapporteerdeMedia()
+        {
+            return View();
+        }
     }
 }

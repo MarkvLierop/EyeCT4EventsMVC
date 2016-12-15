@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="Kampeerplaats.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,27 +11,36 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
 {
     public class Kampeerplaats
     {
-        public List<Gebruiker> gebruikersOpLocatie { get; private set; }
+        public List<Gebruiker> GebruikersOpLocatie { get; private set; }
+
         public int MaxPersonen { get; set; }
+
         public int ID { get; set; }
+
         public string Type { get; set; }
+
         public int Comfort { get; set; }
+
         public int Invalide { get; set; }
+
         public int Lawaai { get; set; }
+
         public int GebruikerID { get; set; }
+
         public int Locatie { get; set; }
 
         public Kampeerplaats()
         {
-            gebruikersOpLocatie = new List<Gebruiker>();
+            GebruikersOpLocatie = new List<Gebruiker>();
         }
 
         public bool CheckOfBezoekerOpKampeerplaatsIs(Gebruiker g)
         {
-            if (gebruikersOpLocatie.Contains(g))
+            if (GebruikersOpLocatie.Contains(g))
             {
                 return true;
             }
+
             return false;
         }
 
@@ -43,12 +55,10 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
             {
                 return "Locatie: " + Locatie + " Max aantal Personen: " + MaxPersonen + " Lawaaierig";
             }
-
             else
             {
                 return "Locatie: " + Locatie + " Max aantal Personen: " + MaxPersonen + " Voor minder valide bezoekers";
             }
-
         }
     }
 }

@@ -22,16 +22,13 @@
         <input type="number" class="form-control" id="AantalPersonen">
     </div>
     <div>
-        <ol>
-            <li>bungalino</li>
-            <li>bungalino</li>
-            <li>bungalino</li>
-            <li>bungalino</li>
-            <li>bungalino</li>
-            @foreach (Kampeerplaats k in (List<Kampeerplaats>)ViewBag.AlleKampeerplaatsen)
+        <textarea name="Campingplaatslijst" rows="30" cols="20">
+          
+                @foreach (Kampeerplaats k in (List<Kampeerplaats>)ViewBag.AlleKampeerplaatsen)
             {
-                <li>@k.Locatie</li>
-            }
-        </ol>
+                    @k.Locatie
+                }
+      
+        </textarea>
     </div>
 </form>

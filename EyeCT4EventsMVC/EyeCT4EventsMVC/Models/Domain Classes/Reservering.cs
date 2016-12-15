@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="Reservering.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,11 +11,6 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
 {
     public class Reservering
     {
-        public Reservering()
-        {
-
-        }
-
         public List<Gebruiker> GebruikerList { get; private set; }
 
         public DateTime DatumTot { get; set; }
@@ -28,5 +26,9 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         public int KampeerplaatsID { get; set; }
 
         public int BezoekerID { get; set; }
+
+        public Reservering()
+        {
+        }
     }
 }

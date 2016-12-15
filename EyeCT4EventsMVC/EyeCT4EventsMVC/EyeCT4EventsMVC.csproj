@@ -203,6 +203,9 @@
     <Content Include="Views\Event\Aanmaken.cshtml" />
     <Content Include="Views\Event\AlleEvents.cshtml" />
     <Content Include="Views\Gebruiker\BeheerderAanmaken.cshtml" />
+    <Content Include="Views\SocialMedia\SocialMedia.cshtml" />
+    <Content Include="Views\Gebruiker\Beheersysteem.cshtml" />
+    <Content Include="Views\SocialMedia\GerapporteerdeMedia.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

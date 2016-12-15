@@ -1,0 +1,90 @@
+﻿@using EyeCT4EventsMVC.Models.Domain_Classes
+
+@{
+    ViewBag.Title = "Social Media Sharing";
+    int weergeefAantal = 4;
+}
+<h2>Social Media Sharing</h2>
+
+@ViewBag.Error
+
+@section Sidebar
+{
+    <form>
+        @Html.ActionLink("Categorie toevoegen", "CategorieToevoegen", new { @class = "btn btn-default"})<br />
+        <a href="#" class="btn btn-default">Categorie toevoegen</a>
+    </form>
+    @foreach (Categorie c in (Categorie[])ViewBag.Categorien)
+    {
+        @Html.ActionLink(@c.Naam, "SocialMedia", new { id = c.ID })<br />
+    }
+}
+@foreach (Media media in (List<Media>) ViewBag.AlleMedia)
+{
+    bool weergeven = true;
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">@media.GeplaatstDoorGebruiker() heeft @media.Type geplaatst</h3>
+            <form method="post">
+                @Html.ActionLink("Likes: " + @media.Likes, "LikeMedia", new {mediaID = media.ID}, new {@class = "btn btn-default floatRight"})
+                @Html.ActionLink("Rapporteer", "RapporteerMedia", new {mediaID = media.ID}, new {@class = "btn btn-danger floatRight"})
+            </form>
+        </div>
+
+        <div class="panel-body">
+            @media.Beschrijving
+        </div>
+        @for (int i = 0; i < media.AlleReacties().Count; i++)
+        {
+            if (i < weergeefAantal)
+            {
+                <b>@media.AlleReacties()[i].GeplaatstDoorGebruiker():</b> 
+                <text>
+                    @media.AlleReacties()[i].Inhoud
+                </text>
+                <form method="post">
+                    @Html.ActionLink("Likes: " + media.AlleReacties()[i].Likes, "LikeReactie", new { reactieID = media.AlleReacties()[i].ReactieID }, new { @class = "floatRight" })
+                    @Html.ActionLink("Rapporteer", "RapporteerReactie", new { reactieID = media.AlleReacties()[i].ReactieID }, new { @class = "floatRight" })
+                </form>
+                <br/>
+            }
+            else
+            {
+                if (i >= weergeefAantal)
+                {
+                    <div id='@media.ID' class="panel-collapse collapse" role="tabpanel" aria-labelledby='@media.ID'>
+                        <div id="contenttext">
+                            @for (int a = weergeefAantal; a < media.AlleReacties().Count; a++)
+                            {
+                                <b>@media.AlleReacties()[a].GeplaatstDoorGebruiker():</b>
+                                <text>
+                                    @media.AlleReacties()[a].Inhoud
+                                </text>
+                                <form method="post">
+                                    @Html.ActionLink("Likes: " + media.AlleReacties()[a].Likes, "LikeReactie", new { reactieID = media.AlleReacties()[a].ReactieID }, new { @class = "floatRight" })
+                                    @Html.ActionLink("Rapporteer", "RapporteerReactie", new { reactieID = media.AlleReacties()[a].ReactieID }, new { @class = "floatRight" })
+                                </form>
+                                <br />
+                            }
+                        </div>
+                    </div>
+                }
+                if (weergeven)
+                {
+                    <div class="replies">
+                        <div class="threadtitle">
+                            <div id="titletext">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href='#@media.ID' aria-expanded="false" aria-controls='@media.ID'>
+                                        <u>Meer reacties weergeven</u>
+                                    </a>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                    weergeven = false;
+                }
+            }
+        }
+    </div>
+}

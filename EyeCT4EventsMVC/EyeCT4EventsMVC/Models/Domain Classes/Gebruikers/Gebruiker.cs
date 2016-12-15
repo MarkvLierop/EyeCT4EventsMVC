@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="Gebruiker.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,17 +13,24 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers
     public abstract class Gebruiker
     {
         public string Achternaam { get; set; }
+
         public int ID { get; set; }
+
         public int RFID { get; set; }
+
         public string Gebruikersnaam { get; set; }
+
         public string Tussenvoegsel { get; set; }
+
         public string Voornaam { get; set; }
+
         public string Wachtwoord { get; set; }
+
         public bool Aanwezig { get; set; }
 
-        private List<Media> MediaList;
-        private List<Reactie> ReactieList;
-        private List<UitgeleendMateriaal> UitgeleendMateriaal;
+        private List<Media> mediaList;
+        private List<Reactie> reactieList;
+        private List<UitgeleendMateriaal> uitgeleendMateriaal;
 
         private RepositoryActiveDirectory rad;
 
@@ -40,11 +50,13 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers
         {
             return rad.Inloggen(gebruikersnaam, wachtwoord);
         }
+
         public string GetGebruikerType()
         {
             string[] type = this.GetType().ToString().Split('.');
             return type[type.Count() - 1];
         }
+
         public override string ToString()
         {
             return Voornaam + " " + Tussenvoegsel + " " + Achternaam;
