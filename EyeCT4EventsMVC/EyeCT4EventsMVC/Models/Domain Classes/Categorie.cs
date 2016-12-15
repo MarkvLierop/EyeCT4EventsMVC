@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="Categorie.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -9,13 +12,15 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
     public class Categorie
     {
         public int ID { get; set; }
+
         public string Naam { get; set; }
+
         public int Parent { get; set; }
 
         public Rectangle Locatie { get; set; }
+
         public Categorie()
         {
-
         }
 
         public void DrawNaam(Graphics g, int count)
