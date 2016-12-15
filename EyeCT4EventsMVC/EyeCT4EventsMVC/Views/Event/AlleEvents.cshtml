@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "~/Views/Shared/_NoHeaderLayout.cshtml";
+    ViewBag.Title = "Event Ophalen";
+}
+
+    <div class="form-group">
+        <div class="col-sm-10">
+            <h2>Alle Events</h2>
+        </div>
+    </div>
+    @foreach (var item in ViewBag.Events)
+    {
+        <form class="form-horizontal" method="post">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Locatie:</label>
+                <div class="col-sm-10">
+                    <p>@item.LocatieNaam</p>
+                </div>
+                <label class="col-sm-2 control-label">Titel:</label>
+                <div class="col-sm-10">
+                    <p>@item.Titel</p>
+                </div>
+                <label class="col-sm-2 control-label">Datum van:</label>
+                <div class="col-sm-10">
+                    <p>@item.DatumVan</p>
+                </div>
+                <label class="col-sm-2 control-label">Datum Tot:</label>
+                <div class="col-sm-10">
+                    <p>@item.DatumTot</p>
+                </div>
+                <label class="col-sm-2 control-label">Beschrijving:</label>
+                <div class="col-sm-10">
+                    <p>@item.Beschrijving</p>
+                </div>
+                <a href="@Url.Action("Verwijderen","Event", new { EventID = @item.ID})">Verwijderen</a>
+            </div>
+        </form>
+    }
+
