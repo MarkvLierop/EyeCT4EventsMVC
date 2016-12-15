@@ -24,6 +24,13 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers
 
         private RepositoryActiveDirectory rad;
 
+        public Gebruiker(string voornaam, string tussenvoegsel, string achternaam, string wachtwoord)
+        {
+            Voornaam = voornaam;
+            Tussenvoegsel = tussenvoegsel;
+            Achternaam = achternaam;
+            Wachtwoord = wachtwoord;
+        }
         protected Gebruiker()
         {
             rad = new RepositoryActiveDirectory(new ActiveDirectory());

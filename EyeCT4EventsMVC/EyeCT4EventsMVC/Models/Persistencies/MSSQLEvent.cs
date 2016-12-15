@@ -29,9 +29,10 @@ namespace EyeCT4EventsMVC.Models.Persistencies
         {
             List<Event> AlleEvents = new List<Event>();
             Connect();
-            string query = "SELECT l.Naam, e.* FROM EventInfo e, Locatie l WHERE l.ID = e.Locatie_ID";
+            string query = "SELECT l.Naam, e.* FROM EventInfo e, Locatie l WHERE l.ID = e.Locatie_ID AND e.DatumTot >= @Nu";
             using (command = new SqlCommand(query, SQLcon))
             {
+                command.Parameters.AddWithValue("@Nu", DateTime.Now);
                 reader = command.ExecuteReader();
                 while (reader.Read())
                 {
