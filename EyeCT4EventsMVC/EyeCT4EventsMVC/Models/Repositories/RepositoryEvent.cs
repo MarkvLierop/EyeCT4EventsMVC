@@ -16,9 +16,19 @@ namespace EyeCT4EventsMVC.Models.Repositories
             Context = context;
         }
 
-        public Event EventAanmaken(Event events)
+        public void EventAanmaken(Event events)
         {
-            return Context.EventAanmaken(events);
+            Context.EventAanmaken(events);
+        }
+
+        public List<Event> AlleEvents()
+        {
+            return Context.AlleEvents();
+        }
+
+        public void EventVerwijderen(int EventID)
+        {
+            Context.EventVerwijderen(EventID);
         }
     }
 }

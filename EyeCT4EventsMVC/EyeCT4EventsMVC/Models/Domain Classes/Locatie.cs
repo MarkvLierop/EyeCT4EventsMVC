@@ -17,7 +17,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         public string Woonplaats { get; private set; }
         private RepositoryLocatie RepoLocatie;
 
-        public Locatie(int id, string naam, string straat, int huisnummer,string postcode, string woonplaats)
+        public Locatie(int id,string naam, string straat, int huisnummer,string postcode, string woonplaats)
         {
             ID = id;
             Naam = naam;

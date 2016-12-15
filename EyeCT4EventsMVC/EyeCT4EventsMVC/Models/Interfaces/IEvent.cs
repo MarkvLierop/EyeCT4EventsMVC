@@ -9,6 +9,8 @@ namespace EyeCT4EventsMVC.Models.Interfaces
 {
     public interface IEvent
     {
-        Event EventAanmaken(Event events);
+        void EventAanmaken(Event events);
+        List<Event> AlleEvents();
+        void EventVerwijderen(int EventID);
     }
 }

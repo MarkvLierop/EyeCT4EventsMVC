@@ -31,7 +31,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
         public Locatie LocatieBijNaam(string naam)
         {
             Connect();
-            string query = "SELECT ID From Locatie WHERE Naam LIKE @Naam";
+            string query = "SELECT * From Locatie WHERE Naam LIKE @Naam";
             using(command = new SqlCommand(query, SQLcon))
             {
                 command.Parameters.AddWithValue("@Naam", naam);

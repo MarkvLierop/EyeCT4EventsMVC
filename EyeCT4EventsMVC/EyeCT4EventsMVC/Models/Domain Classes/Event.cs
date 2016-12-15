@@ -9,6 +9,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
 {
     public class Event
     {
+        public string LocatieNaam { get; set; }
         public string Beschrijving { get; set; }
         public DateTime DatumTot { get; set; }
         public DateTime DatumVan { get; set; }
@@ -30,10 +31,32 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
             Beschrijving = beschrijving;
         }
 
-        public Event EventAanmaken(Event events)
+        public Event(int id,string locatieNaam, DateTime datumVan, DateTime datumTot, string titel, string beschrijving)
+        {
+            ID = id;
+            LocatieNaam = locatieNaam;
+            DatumVan = datumVan;
+            DatumTot = datumTot;
+            Titel = titel;
+            Beschrijving = beschrijving;
+        }
+
+        public void EventAanmaken(Event events)
         {
             RepoEvent = new RepositoryEvent(new MSSQLEvent());
-            return RepoEvent.EventAanmaken(events);
+            RepoEvent.EventAanmaken(events);
+        }
+
+        public List<Event> AlleEvents()
+        {
+            RepoEvent = new RepositoryEvent(new MSSQLEvent());
+            return RepoEvent.AlleEvents();
+        }
+
+        public void EventVerwijderen(int EventID)
+        {
+            RepoEvent = new RepositoryEvent(new MSSQLEvent());
+            RepoEvent.EventVerwijderen(EventID);
         }
 
         public string GetEventData()

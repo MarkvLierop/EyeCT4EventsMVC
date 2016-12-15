@@ -10,8 +10,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
 {
     public class MSSQLEvent:MSSQLServer, IEvent 
     {
-        private Event eventen;
-        public Event EventAanmaken(Event events)
+        public void EventAanmaken(Event events)
         {
             Connect();
             string query = "INSERT INTO EventInfo(Locatie_ID,DatumVan,DatumTot,Titel,Beschrijving)Values(@LocatieID,@DatumVan,@DatumTot,@Titel,@Beschrijving)";
@@ -24,7 +23,44 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 command.Parameters.AddWithValue("@Beschrijving", events.Beschrijving);
                 command.ExecuteNonQuery();
             }
-            return eventen;
+        }
+
+        public List<Event> AlleEvents()
+        {
+            List<Event> AlleEvents = new List<Event>();
+            Connect();
+            string query = "SELECT l.Naam, e.* FROM EventInfo e, Locatie l WHERE l.ID = e.Locatie_ID";
+            using (command = new SqlCommand(query, SQLcon))
+            {
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    AlleEvents.Add(CreateEventFromReader(reader));
+                }
+            }
+            return AlleEvents;
+        }
+
+        public void EventVerwijderen(int EventID)
+        {
+            Connect();
+            string query = "DELETE FROM EventInfo WHERE ID = @EventID";
+            using(command = new SqlCommand(query, SQLcon))
+            {
+                command.Parameters.AddWithValue("@EventID", EventID);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        private Event CreateEventFromReader(SqlDataReader reader)
+        {
+            return new Event(
+                Convert.ToInt32(reader["ID"]),
+                Convert.ToString(reader["Naam"]),
+                Convert.ToDateTime(reader["DatumVan"]),
+                Convert.ToDateTime(reader["DatumTot"]),
+                Convert.ToString(reader["Titel"]),
+                Convert.ToString(reader["Beschrijving"]));
         }
     }
 }

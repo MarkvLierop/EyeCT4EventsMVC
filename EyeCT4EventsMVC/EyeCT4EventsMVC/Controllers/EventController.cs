@@ -10,12 +10,28 @@ namespace EyeCT4EventsMVC.Controllers
     public class EventController : Controller
     {
         private Locatie locatie;
+        private Event Event;
         // GET: Event
-        public ActionResult Index()
+        public ActionResult Aanmaken()
         {
             locatie = new Locatie();
             ViewBag.Locaties = locatie.AlleLocaties();
             return View();
+        }
+
+
+        public ActionResult AlleEvents()
+        {
+            Event = new Event();
+            ViewBag.Events = Event.AlleEvents();
+            return View();
+        }
+
+        public ActionResult Verwijderen(int EventID)
+        {
+            Event = new Event();
+            Event.EventVerwijderen(EventID);
+            return RedirectToAction("AlleEvents", "Event");
         }
 
         public ActionResult EventAanmaken(string Locatie, DateTime datumVan,DateTime datumTot,string titel, string beschrijving)
@@ -23,7 +39,7 @@ namespace EyeCT4EventsMVC.Controllers
             locatie = new Locatie();
             Event events = new Event(locatie.LocatieBijNaam(Locatie).ID, datumVan, datumTot, titel, beschrijving);
             events.EventAanmaken(events);
-            return RedirectToAction("Index", "Event");
+            return RedirectToAction("AlleEvents", "Event");
         }
     }
 }
