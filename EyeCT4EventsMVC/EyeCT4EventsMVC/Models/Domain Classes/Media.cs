@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="Media.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,19 +14,34 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
 {
     public class Media
     {
+        int hoogsteID;
+
         public int Categorie { get; set; }
+
         public int Flagged { get; set; }
+
         public int GeplaatstDoor { get; set; }
+
         public int Likes { get; set; }
+
         public int ID { get; set; }
+
         public string Type { get; set; }
+
         public string Pad { get; set; }
+
         public string Beschrijving { get; set; }
 
+<<<<<<< HEAD
+        Repositories.RepositorySocialMediaSharing smsr;
+        Repositories.RepositoryGebruiker rg;
+
+=======
         private readonly List<Reactie> reacties = new List<Reactie>();
 
         RepositorySocialMediaSharing smsr;
         RepositoryGebruiker rg;
+>>>>>>> f127336da0b3b241a4f71e24e5bcb7003423822c
         public Media()
         {
             smsr = new RepositorySocialMediaSharing(new MSSQLSocialMediaSharing());
@@ -34,6 +52,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         {
             return smsr.AlleReactiesOpvragen(this);
         }
+
         public string FilterVastStellen()
         {
             if (Type == "Afbeelding")
@@ -48,14 +67,14 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
             {
                 return "Video Bestand|*" + GetBestandsExtentie();
             }
+
             return "Overige Bestanden|*" + GetBestandsExtentie();
         }
-        int hoogsteID;
+
         public void BestandOpslaan(string safeFileName, string fileName)
         {
             try
             {
-
                 if (smsr.SelectHoogsteMediaID().ID == 1)
                 {
                     hoogsteID = 1;
@@ -64,30 +83,35 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
                 {
                     hoogsteID = smsr.SelectHoogsteMediaID().ID + 1;
                 }
+
                 string directory = "SocialMediaSharingData\\" + hoogsteID.ToString() + "\\";
                 Pad = directory + safeFileName;
                 Directory.CreateDirectory(directory);
                 File.Copy(fileName, directory + safeFileName);
             }
-            catch (Exception e)
+                        catch (Exception e)
             {
                 throw new FoutBijOpslaanBestandException(e.Message);
             }
         }
+
         public override string ToString()
         {
             return "Geplaatst Door: " + rg.GetGebruikerByID(GeplaatstDoor).ToString() + " | Aantal keren gerapporteerd: " + Flagged.ToString();
         }
+
         public string GeplaatstDoorGebruiker()
         {
             return rg.GetGebruikerByID(GeplaatstDoor).ToString();
         }
+
         public string GetBestandsNaam()
         {
             string[] bestandsnaam = Pad.Split('\\');
             string test = bestandsnaam[bestandsnaam.Count() - 1];
             return bestandsnaam[bestandsnaam.Count() - 1];
         }
+
         private string GetBestandsExtentie()
         {
             string[] splitPad = Pad.Split('.');

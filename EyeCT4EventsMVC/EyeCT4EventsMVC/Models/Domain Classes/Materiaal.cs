@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="Materiaal.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,13 +11,15 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
     public class Materiaal
     {
         public int MateriaalID { get; set; }
+
         public string Naam { get; set; }
+
         public int Prijs { get; set; }
+
         public int Voorraad { get; set; }
 
         public Materiaal()
         {
-
         }
 
         public override string ToString()

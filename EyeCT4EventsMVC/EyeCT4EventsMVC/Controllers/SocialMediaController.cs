@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="SocialMediaController.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -13,6 +16,9 @@ namespace EyeCT4EventsMVC.Controllers
     {
         private RepositorySocialMediaSharing rsms = new RepositorySocialMediaSharing(new MSSQLSocialMediaSharing());
 
+<<<<<<< HEAD
+        public ActionResult Index()
+=======
         public ActionResult SocialMedia()
         {
             if (Url.RequestContext.RouteData.Values["id"] == null)
@@ -49,6 +55,7 @@ namespace EyeCT4EventsMVC.Controllers
         }
 
         public ActionResult LikeMedia(int mediaID)
+>>>>>>> f127336da0b3b241a4f71e24e5bcb7003423822c
         {
             try
             {
@@ -59,6 +66,14 @@ namespace EyeCT4EventsMVC.Controllers
                 ViewBag.Error = e.Message;
             }
 
+<<<<<<< HEAD
+            return View();
+        }
+
+        public ActionResult PlaatsReactie()
+        {
+            return View();
+=======
             return RedirectToAction("SocialMedia");
         }
         public ActionResult RapporteerMedia(int mediaID)
@@ -103,6 +118,7 @@ namespace EyeCT4EventsMVC.Controllers
         public ActionResult CategorieToevoegen()
         {
             return 
+>>>>>>> f127336da0b3b241a4f71e24e5bcb7003423822c
         }
     }
 }

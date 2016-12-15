@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="GebruikerController.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -29,7 +32,7 @@ namespace EyeCT4EventsMVC.Controllers
                 {
                     Gebruiker g = rg.GetGebruikerByGebruikersnaam(gebruikersnaam);
 
-                    // if g heeft polsbandje, naar social media. Anders naar registreer pagina
+                    //// if g heeft polsbandje, naar social media. Anders naar registreer pagina
 
                     return RedirectToAction("Index", "SocialMedia");
                 }
@@ -38,6 +41,7 @@ namespace EyeCT4EventsMVC.Controllers
             {
                 ViewBag.Error = e.Message;
             }
+
             return View();
         }
     }

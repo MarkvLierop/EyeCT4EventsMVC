@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="RouteConfig.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,8 +19,7 @@ namespace EyeCT4EventsMVC
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Gebruiker", action = "Login", id = UrlParameter.Optional }
-            );
+                defaults: new { controller = "Gebruiker", action = "Login", id = UrlParameter.Optional });
         }
     }
 }
