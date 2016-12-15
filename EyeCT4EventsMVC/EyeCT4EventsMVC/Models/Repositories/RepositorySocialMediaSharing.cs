@@ -10,7 +10,7 @@ namespace EyeCT4EventsMVC.Models.Repositories
 {
     public class RepositorySocialMediaSharing
     {
-        ISocialMediaSharing ISMS;
+        private ISocialMediaSharing ISMS;
 
         public RepositorySocialMediaSharing(ISocialMediaSharing ISM)
         {
@@ -88,9 +88,9 @@ namespace EyeCT4EventsMVC.Models.Repositories
         {
             return ISMS.AlleGerapporteerdeMediaOpvragen();
         }
-        public List<Reactie> AlleReactiesOpvragen()
+        public List<Reactie> AlleReactiesOpvragen(Media media)
         {
-            return ISMS.AlleReactiesOpvragen();
+            return ISMS.AlleReactiesOpvragen(media);
         }
         public void ToevoegenReactie(Reactie reactie)
         {

@@ -209,9 +209,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                             gebruiker = new Medewerker();
                         }
                         gebruiker.ID = Convert.ToInt32(reader["ID"]);
-                        gebruiker.RFID = Convert.ToInt32(reader["RFID"]);
                         gebruiker.Gebruikersnaam = reader["Gebruikersnaam"].ToString();
-                        gebruiker.Wachtwoord = reader["Wachtwoord"].ToString();
                         gebruiker.Voornaam = reader["Voornaam"].ToString();
                         gebruiker.Tussenvoegsel = reader["Tussenvoegsel"].ToString();
                         gebruiker.Achternaam = reader["Achternaam"].ToString();

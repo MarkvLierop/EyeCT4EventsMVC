@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using EyeCT4EventsMVC.Models.Exceptions;
 using EyeCT4EventsMVC.Models.Persistencies;
+using EyeCT4EventsMVC.Models.Repositories;
 
 namespace EyeCT4EventsMVC.Models.Domain_Classes
 {
@@ -19,12 +20,19 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         public string Pad { get; set; }
         public string Beschrijving { get; set; }
 
-        Repositories.RepositorySocialMediaSharing smsr;
-        Repositories.RepositoryGebruiker rg;
+        private readonly List<Reactie> reacties = new List<Reactie>();
+
+        RepositorySocialMediaSharing smsr;
+        RepositoryGebruiker rg;
         public Media()
         {
-            smsr = new Repositories.RepositorySocialMediaSharing(new MSSQLSocialMediaSharing());
-            rg = new Repositories.RepositoryGebruiker(new MSSQLGebruiker());
+            smsr = new RepositorySocialMediaSharing(new MSSQLSocialMediaSharing());
+            rg = new RepositoryGebruiker(new MSSQLGebruiker());
+        }
+
+        public List<Reactie> AlleReacties()
+        {
+            return smsr.AlleReactiesOpvragen(this);
         }
         public string FilterVastStellen()
         {
