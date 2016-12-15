@@ -242,21 +242,12 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 string query = "SELECT * FROM Media WHERE Flagged > @VerbergThreshhold ORDER BY ID DESC";
                 using (command = new SqlCommand(query, SQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@VerbergThreshhold", GetMediaVerbergThreshhold()));
+                    command.Parameters.AddWithValue("@VerbergThreshhold", 0); //Moet nog aangepast worden
                     reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        Media media = new Media();
-                        media.ID = Convert.ToInt32(reader["ID"]);
-                        media.Beschrijving = reader["Beschrijving"].ToString();
-                        media.Pad = reader["BestandPad"].ToString();
-                        media.Type = reader["MediaType"].ToString();
-                        media.Categorie = Convert.ToInt32(reader["Categorie"]);
-                        media.Flagged = Convert.ToInt32(reader["Flagged"]);
-                        media.Likes = Convert.ToInt32(reader["Likes"]);
-                        media.GeplaatstDoor = Convert.ToInt32(reader["GeplaatstDoor"]);
-                        mediaList.Add(media);
+                        mediaList.Add(CreateMediaFromReader(reader));
                     }
                 }
             }
@@ -845,6 +836,21 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Close();
 
             return eventList;
+        }
+
+        public Media CreateMediaFromReader(SqlDataReader reader)
+        {
+            Media media = new Media();
+            media.ID = Convert.ToInt32(reader["ID"]);
+            media.GeplaatstDoor = Convert.ToInt32(reader["Gebruiker_ID"]);
+            media.Categorie = Convert.ToInt32(reader["Categorie_ID"]);
+            media.Pad = Convert.ToString(reader["BestandPad"]);
+            media.Type = Convert.ToString(reader["MediaType"]);
+            media.Likes = Convert.ToInt32(reader["Likes"]);
+            media.Geplaats = Convert.ToDateTime(reader["DatumTijd"]);
+            media.Beschrijving = Convert.ToString(reader["Beschrijving"]);
+            media.Flagged = Convert.ToInt32(reader["Flagged"]);
+            return media;
         }
     }
 }

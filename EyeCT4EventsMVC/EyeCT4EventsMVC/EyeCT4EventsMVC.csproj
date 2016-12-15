@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BeheerController.cs" />
     <Compile Include="Controllers\EventController.cs" />
     <Compile Include="Controllers\GebruikerController.cs" />
     <Compile Include="Controllers\ReserveringController.cs" />
@@ -200,12 +201,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Event\Aanmaken.cshtml" />
-    <Content Include="Views\Event\AlleEvents.cshtml" />
-    <Content Include="Views\Gebruiker\BeheerderAanmaken.cshtml" />
+    <Content Include="Views\Beheer\EventAanmaken.cshtml" />
+    <Content Include="Views\Beheer\AlleEvents.cshtml" />
+    <Content Include="Views\Beheer\BeheerderAanmaken.cshtml" />
     <Content Include="Views\SocialMedia\SocialMedia.cshtml" />
-    <Content Include="Views\Gebruiker\Beheersysteem.cshtml" />
-    <Content Include="Views\SocialMedia\GerapporteerdeMedia.cshtml" />
+    <Content Include="Views\Beheer\Index.cshtml" />
+    <Content Include="Views\Beheer\GerapporteerdeMedia.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -215,6 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Event\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

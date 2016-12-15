@@ -1,0 +1,25 @@
+﻿@{
+    Layout = "~/Views/Shared/_NoHeaderLayout.cshtml";
+    ViewBag.Title = "Gerapporteerde Media";
+}
+<!DOCTYPE Html>
+<html>
+<body>
+    <h2>Gerapporteerde Media</h2>
+    @foreach (var media in ViewBag.GerapporteerdeMedia)
+    {
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">@media.GeplaatstDoorGebruiker() heeft @media.Type geplaatst</h3>
+        </div>
+
+        <div class="panel-body">
+            @media.Beschrijving
+        </div>
+       
+    </div>
+    }
+</body>
+</html>
+
+

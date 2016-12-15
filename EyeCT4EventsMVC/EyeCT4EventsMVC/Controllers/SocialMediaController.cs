@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using EyeCT4EventsMVC.Models.Persistencies;
 using EyeCT4EventsMVC.Models.Repositories;
+using EyeCT4EventsMVC.Models.Domain_Classes;
 
 namespace EyeCT4EventsMVC.Controllers
 {
@@ -30,9 +31,5 @@ namespace EyeCT4EventsMVC.Controllers
             return View();
         }
 
-        public ActionResult GerapporteerdeMedia()
-        {
-            return View();
-        }
     }
 }
