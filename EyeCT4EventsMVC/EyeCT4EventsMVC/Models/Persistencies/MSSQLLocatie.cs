@@ -43,15 +43,15 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             }
             return locatie;
         }
-        private Locatie CreateLocatieFromReader(SqlDataReader readers)
+        private Locatie CreateLocatieFromReader(SqlDataReader reader)
         {
             return new Locatie(
-                Convert.ToInt32(readers["ID"]),
-                Convert.ToString(readers["Naam"]),
-                Convert.ToString(readers["Straat"]),
-                Convert.ToInt32(readers["Huisnummer"]),
-                Convert.ToString(readers["Postcode"]),
-                Convert.ToString(readers["Woonplaats"]));
+                Convert.ToInt32(reader["ID"]),
+                Convert.ToString(reader["Naam"]),
+                Convert.ToString(reader["Straat"]),
+                Convert.ToInt32(reader["Huisnummer"]),
+                Convert.ToString(reader["Postcode"]),
+                Convert.ToString(reader["Woonplaats"]));
         }
     }
 }

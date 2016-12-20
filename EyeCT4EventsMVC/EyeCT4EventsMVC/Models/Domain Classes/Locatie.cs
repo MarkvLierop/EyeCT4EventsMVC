@@ -9,7 +9,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
 {
     public class Locatie
     {
-        public int ID { get; set; }
+        public int ID { get; private set; }
         public string  Naam { get; private set; }
         public string Straat { get; private set; }
         public int Huisnummer { get; private set; }

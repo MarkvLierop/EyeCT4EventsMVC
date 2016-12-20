@@ -24,6 +24,8 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         
         public int LocatieID { get; set; }
         private RepositoryEvent RepoEvent;
+        private Locatie locatie;
+
         public Event()
         {
         }
@@ -41,6 +43,15 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         {
             ID = id;
             LocatieNaam = locatieNaam;
+            DatumVan = datumVan;
+            DatumTot = datumTot;
+            Titel = titel;
+            Beschrijving = beschrijving;
+        }
+
+        public Event(Locatie locatie, DateTime datumVan, DateTime datumTot, string titel, string beschrijving)
+        {
+            this.locatie = locatie;
             DatumVan = datumVan;
             DatumTot = datumTot;
             Titel = titel;
