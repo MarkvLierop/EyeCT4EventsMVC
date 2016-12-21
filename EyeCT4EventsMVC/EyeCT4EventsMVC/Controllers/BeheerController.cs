@@ -9,7 +9,9 @@ namespace EyeCT4EventsMVC.Controllers
 {
     public class BeheerController : Controller
     {
-        private Locatie locatie;
+        private Locatie Locatie;
+        private Event Event;
+        private Media Media;
         // GET: Beheer
         public ActionResult Index()
         {
@@ -18,20 +20,23 @@ namespace EyeCT4EventsMVC.Controllers
 
         public ActionResult EventAanmaken()
         {
-            locatie = new Locatie();
-            ViewBag.Locaties = locatie.AlleLocaties();
+            Locatie = new Locatie();
+            ViewBag.Locaties = Locatie.AlleLocaties();
             return View();
         }
 
-        public ActionResult Aanmaken(int locatieID, DateTime datumVan, DateTime datumTot,string titel, string beschrijving)
+        public ActionResult Aanmaken(string locatie, DateTime datumVan, DateTime datumTot,string titel, string beschrijving)
         {
-            Event events = new Event(locatieID,datumVan,datumTot,titel,beschrijving);
+            Locatie = new Locatie();
+            Event events = new Event(Locatie.LocatieBijNaam(locatie),datumVan,datumTot,titel,beschrijving);
             events.EventAanmaken(events);
             return RedirectToAction("AlleEvents", "Beheer");
         }
 
         public ActionResult AlleEvents()
         {
+            Event = new Event();
+            ViewBag.Events = Event.AlleEvents();
             return View();
         }
 
@@ -42,7 +47,30 @@ namespace EyeCT4EventsMVC.Controllers
 
         public ActionResult GerapporteerdeMedia()
         {
+            Media = new Media();
+            ViewBag.GerapporteerdeMedia = Media.GerapporteerdeMedia();
             return View();
+        }
+
+        public ActionResult VerwijderenEvent(int EventID)
+        {
+            Event = new Event();
+            Event.EventVerwijderen(EventID);
+            return RedirectToAction("AlleEvents", "Beheer");
+        }
+
+        public ActionResult VerwijderenMedia(int MediaID)
+        {
+            Media = new Media();
+            Media.MediaVerwijderen(MediaID);
+            return RedirectToAction("GerapporteerdeMedia", "Beheer");
+        }
+
+        public ActionResult BekijkReacties(int MediaID)
+        {
+            Reactie reactie = new Reactie();
+            ViewBag.Reacties = reactie.ReactieBijMedia(MediaID);
+            return RedirectToAction("GerapporteerdeMedia", "Beheer");
         }
     }
 }

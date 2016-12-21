@@ -171,11 +171,13 @@
     <Compile Include="Models\Interfaces\IKampeerplaats.cs" />
     <Compile Include="Models\Interfaces\ILocatie.cs" />
     <Compile Include="Models\Interfaces\IMateriaal.cs" />
+    <Compile Include="Models\Interfaces\IReactie.cs" />
     <Compile Include="Models\Interfaces\ISocialMediaSharing.cs" />
     <Compile Include="Models\Persistencies\ActiveDirectory.cs" />
     <Compile Include="Models\Persistencies\MSSQLEvent.cs" />
     <Compile Include="Models\Persistencies\MSSQLGebruiker.cs" />
     <Compile Include="Models\Persistencies\MSSQLLocatie.cs" />
+    <Compile Include="Models\Persistencies\MSSQLReactie.cs" />
     <Compile Include="Models\Persistencies\MSSQLReserveren.cs" />
     <Compile Include="Models\Persistencies\MSSQLServer.cs" />
     <Compile Include="Models\Persistencies\MSSQLSocialMediaSharing.cs" />
@@ -185,6 +187,7 @@
     <Compile Include="Models\Repositories\RepositoryKampeerPlaatsen.cs" />
     <Compile Include="Models\Repositories\RepositoryLocatie.cs" />
     <Compile Include="Models\Repositories\RepositoryMateriaal.cs" />
+    <Compile Include="Models\Repositories\RepositoryReactie.cs" />
     <Compile Include="Models\Repositories\RepositorySocialMediaSharing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

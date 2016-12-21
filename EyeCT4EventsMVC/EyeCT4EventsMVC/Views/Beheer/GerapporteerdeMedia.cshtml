@@ -16,7 +16,22 @@
         <div class="panel-body">
             @media.Beschrijving
         </div>
-       
+        <div class="panel-primary">
+            <p>Aantal Likes: @media.Likes </p> 
+            <p>Aantal keer Gerapporteerd: @media.Flagged </p>
+            <div class="col-sm-2">
+                <a href="@Url.Action("BekijkReacties","Beheer", new { MediaID = @media.ID})">Reacties</a>
+            </div>
+            <div class="col-sm-2">
+                <a href="@Url.Action("VerwijderenMedia","Beheer", new { MediaID = @media.ID})">Verwijderen</a>
+            </div>
+        </div>
+        
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel"
+            </div>
+        </div>
     </div>
     }
 </body>

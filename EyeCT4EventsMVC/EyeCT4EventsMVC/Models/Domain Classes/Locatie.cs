@@ -38,7 +38,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
             return RepoLocatie.AlleLocaties();
         }
 
-        public Locatie LocatieBijNaam(string naam)
+        public int LocatieBijNaam(string naam)
         {
             RepoLocatie = new RepositoryLocatie(new MSSQLLocatie());
             return RepoLocatie.LocatieBijNaam(naam);

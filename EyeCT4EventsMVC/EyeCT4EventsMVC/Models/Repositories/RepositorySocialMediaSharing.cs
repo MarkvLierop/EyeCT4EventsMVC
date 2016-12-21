@@ -16,9 +16,9 @@ namespace EyeCT4EventsMVC.Models.Repositories
         {
             this.ISMS = ISM;
         }
-        public void VerwijderMedia(Media media)
+        public void VerwijderMedia(int MediaID)
         {
-            ISMS.VerwijderMedia(media);
+            ISMS.VerwijderMedia(MediaID);
         }
         public void SchoolAbusievelijkTaalgebruikOp()
         {

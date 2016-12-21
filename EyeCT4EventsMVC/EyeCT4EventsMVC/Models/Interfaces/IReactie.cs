@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace EyeCT4EventsMVC.Models.Interfaces
 {
-    public interface ILocatie
+    public interface IReactie
     {
-        List<Locatie> AlleLocaties();
-        int LocatieBijNaam(string naam);
+        List<Reactie> ReactieBijMedia(int MediaID);
     }
-
 }

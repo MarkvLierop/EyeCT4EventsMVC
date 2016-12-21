@@ -118,5 +118,10 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         {
             return smsr.AlleGerapporteerdeMediaOpvragen();
         }
+
+        public void MediaVerwijderen(int MediaID)
+        {
+            smsr.VerwijderMedia(MediaID);
+        }
     }
 }
