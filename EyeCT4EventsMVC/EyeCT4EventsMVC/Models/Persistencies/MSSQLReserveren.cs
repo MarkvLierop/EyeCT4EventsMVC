@@ -53,7 +53,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Connect();
             try
             {
-                string query = "SELECT * FROM Kampeerplaats";
+                string query = "SELECT * FROM Kampeerplaats where ID NOT IN (Select Kampeerplaats_ID from Reservering) ";
                 using (command = new SqlCommand(query, SQLcon))
                 {
                     reader = command.ExecuteReader();
@@ -64,7 +64,8 @@ namespace EyeCT4EventsMVC.Models.Persistencies
 
                         kampeerplaats.Type = reader["KampeerPlaatsType"].ToString();
                         kampeerplaats.ID = Convert.ToInt32(reader["ID"]);
-                        kampeerplaats.MaxPersonen = Convert.ToInt32(reader["MaxPersonen"]);
+                        kampeerplaats.Nummer = Convert.ToInt32(reader["Nummer"]);
+                        kampeerplaats.MaxPersonen = Convert.ToInt32(reader["Capaciteit"]);
                         kampeerplaats.Lawaai = Convert.ToInt32(reader["Lawaai"]);
                         kampeerplaats.Invalide = Convert.ToInt32(reader["Invalide"]);
                         kampeerplaats.Comfort = Convert.ToInt32(reader["Comfort"]);

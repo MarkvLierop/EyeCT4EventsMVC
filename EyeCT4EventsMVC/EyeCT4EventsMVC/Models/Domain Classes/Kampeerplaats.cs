@@ -17,6 +17,8 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
 
         public int ID { get; set; }
 
+        public int Nummer { get; set; }
+
         public string Type { get; set; }
 
         public int Comfort { get; set; }

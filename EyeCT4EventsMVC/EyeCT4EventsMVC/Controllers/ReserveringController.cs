@@ -18,7 +18,8 @@ namespace EyeCT4EventsMVC.Controllers
         // GET: Reservering
         public ActionResult Reservering()
         {
-            ViewBag.AlleKampeerplaatsen = rkp.AlleKampeerplaatsenOpvragen();
+            ViewBag.AlleKampeerplaatsen = rkp.AlleKampeerplaatsenOpvragen();  
+                     
             return View();
         }
     }
