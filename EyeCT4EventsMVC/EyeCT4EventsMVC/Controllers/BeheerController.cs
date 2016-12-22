@@ -1,4 +1,5 @@
 ﻿using EyeCT4EventsMVC.Models.Domain_Classes;
+using EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace EyeCT4EventsMVC.Controllers
         private Locatie Locatie;
         private Event Event;
         private Media Media;
+        private Gebruiker gebruiker;
         // GET: Beheer
         public ActionResult Index()
         {
@@ -45,8 +47,33 @@ namespace EyeCT4EventsMVC.Controllers
             return View();
         }
 
+        public ActionResult MaakBeheerderAan(string Voornaam,string Tussenvoegsel, string Achternaam,string Email,
+            string Gebruikersnaam,string Wachtwoord, string type)
+        {
+           
+            if (type == "Beheerder")
+            {
+                gebruiker = new Beheerder(gebruiker);
+            }
+
+            if(type == "Medewerker")
+            {
+                gebruiker = new Medewerker(gebruiker);
+            }
+            gebruiker.Voornaam = Voornaam;
+            gebruiker.Tussenvoegsel = Tussenvoegsel;
+            gebruiker.Achternaam = Achternaam;
+            gebruiker.Email = Email;
+            gebruiker.Gebruikersnaam = Gebruikersnaam;
+            gebruiker.Wachtwoord = Wachtwoord;
+
+            gebruiker.GebruikerRegistreren(gebruiker);
+            return RedirectToAction("Index", "Beheer");
+        }
+
         public ActionResult GerapporteerdeMedia()
         {
+            Session["Bool"] = false;
             Media = new Media();
             ViewBag.GerapporteerdeMedia = Media.GerapporteerdeMedia();
             return View();
@@ -68,6 +95,15 @@ namespace EyeCT4EventsMVC.Controllers
 
         public ActionResult BekijkReacties(int MediaID)
         {
+            if((bool)Session["Bool"] == false)
+            {
+                Session["Bool"] = true;
+            }
+
+            if((bool)Session["Bool"] == true)
+            {
+                Session["Bool"] = false;
+            }
             Reactie reactie = new Reactie();
             ViewBag.Reacties = reactie.ReactieBijMedia(MediaID);
             return RedirectToAction("GerapporteerdeMedia", "Beheer");

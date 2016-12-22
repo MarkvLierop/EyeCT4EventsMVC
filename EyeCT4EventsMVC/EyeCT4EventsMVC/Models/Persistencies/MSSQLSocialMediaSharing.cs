@@ -239,7 +239,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Connect();
             try
             {
-                string query = "SELECT * FROM Media WHERE Flagged > @VerbergThreshhold ORDER BY ID DESC";
+                string query = "SELECT * FROM Media WHERE Flagged >= @VerbergThreshhold ORDER BY ID DESC";
                 using (command = new SqlCommand(query, SQLcon))
                 {
                     command.Parameters.AddWithValue("@VerbergThreshhold", 0); //Moet nog aangepast worden
@@ -841,14 +841,14 @@ namespace EyeCT4EventsMVC.Models.Persistencies
         public void VerwijderMedia(int MediaID)
         {
             Connect();
-            string[] query = new string[1];
+            string[] query = new string[2];
             query[0] = "DELETE FROM Media WHERE ID = @MediaID";
             query[1] = "DELETE FROM Reactie WHERE Media_ID = @MediaID";
             for(int i =0; i< query.Length; i++)
             {
                 using(command = new SqlCommand(query[i], SQLcon))
                 {
-                    command.Parameters.AddWithValue("@Media", MediaID);
+                    command.Parameters.AddWithValue("@MediaID", MediaID);
                     command.ExecuteNonQuery();
                 }
             }

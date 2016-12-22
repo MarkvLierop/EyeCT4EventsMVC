@@ -17,6 +17,10 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers
         {
 
         }
+        public Beheerder(Gebruiker gebruiker)
+        {
+
+        }
    
         public void BeheerderAanmaken(Gebruiker gebruiker)
         {

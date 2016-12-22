@@ -10,7 +10,6 @@ namespace EyeCT4EventsMVC.Models.Persistencies
 {
     public class MSSQLLocatie:MSSQLServer, ILocatie 
     {
-        private Locatie locatie;
         private int LocatieID;
         public List<Locatie> AlleLocaties()
         {
