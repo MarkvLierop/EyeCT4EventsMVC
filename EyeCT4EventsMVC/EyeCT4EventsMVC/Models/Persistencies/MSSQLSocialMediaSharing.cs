@@ -671,7 +671,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         Categorie cat = new Categorie();
                         cat.ID = Convert.ToInt32(reader["ID"]);
                         cat.Naam = reader["Naam"].ToString();
-                        cat.Parent = Convert.ToInt32(reader["ParentCategorie"]);
+                        cat.Parent = Convert.ToInt32(reader["Categorie_ID"]);
                         catlist.Add(cat);
                     }
                 }
@@ -724,6 +724,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         reactie.Inhoud = reader["Inhoud"].ToString();
                         reactie.Media = Convert.ToInt32(reader["Media_ID"]);
                         reactie.ReactieID = Convert.ToInt32(reader["ID"]);
+                        reactie.Likes = Convert.ToInt32(reader["Likes"]);
                         reactieLijst.Add(reactie);
                     }
                 }
@@ -776,7 +777,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 string query = "INSERT INTO Reactie VALUES (@geplaatstDoor, @mediaID, 0, @inhoud, @datetime, 0)";
                 using (command = new SqlCommand(query, SQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@geplaatstDoor", 1)); // Later aanpassen
+                    command.Parameters.Add(new SqlParameter("@geplaatstDoor", 3)); // Later aanpassen
                     command.Parameters.Add(new SqlParameter("@mediaID", reactie.Media));
                     command.Parameters.Add(new SqlParameter("@inhoud", reactie.Inhoud));
                     command.Parameters.Add(new SqlParameter("@datetime", DateTime.Now.ToString()));

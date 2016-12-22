@@ -1,24 +1,37 @@
 ﻿@using EyeCT4EventsMVC.Models.Domain_Classes
 
 @{
+    Layout = "~/Views/Shared/_NoHeaderLayout.cshtml";
     ViewBag.Title = "Social Media Sharing";
+
     int weergeefAantal = 4;
 }
 <h2>Social Media Sharing</h2>
-
+<form>
+    @Html.ActionLink("Media plaatsen", "MediaToevoegen", new { id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "btn btn-default" })<br />
+</form>
 @ViewBag.Error
 
 @section Sidebar
 {
-    <form>
-        @Html.ActionLink("Categorie toevoegen", "CategorieToevoegen", new { @class = "btn btn-default"})<br />
-        <a href="#" class="btn btn-default">Categorie toevoegen</a>
-    </form>
-    @foreach (Categorie c in (Categorie[])ViewBag.Categorien)
-    {
-        @Html.ActionLink(@c.Naam, "SocialMedia", new { id = c.ID })<br />
-    }
+    <div>
+        <h3>Categorien:</h3>
+        
+        <form method="get" action="@Url.Action("SocialMedia", "SocialMedia")">
+            <input type="submit" value="Zoeken" class="btn btn-default"/><br/>
+            <input type="text" name="categorie" /> <br/>
+        </form>
+        @foreach (Categorie c in (Categorie[]) ViewBag.Categorien)
+        {
+            @Html.ActionLink(c.Naam, "SocialMedia", new {id = c.ID})<br/>
+        }
+
+        <form>
+            @Html.ActionLink("Categorie toevoegen", "CategorieToevoegen", new { id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "btn btn-default" })<br />
+        </form>
+    </div>
 }
+
 @foreach (Media media in (List<Media>) ViewBag.AlleMedia)
 {
     bool weergeven = true;
@@ -26,65 +39,93 @@
         <div class="panel-heading">
             <h3 class="panel-title">@media.GeplaatstDoorGebruiker() heeft @media.Type geplaatst</h3>
             <form method="post">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target='#@(@media.ID+media.ID)'>Reageer</button>
                 @Html.ActionLink("Likes: " + @media.Likes, "LikeMedia", new {mediaID = media.ID}, new {@class = "btn btn-default floatRight"})
                 @Html.ActionLink("Rapporteer", "RapporteerMedia", new {mediaID = media.ID}, new {@class = "btn btn-danger floatRight"})
             </form>
         </div>
 
         <div class="panel-body">
+            <h4>Beschrijving:</h4>
             @media.Beschrijving
-        </div>
-        @for (int i = 0; i < media.AlleReacties().Count; i++)
-        {
-            if (i < weergeefAantal)
-            {
-                <b>@media.AlleReacties()[i].GeplaatstDoorGebruiker():</b> 
-                <text>
-                    @media.AlleReacties()[i].Inhoud
-                </text>
-                <form method="post">
-                    @Html.ActionLink("Likes: " + media.AlleReacties()[i].Likes, "LikeReactie", new { reactieID = media.AlleReacties()[i].ReactieID }, new { @class = "floatRight" })
-                    @Html.ActionLink("Rapporteer", "RapporteerReactie", new { reactieID = media.AlleReacties()[i].ReactieID }, new { @class = "floatRight" })
-                </form>
-                <br/>
-            }
-            else
-            {
-                if (i >= weergeefAantal)
-                {
-                    <div id='@media.ID' class="panel-collapse collapse" role="tabpanel" aria-labelledby='@media.ID'>
-                        <div id="contenttext">
-                            @for (int a = weergeefAantal; a < media.AlleReacties().Count; a++)
-                            {
-                                <b>@media.AlleReacties()[a].GeplaatstDoorGebruiker():</b>
-                                <text>
-                                    @media.AlleReacties()[a].Inhoud
-                                </text>
-                                <form method="post">
-                                    @Html.ActionLink("Likes: " + media.AlleReacties()[a].Likes, "LikeReactie", new { reactieID = media.AlleReacties()[a].ReactieID }, new { @class = "floatRight" })
-                                    @Html.ActionLink("Rapporteer", "RapporteerReactie", new { reactieID = media.AlleReacties()[a].ReactieID }, new { @class = "floatRight" })
-                                </form>
-                                <br />
-                            }
-                        </div>
-                    </div>
-                }
-                if (weergeven)
-                {
-                    <div class="replies">
-                        <div class="threadtitle">
-                            <div id="titletext">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" href='#@media.ID' aria-expanded="false" aria-controls='@media.ID'>
-                                        <u>Meer reacties weergeven</u>
-                                    </a>
-                                </h4>
+            <form method="get" action="@Url.Action("ReactieToevoegen")">
+                <!-- Modal -->
+                <div id='@(@media.ID + media.ID)' class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Plaats een reactie:</h4>
+                            </div>
+                            <div class="modal-body">
+                                <textarea type="text" placeholder="Inhoud" style="border: none" name="inhoud" class="borderless"></textarea>
+                                <input type="hidden" name="id" value="@media.ID"/>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <input type="submit" value="Plaats Reactie" class="btn-default btn"/>
                             </div>
                         </div>
+
                     </div>
-                    weergeven = false;
+                </div>
+            </form>
+            <h4>Reacties:</h4>
+            @for (int i = 0; i < media.AlleReacties().Count; i++)
+            {
+                if (i < weergeefAantal)
+                {
+                    <b>@media.AlleReacties()[i].GeplaatstDoorGebruiker():</b>
+                    <p>
+                        @media.AlleReacties()[i].Inhoud
+                    </p>
+                    <form method="post">
+                        @Html.ActionLink(" Likes: " + media.AlleReacties()[i].Likes, "LikeReactie", new {reactieID = media.AlleReacties()[i].ReactieID}, new {@class = ""})
+                        @Html.ActionLink("Rapporteer", "RapporteerReactie", new {reactieID = media.AlleReacties()[i].ReactieID}, new {@class = ""})
+                    </form>
+                    <hr/>
+                }
+                else
+                {
+                    if (i >= weergeefAantal)
+                    {
+                        <div id='@media.ID' class="panel-collapse collapse" role="tabpanel" aria-labelledby='@media.ID'>
+                            <div id="contenttext">
+                                @for (int a = weergeefAantal; a < media.AlleReacties().Count; a++)
+                                {
+                                    <b>@media.AlleReacties()[a].GeplaatstDoorGebruiker():</b>
+                                    <p>
+                                        @media.AlleReacties()[a].Inhoud
+                                    </p>
+                                    <form method="post">
+                                        @Html.ActionLink("Likes: " + media.AlleReacties()[a].Likes, "LikeReactie", new {reactieID = media.AlleReacties()[a].ReactieID}, new {@class = ""})
+                                        @Html.ActionLink("Rapporteer", "RapporteerReactie", new {reactieID = media.AlleReacties()[a].ReactieID}, new {@class = ""})
+                                    </form>
+                                    <hr/>
+                                }
+                            </div>
+                        </div>
+                    }
+                    if (weergeven)
+                    {
+                        <div class="replies">
+                            <div class="threadtitle">
+                                <div id="titletext">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" href='#@media.ID' aria-expanded="false" aria-controls='@media.ID'>
+                                            <u>Meer reacties weergeven</u>
+                                        </a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        weergeven = false;
+                    }
                 }
             }
-        }
+        </div>
+        
     </div>
 }

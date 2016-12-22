@@ -206,6 +206,9 @@
     <Content Include="Views\SocialMedia\SocialMedia.cshtml" />
     <Content Include="Views\Gebruiker\Beheersysteem.cshtml" />
     <Content Include="Views\SocialMedia\GerapporteerdeMedia.cshtml" />
+    <Content Include="Views\SocialMedia\CategorieToevoegen.cshtml" />
+    <Content Include="Views\SocialMedia\MediaToevoegen.cshtml" />
+    <Content Include="Views\SocialMedia\ReactieToevoegen.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

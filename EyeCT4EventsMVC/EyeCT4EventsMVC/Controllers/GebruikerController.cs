@@ -39,7 +39,7 @@ namespace EyeCT4EventsMVC.Controllers
 
                     //// if g heeft polsbandje, naar social media. Anders naar registreer pagina
 
-                    return RedirectToAction("Index", "SocialMedia");
+                    return RedirectToAction("SocialMedia", "SocialMedia");
                 }
             }
             catch (Exception e)

@@ -44,8 +44,9 @@ namespace EyeCT4EventsMVC.Models.Repositories
         {
             ISMS.ToevoegenCategorie(cat);
         }
-        public void ToevoegenMedia(Media media)
+        public void ToevoegenMedia(Media media)  // AANPASSEN
         {
+            //media.BestandOpslaan();
             ISMS.ToevoegenMedia(media);
         }
         public void ZetAantalKerenGerapporteerdOp0(Media media)
