@@ -52,6 +52,12 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             }
             return null;
         }
+        /// <summary>
+        /// Public Methods
+        /// </summary>
+        /// <param name="gebruikersnaam"></param>
+        /// <param name="wachtwoord"></param>
+        /// <returns></returns>
         public bool GebruikerAuthentiseren(string gebruikersnaam, string wachtwoord)
         {
             LDAPConnection = ConnectieGebruikersOu();
@@ -125,6 +131,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             ent.Invoke("remove", new object[] { GebruikerDirectoryEntry(gebruiker) });
             ent.CommitChanges();
         }        // Foutmelding: server is unwilling to process the request.
+
         public List<Gebruiker> GetAlleGebruikers()
         {
             List<Gebruiker> gebruikers = new List<Gebruiker>();

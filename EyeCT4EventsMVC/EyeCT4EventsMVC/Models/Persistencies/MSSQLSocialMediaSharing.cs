@@ -632,7 +632,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         cat = new Categorie();
                         cat.ID = Convert.ToInt32(reader["ID"]);
                         cat.Naam = reader["Naam"].ToString();
-                        cat.Parent = Convert.ToInt32(reader["ParentCategorie"]);
+                        cat.Parent = Convert.ToInt32(reader["Categorie_ID"]);
                     }
                 }
             }
