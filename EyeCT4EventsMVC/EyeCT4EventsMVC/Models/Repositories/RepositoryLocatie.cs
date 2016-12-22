@@ -21,7 +21,7 @@ namespace EyeCT4EventsMVC.Models.Repositories
             return Context.AlleLocaties();
         }
 
-        public Locatie LocatieBijNaam(string naam)
+        public int LocatieBijNaam(string naam)
         {
             return Context.LocatieBijNaam(naam);
         }

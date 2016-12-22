@@ -35,9 +35,8 @@ namespace EyeCT4EventsMVC.Controllers
             {
                 if (rad.Inloggen(gebruikersnaam, wachtwoord))
                 {
-                    Gebruiker g = rg.GetGebruikerByGebruikersnaam(gebruikersnaam);
-
-                    //// if g heeft polsbandje, naar social media. Anders naar registreer pagina
+                    //// if gebruiker heeft polsbandje, naar social media. Anders naar registreer pagina
+                    Session["Gebruiker"] = rg.GetGebruikerByGebruikersnaam(gebruikersnaam);
 
                     return RedirectToAction("SocialMedia", "SocialMedia");
                 }
