@@ -26,12 +26,20 @@
                 <a href="@Url.Action("VerwijderenMedia","Beheer", new { MediaID = @media.ID})">Verwijderen</a>
             </div>
         </div>
-        
+        @if ((bool)Session["Bool"] == true)
+        {
+        foreach (var item in ViewBag.Reacties)
+        {
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel"
+                <h5 class="panel-title">@item.GeplaatstDoorGebruiker() heeft een reactie geplaatst</h5>
+            </div>
+            <div class="panel-body">
+                @item.Inhoud
             </div>
         </div>
+        }
+        }
     </div>
     }
 </body>

@@ -388,19 +388,19 @@ namespace EyeCT4EventsMVC.Models.Persistencies
         }
         public void GebruikerRegistreren(Gebruiker gebruiker)
         {
-            string wachtwoord = EncryptString(gebruiker.Wachtwoord);
             Connect();
-            string query = "INSERT INTO Gebruiker VALUES (@RFID, @Gebruikersnaam, @Wachtwoord, @Voornaam, @Tussenvoegsel, @Achternaam, @GebruikerType, @Aanwezig)";
+            string query = "INSERT INTO Gebruiker(Wachtwoord,Voornaam,Tussenvoegsel,Achternaam,GebruikerType,Aanwezig,Emailadres,Gebruikersnaam)" +
+                "VALUES (@Wachtwoord,@Voornaam, @Tussenvoegsel, @Achternaam, @GebruikerType, @Aanwezig,@Emailadres,@Gebruikersnaam)";
             using (command = new SqlCommand(query, SQLcon))
             {
-                command.Parameters.Add(new SqlParameter("@RFID", gebruiker.RFID));
-                command.Parameters.Add(new SqlParameter("@Gebruikersnaam", gebruiker.Gebruikersnaam));
-                command.Parameters.Add(new SqlParameter("@Wachtwoord", wachtwoord));
-                command.Parameters.Add(new SqlParameter("@Voornaam", gebruiker.Voornaam));
-                command.Parameters.Add(new SqlParameter("@Tussenvoegsel", gebruiker.Tussenvoegsel));
-                command.Parameters.Add(new SqlParameter("@Achternaam", gebruiker.Achternaam));
-                command.Parameters.Add(new SqlParameter("@GebruikerType", gebruiker.GetGebruikerType()));
-                command.Parameters.Add(new SqlParameter("@Aanwezig", gebruiker.Aanwezig ? 1 : 0));
+                command.Parameters.AddWithValue("@Wachtwoord", gebruiker.Wachtwoord);
+                command.Parameters.AddWithValue("@Voornaam", gebruiker.Voornaam);
+                command.Parameters.AddWithValue("@Tussenvoegsel", gebruiker.Tussenvoegsel);
+                command.Parameters.AddWithValue("@Achternaam", gebruiker.Achternaam);
+                command.Parameters.AddWithValue("@GebruikerType", gebruiker.GetGebruikerType());
+                command.Parameters.AddWithValue("@Aanwezig", 0);
+                command.Parameters.AddWithValue("@Emailadres", gebruiker.Email);
+                command.Parameters.AddWithValue("@Gebruikersnaam", gebruiker.Gebruikersnaam);
 
                 command.ExecuteNonQuery();
             }

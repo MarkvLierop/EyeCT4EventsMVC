@@ -77,7 +77,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 throw new Exception(e.Message);
             }
         }
-        public void CreateUserAccount(string userName, string userPassword)
+        public void CreateUserAccount(string userName, string userPassword) //type
         {
             DirectoryEntry ouEntry = LDAPConnectie(ConnectieBezoekerOu());
 
