@@ -19,5 +19,10 @@ namespace EyeCT4EventsMVC.Models.Repositories
         {
             return iad.GebruikerAuthentiseren(gebruikersnaam, wachtwoord);
         }
+
+        public void ToevoegenAanGroep(string gebruikersnaam, string groepnaam)
+        {
+            iad.ToevoegenAanGroep(gebruikersnaam, groepnaam);
+        }
     }
 }

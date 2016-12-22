@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Views/Shared/_NoHeaderLayout.cshtml";
+    ViewBag.Title = "Beheersysteem";
+}
+<!DOCTYPE Html>
+<html>
+<body>
+        <div class="form-group">
+            <h2>Beheersysteem</h2>
+            <div class="col-sm-10">
+                <a href="@Url.Action("EventAanmaken","Beheer")">Event Aanmaken</a>
+                </div>
+            <div class="col-sm-10">
+                <a href="@Url.Action("AlleEvents","Beheer")">Alle Events</a>
+            </div>
+            <div class="col-sm-10">
+                <a href="@Url.Action("GerapporteerdeMedia","Beheer")">Gerapporteerde Media</a>
+            </div>
+            <div class="col-sm-10">
+                <a href="@Url.Action("BeheerderAanmaken","Beheer")">Beheerder Aanmaken</a>
+            </div>
+            </div>
+</body>
+</html>

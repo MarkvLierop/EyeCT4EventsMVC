@@ -10,8 +10,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
 {
     public class MSSQLLocatie:MSSQLServer, ILocatie 
     {
-        private Locatie locatie;
-
+        private int LocatieID;
         public List<Locatie> AlleLocaties()
         {
             List<Locatie> AlleLocaties = new List<Locatie>();
@@ -28,30 +27,30 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             return AlleLocaties;
         }
 
-        public Locatie LocatieBijNaam(string naam)
+        public int LocatieBijNaam(string naam)
         {
             Connect();
-            string query = "SELECT * From Locatie WHERE Naam LIKE @Naam";
+            string query = "SELECT ID From Locatie WHERE Naam LIKE @Naam";
             using(command = new SqlCommand(query, SQLcon))
             {
                 command.Parameters.AddWithValue("@Naam", naam);
                 reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    locatie = CreateLocatieFromReader(reader);
+                    LocatieID = reader.GetInt32(0);
                 }
             }
-            return locatie;
+            return LocatieID;
         }
-        private Locatie CreateLocatieFromReader(SqlDataReader readers)
+        private Locatie CreateLocatieFromReader(SqlDataReader reader)
         {
             return new Locatie(
-                Convert.ToInt32(readers["ID"]),
-                Convert.ToString(readers["Naam"]),
-                Convert.ToString(readers["Straat"]),
-                Convert.ToInt32(readers["Huisnummer"]),
-                Convert.ToString(readers["Postcode"]),
-                Convert.ToString(readers["Woonplaats"]));
+                Convert.ToInt32(reader["ID"]),
+                Convert.ToString(reader["Naam"]),
+                Convert.ToString(reader["Straat"]),
+                Convert.ToInt32(reader["Huisnummer"]),
+                Convert.ToString(reader["Postcode"]),
+                Convert.ToString(reader["Woonplaats"]));
         }
     }
 }

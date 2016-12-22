@@ -1,17 +1,18 @@
-﻿
+﻿@using EyeCT4EventsMVC.Models.Domain_Classes
+@model EyeCT4EventsMVC.Models.Domain_Classes.Categorie
 @{
     Layout = "~/Views/Shared/_NoHeaderLayout.cshtml";
 }
 
-<!DOCTYPE html>
+<h1>Categorie Toevoegen</h1>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>CategorieToevoegen</title>
-</head>
-<body>
-    <div> 
+@ViewBag.Error
+
+<form method="get" action="@Url.Action("InsertCategorie", "SocialMedia")">
+    <div class="form-group">
+        <label class="control-label" for="inputDefault">Categorie naam:</label>
+        @Html.TextBoxFor(m => m.Naam, new {@class="form-control"})<br/>
+        @Html.TextBoxFor(m => m.Parent, new { @class = "form-control", type="hidden", value = Url.RequestContext.RouteData.Values["id"].ToString() })<br />
+        <input type="submit" value="Toevoegen" class="btn btn-default"/>
     </div>
-</body>
-</html>
+</form>

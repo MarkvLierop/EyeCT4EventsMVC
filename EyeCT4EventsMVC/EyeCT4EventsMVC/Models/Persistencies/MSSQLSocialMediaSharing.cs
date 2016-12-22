@@ -239,24 +239,15 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Connect();
             try
             {
-                string query = "SELECT * FROM Media WHERE Flagged > @VerbergThreshhold ORDER BY ID DESC";
+                string query = "SELECT * FROM Media WHERE Flagged >= @VerbergThreshhold ORDER BY ID DESC";
                 using (command = new SqlCommand(query, SQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@VerbergThreshhold", GetMediaVerbergThreshhold()));
+                    command.Parameters.AddWithValue("@VerbergThreshhold", 0); //Moet nog aangepast worden
                     reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
-                        Media media = new Media();
-                        media.ID = Convert.ToInt32(reader["ID"]);
-                        media.Beschrijving = reader["Beschrijving"].ToString();
-                        media.Pad = reader["BestandPad"].ToString();
-                        media.Type = reader["MediaType"].ToString();
-                        media.Categorie = Convert.ToInt32(reader["Categorie"]);
-                        media.Flagged = Convert.ToInt32(reader["Flagged"]);
-                        media.Likes = Convert.ToInt32(reader["Likes"]);
-                        media.GeplaatstDoor = Convert.ToInt32(reader["GeplaatstDoor"]);
-                        mediaList.Add(media);
+                        mediaList.Add(CreateMediaFromReader(reader));
                     }
                 }
             }
@@ -479,7 +470,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             List<Reactie> reactielijst = AlleReactiesOpvragen();
             foreach (Reactie r in reactielijst)
             {
-                if (r.Media == media.ID)
+                if (r.MediaID == media.ID)
                 {
                     VerwijderReactie(r);
                 }
@@ -641,7 +632,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         cat = new Categorie();
                         cat.ID = Convert.ToInt32(reader["ID"]);
                         cat.Naam = reader["Naam"].ToString();
-                        cat.Parent = Convert.ToInt32(reader["ParentCategorie"]);
+                        cat.Parent = Convert.ToInt32(reader["Categorie_ID"]);
                     }
                 }
             }
@@ -722,7 +713,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         reactie.Flagged = Convert.ToInt32(reader["Flagged"]);
                         reactie.GeplaatstDoor = Convert.ToInt32(reader["Gebruiker_ID"]);
                         reactie.Inhoud = reader["Inhoud"].ToString();
-                        reactie.Media = Convert.ToInt32(reader["Media_ID"]);
+                        reactie.MediaID = Convert.ToInt32(reader["Media_ID"]);
                         reactie.ReactieID = Convert.ToInt32(reader["ID"]);
                         reactieLijst.Add(reactie);
                     }
@@ -754,7 +745,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         reactie.Flagged = Convert.ToInt32(reader["Flagged"]);
                         reactie.GeplaatstDoor = Convert.ToInt32(reader["Gebruiker_ID"]);
                         reactie.Inhoud = reader["Inhoud"].ToString();
-                        reactie.Media = Convert.ToInt32(reader["Media_ID"]);
+                        reactie.MediaID = Convert.ToInt32(reader["Media_ID"]);
                         reactie.ReactieID = Convert.ToInt32(reader["ID"]);
                         reactieLijst.Add(reactie);
                     }
@@ -777,7 +768,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 using (command = new SqlCommand(query, SQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@geplaatstDoor", 1)); // Later aanpassen
-                    command.Parameters.Add(new SqlParameter("@mediaID", reactie.Media));
+                    command.Parameters.Add(new SqlParameter("@mediaID", reactie.MediaID));
                     command.Parameters.Add(new SqlParameter("@inhoud", reactie.Inhoud));
                     command.Parameters.Add(new SqlParameter("@datetime", DateTime.Now.ToString()));
                     command.ExecuteNonQuery();
@@ -845,6 +836,37 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Close();
 
             return eventList;
+        }
+
+        public void VerwijderMedia(int MediaID)
+        {
+            Connect();
+            string[] query = new string[2];
+            query[0] = "DELETE FROM Media WHERE ID = @MediaID";
+            query[1] = "DELETE FROM Reactie WHERE Media_ID = @MediaID";
+            for(int i =0; i< query.Length; i++)
+            {
+                using(command = new SqlCommand(query[i], SQLcon))
+                {
+                    command.Parameters.AddWithValue("@MediaID", MediaID);
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public Media CreateMediaFromReader(SqlDataReader reader)
+        {
+            Media media = new Media();
+            media.ID = Convert.ToInt32(reader["ID"]);
+            media.GeplaatstDoor = Convert.ToInt32(reader["Gebruiker_ID"]);
+            media.Categorie = Convert.ToInt32(reader["Categorie_ID"]);
+            media.Pad = Convert.ToString(reader["BestandPad"]);
+            media.Type = Convert.ToString(reader["MediaType"]);
+            media.Likes = Convert.ToInt32(reader["Likes"]);
+            media.Geplaats = Convert.ToDateTime(reader["DatumTijd"]);
+            media.Beschrijving = Convert.ToString(reader["Beschrijving"]);
+            media.Flagged = Convert.ToInt32(reader["Flagged"]);
+            return media;
         }
     }
 }

@@ -10,5 +10,14 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers
 {
     public class Medewerker : Gebruiker
     {
+        public Medewerker()
+        {
+
+        }
+        public Medewerker(Gebruiker gebruiker)
+        {
+
+        }
+
     }
 }
