@@ -160,16 +160,12 @@ namespace EyeCT4EventsMVC.Controllers
             g.ID = 44;
             Session["Gebruiker"] = g;
             Reactie reactie = new Reactie();
-            reactie.Media = id;
+            reactie.MediaID = id;
             reactie.DatumTijd = DateTime.Now;
             reactie.GeplaatstDoor = ((Gebruiker) Session["Gebruiker"]).ID;
             reactie.Inhoud = inhoud;
             rsms.ToevoegenReactie(reactie);
             return RedirectToAction("SocialMedia");
-        }
-        public ActionResult Categorien()
-        {
-            return View();
         }
         public ActionResult InsertCategorie(Categorie cat)
         {
