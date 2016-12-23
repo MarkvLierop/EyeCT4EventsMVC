@@ -1,15 +1,18 @@
-﻿using EyeCT4EventsMVC.Models.Domain_Classes;
-using EyeCT4EventsMVC.Models.Interfaces;
+﻿// <copyright file="RepositoryLocatie.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using EyeCT4EventsMVC.Models.Domain_Classes;
+using EyeCT4EventsMVC.Models.Interfaces;
 
 namespace EyeCT4EventsMVC.Models.Repositories
 {
     public class RepositoryLocatie
     {
-        private ILocatie Context;
+        public ILocatie Context;
 
         public RepositoryLocatie(ILocatie context)
         {
@@ -25,6 +28,5 @@ namespace EyeCT4EventsMVC.Models.Repositories
         {
             return Context.LocatieBijNaam(naam);
         }
-
     }
 }

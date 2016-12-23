@@ -1,24 +1,27 @@
-﻿using EyeCT4EventsMVC.Models.Domain_Classes;
-using EyeCT4EventsMVC.Models.Interfaces;
+﻿// <copyright file="RepositoryReactie.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using EyeCT4EventsMVC.Models.Domain_Classes;
+using EyeCT4EventsMVC.Models.Interfaces;
 
 namespace EyeCT4EventsMVC.Models.Repositories
 {
     public class RepositoryReactie
     {
-        private IReactie Context;
+        public IReactie Context;
 
         public RepositoryReactie(IReactie context)
         {
             Context = context;
         }
 
-        public List<Reactie> ReactieBijMedia(int MediaID)
+        public List<Reactie> ReactieBijMedia(int mediaID)
         {
-            return Context.ReactieBijMedia(MediaID);
+            return Context.ReactieBijMedia(mediaID);
         }
     }
 }

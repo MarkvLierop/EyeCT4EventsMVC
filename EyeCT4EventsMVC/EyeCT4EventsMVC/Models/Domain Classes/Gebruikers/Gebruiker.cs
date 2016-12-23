@@ -13,6 +13,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers
     public abstract class Gebruiker
     {
         public string Email { get; set; }
+
         public string Achternaam { get; set; }
 
         public int ID { get; set; }
@@ -34,8 +35,9 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers
         private List<UitgeleendMateriaal> uitgeleendMateriaal;
 
         private RepositoryActiveDirectory rad;
-        private RepositoryGebruiker RepoGebruiker;
-        public Gebruiker(string gebruikersnaam, string voornaam, string tussenvoegsel, string achternaam, string wachtwoord,string email)
+        private RepositoryGebruiker repoGebruiker;
+
+        public Gebruiker(string gebruikersnaam, string voornaam, string tussenvoegsel, string achternaam, string wachtwoord, string email)
         {
             Voornaam = voornaam;
             Tussenvoegsel = tussenvoegsel;
@@ -43,6 +45,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers
             Wachtwoord = wachtwoord;
             Email = email;
         }
+
         protected Gebruiker()
         {
             rad = new RepositoryActiveDirectory(new ActiveDirectory());
@@ -55,8 +58,8 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers
 
         public void GebruikerRegistreren(Gebruiker gebruiker)
         {
-            RepoGebruiker = new RepositoryGebruiker(new MSSQLGebruiker());
-            RepoGebruiker.GebruikerRegistreren(gebruiker);
+            repoGebruiker = new RepositoryGebruiker(new MSSQLGebruiker());
+            repoGebruiker.GebruikerRegistreren(gebruiker);
         }
 
         public string GetGebruikerType()

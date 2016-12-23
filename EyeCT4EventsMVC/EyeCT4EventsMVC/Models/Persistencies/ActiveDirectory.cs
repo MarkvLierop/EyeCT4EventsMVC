@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="ActiveDirectory.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
 using System.Linq;
@@ -10,62 +13,17 @@ namespace EyeCT4EventsMVC.Models.Persistencies
 {
     public class ActiveDirectory : IActiveDirectory
     {
-        DirectoryEntry LDAPConnection;
-        DirectorySearcher ds;
-        private DirectoryEntry ConnectieBezoekerOu()
-        {
-            return new DirectoryEntry("LDAP://192.168.15.10/OU=Bezoekers,OU=Gebruikers,OU=EyeCT4Events,DC=EyeCT4Events,DC=nl");
-        }
-        private DirectoryEntry ConnectieBeheerderOu()
-        {
-            return new DirectoryEntry("LDAP://192.168.15.10/OU=Beheerder,OU=Gebruikers,OU=EyeCT4Events,DC=EyeCT4Events,DC=nl");
-        }
-        private DirectoryEntry ConnectieMedewerkerOu()
-        {
-            return new DirectoryEntry("LDAP://192.168.15.10/OU=Medewerkers,OU=Gebruikers,OU=EyeCT4Events,DC=EyeCT4Events,DC=nl");
-        }
-        private DirectoryEntry ConnectieGebruikersOu()
-        {
-            return new DirectoryEntry("LDAP://192.168.15.10/OU=Gebruikers,OU=EyeCT4Events,DC=EyeCT4Events,DC=nl");
-        }
-        private DirectoryEntry ConnectieGroepenOU()
-        {
-            return new DirectoryEntry("LDAP://192.168.15.10/OU=Groepen,OU=EyeCT4Events,DC=EyeCT4Events,DC=nl");
-        }
-        private DirectoryEntry LDAPConnectie(DirectoryEntry LDAPConnectie)
-        {
-            LDAPConnection = LDAPConnectie;
-            LDAPConnection.Username = @"EyeCT4Events\Administrator";
-            LDAPConnection.Password = "EyeCT4Events";
+        private DirectoryEntry lDAPConnection;
+        private DirectorySearcher ds;
 
-            return LDAPConnection;
-        }
-        private DirectoryEntry GebruikerDirectoryEntry(string gebruikersnaam)
-        {
-            DirectorySearcher searcher = new DirectorySearcher(LDAPConnectie(ConnectieBezoekerOu()));
-            searcher.Filter = "(sAMAccountName=" + gebruikersnaam + ")";
-            SearchResult result = searcher.FindOne();
-
-            if (result != null)
-            {
-                return new DirectoryEntry(result.Path);
-            }
-            return null;
-        }
-        /// <summary>
-        /// Public Methods
-        /// </summary>
-        /// <param name="gebruikersnaam"></param>
-        /// <param name="wachtwoord"></param>
-        /// <returns></returns>
         public bool GebruikerAuthentiseren(string gebruikersnaam, string wachtwoord)
         {
-            LDAPConnection = ConnectieGebruikersOu();
-            LDAPConnection.Username = @"EyeCT4Events\" + gebruikersnaam;
-            LDAPConnection.Password = wachtwoord;
+            lDAPConnection = ConnectieGebruikersOu();
+            lDAPConnection.Username = @"EyeCT4Events\" + gebruikersnaam;
+            lDAPConnection.Password = wachtwoord;
             try
             {
-                if (LDAPConnection.NativeGuid == null)
+                if (lDAPConnection.NativeGuid == null)
                 {
                     return false;
                 }
@@ -77,7 +35,8 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 throw new Exception(e.Message);
             }
         }
-        public void CreateUserAccount(string userName, string userPassword) //type
+
+        public void CreateUserAccount(string userName, string userPassword) // type
         {
             DirectoryEntry ouEntry = LDAPConnectie(ConnectieBezoekerOu());
 
@@ -108,6 +67,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 entryToUpdate.Properties["samaccountname"].Value = userName;
             }
         }
+
         public void CreateGroup(string groepNaam)
         {
             DirectoryEntry ouEntry = LDAPConnectie(ConnectieGroepenOU());
@@ -123,6 +83,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 throw new Exception();
             }
         }
+
         public void GebruikerToevoegenGroep(string gebruiker, string groepNaam) // werkt niet
         {
             DirectoryEntry ent = LDAPConnectie(ConnectieGroepenOU());
@@ -152,6 +113,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
 
             return gebruikers;
         }
+
         public Gebruiker GebruikerZoeken(string gebruikersnaam)
         {
             Gebruiker gebruiker = null;
@@ -167,10 +129,11 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 gebruiker.Voornaam = result.Properties["givenname"][0].ToString();
                 gebruiker.Achternaam = result.Properties["sn"][0].ToString();
             }
+
             return gebruiker;
         }
-        public void GebruikerUpdaten(string gebruikersnaam, string title, string street, string l, string st, string postcode,
-                                    string afdeling, string mail, string manager, string telnummer)
+
+        public void GebruikerUpdaten(string gebruikersnaam, string title, string street, string l, string st, string postcode, string afdeling, string mail, string manager, string telnummer)
         {
             DirectorySearcher searcher = new DirectorySearcher(LDAPConnectie(ConnectieGebruikersOu()));
             searcher.Filter = "(sAMAccountName=" + gebruikersnaam + ")";
@@ -204,6 +167,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 entryToUpdate.CommitChanges();
             }
         }  // Werkt.
+
         public void VerwijderenGebruiker(string gebruikersnaam)
         {
             DirectoryEntry ouEntry = LDAPConnectie(ConnectieBezoekerOu());
@@ -218,6 +182,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 throw new Exception(ex.Message);
             }
         }
+
         public void ToevoegenAanGroep(string gebruikersnaam, string groepnaam)
         {
             DirectoryEntry ouEntry = LDAPConnectie(ConnectieGroepenOU());
@@ -237,6 +202,54 @@ namespace EyeCT4EventsMVC.Models.Persistencies
         string IActiveDirectory.CreateUserAccount(string userName, string userPassword)
         {
             throw new NotImplementedException();
+        }
+
+        private DirectoryEntry ConnectieBezoekerOu()
+        {
+            return new DirectoryEntry("LDAP://192.168.15.10/OU=Bezoekers,OU=Gebruikers,OU=EyeCT4Events,DC=EyeCT4Events,DC=nl");
+        }
+
+        private DirectoryEntry ConnectieBeheerderOu()
+        {
+            return new DirectoryEntry("LDAP://192.168.15.10/OU=Beheerder,OU=Gebruikers,OU=EyeCT4Events,DC=EyeCT4Events,DC=nl");
+        }
+
+        private DirectoryEntry ConnectieMedewerkerOu()
+        {
+            return new DirectoryEntry("LDAP://192.168.15.10/OU=Medewerkers,OU=Gebruikers,OU=EyeCT4Events,DC=EyeCT4Events,DC=nl");
+        }
+
+        private DirectoryEntry ConnectieGebruikersOu()
+        {
+            return new DirectoryEntry("LDAP://192.168.15.10/OU=Gebruikers,OU=EyeCT4Events,DC=EyeCT4Events,DC=nl");
+        }
+
+        private DirectoryEntry ConnectieGroepenOU()
+        {
+            return new DirectoryEntry("LDAP://192.168.15.10/OU=Groepen,OU=EyeCT4Events,DC=EyeCT4Events,DC=nl");
+        }
+
+        private DirectoryEntry LDAPConnectie(DirectoryEntry lDAPConnectie)
+        {
+            lDAPConnection = lDAPConnectie;
+            lDAPConnection.Username = @"EyeCT4Events\Administrator";
+            lDAPConnection.Password = "EyeCT4Events";
+
+            return lDAPConnection;
+        }
+
+        private DirectoryEntry GebruikerDirectoryEntry(string gebruikersnaam)
+        {
+            DirectorySearcher searcher = new DirectorySearcher(LDAPConnectie(ConnectieBezoekerOu()));
+            searcher.Filter = "(sAMAccountName=" + gebruikersnaam + ")";
+            SearchResult result = searcher.FindOne();
+
+            if (result != null)
+            {
+                return new DirectoryEntry(result.Path);
+            }
+
+            return null;
         }
     }
 }

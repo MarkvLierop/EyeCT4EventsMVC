@@ -28,16 +28,15 @@
         <a target="_blank" href="Camping_ReëenDal.PNG">
             <img src="~/Resources/Camping_ReeënDal.png" alt="CampingPlattegrond" width="500" height="600">
         </a>
-        </div>
+    </div>
     <div>
-        <ul name="Campingplaatslijst" rows="30" cols="50">
-        
-             @foreach (Kampeerplaats k in (List<Kampeerplaats>)ViewBag.AlleKampeerplaatsen)
+        <select>
+            @foreach (Kampeerplaats k in (List<Kampeerplaats>)ViewBag.AlleKampeerplaatsen)
             {
-                  <li>@k.Nummer, @k.Type, @k.MaxPersonen</li>
+                <option value="Kampeerplaats" name="Kampeerplek">@k.Nummer, @k.Type, @k.MaxPersonen</option>
             }
 
-        </ul>
+        </select>
     </div>
 
 </form>

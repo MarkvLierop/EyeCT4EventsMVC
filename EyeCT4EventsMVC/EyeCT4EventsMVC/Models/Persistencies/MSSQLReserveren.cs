@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="MSSQLReserveren.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -19,7 +22,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT * FROM Materiaal WHERE HuidigeVoorraad > 0";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     reader = command.ExecuteReader();
 
@@ -32,7 +35,6 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         materiaal.Prijs = Convert.ToInt32(reader["Prijs"]);
                         materiaal.Voorraad = Convert.ToInt32(reader["HuidigeVoorraad"]);
 
-
                         materialen.Add(materiaal);
                     }
                 }
@@ -41,20 +43,20 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
-            Close();
 
+            Close();
             return materialen;
         }
 
         public List<Kampeerplaats> AlleKampeerplaatsenOpvragen()
         {
-            List<Kampeerplaats> KampeerList = new List<Kampeerplaats>();
+            List<Kampeerplaats> kampeerList = new List<Kampeerplaats>();
 
             Connect();
             try
             {
                 string query = "SELECT * FROM Kampeerplaats where ID NOT IN (Select Kampeerplaats_ID from Reservering) ";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     reader = command.ExecuteReader();
 
@@ -69,8 +71,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         kampeerplaats.Lawaai = Convert.ToInt32(reader["Lawaai"]);
                         kampeerplaats.Invalide = Convert.ToInt32(reader["Invalide"]);
                         kampeerplaats.Comfort = Convert.ToInt32(reader["Comfort"]);
-                        KampeerList.Add(kampeerplaats);
-
+                        kampeerList.Add(kampeerplaats);
                     }
                 }
             }
@@ -78,19 +79,20 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
+
             Close();
-            return KampeerList;
+            return kampeerList;
         }
-        public List<Kampeerplaats> KampeerplaatsenOpvragen(int comfort, int invalide, int lawaai, string eigentent,
-                                     string bungalow, string bungalino, string blokhut, string stacaravan, string huurtent)
+
+        public List<Kampeerplaats> KampeerplaatsenOpvragen(int comfort, int invalide, int lawaai, string eigentent, string bungalow, string bungalino, string blokhut, string stacaravan, string huurtent)
         {
-            List<Kampeerplaats> KampeerList = new List<Kampeerplaats>();
+            List<Kampeerplaats> kampeerList = new List<Kampeerplaats>();
 
             Connect();
             try
             {
                 string query = "SELECT * FROM KampeerPlaats k WHERE k.Comfort = @comfort AND k.Invalide = @invalide AND k.Lawaai = @lawaai AND (k.KampeerPlaatsType = @eigentent OR k.KampeerPlaatsType = @bungalow OR k.KampeerPlaatsType = @bungalino OR k.KampeerPlaatsType = @blokhut OR k.KampeerPlaatsType = @stacaravan OR k.KampeerPlaatsType = @huurtent);";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@comfort", comfort));
                     command.Parameters.Add(new SqlParameter("@invalide", invalide));
@@ -115,8 +117,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         kampeerplaats.Invalide = Convert.ToInt32(reader["Invalide"]);
                         kampeerplaats.Comfort = Convert.ToInt32(reader["Comfort"]);
                         kampeerplaats.Locatie = Convert.ToInt32(reader["Locatie"]);
-                        KampeerList.Add(kampeerplaats);
-
+                        kampeerList.Add(kampeerplaats);
                     }
                 }
             }
@@ -124,18 +125,20 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
+
             Close();
-            return KampeerList;
+            return kampeerList;
         }
-        public void ZetBezoekerOpAfwezig(int RFID)
+
+        public void ZetBezoekerOpAfwezig(int rfid)
         {
             Connect();
             try
             {
                 string query = "UPDATE Gebruiker SET Aanwezig = 0 WHERE RFID = @RFID ";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@RFID", RFID));
+                    command.Parameters.Add(new SqlParameter("@RFID", rfid));
 
                     command.ExecuteNonQuery();
                 }
@@ -144,17 +147,19 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
+
             Close();
         }
-        public void ZetBezoekerOpAanwezig(int RFID)
+
+        public void ZetBezoekerOpAanwezig(int rfid)
         {
             Connect();
             try
             {
                 string query = "UPDATE Gebruiker SET Aanwezig = 1 WHERE RFID = @RFID ";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@RFID", RFID));
+                    command.Parameters.Add(new SqlParameter("@RFID", rfid));
 
                     command.ExecuteNonQuery();
                 }
@@ -163,6 +168,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
+
             Close();
         }
 
@@ -170,7 +176,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
         {
             Connect();
             string query = "INSERT INTO Materiaal VALUES (@voorraad, @naam, @prijs)";
-            using (command = new SqlCommand(query, SQLcon))
+            using (command = new SqlCommand(query, sQLcon))
             {
                 command.Parameters.Add(new SqlParameter("@voorraad", voorraad));
                 command.Parameters.Add(new SqlParameter("@naam", naam));
@@ -181,6 +187,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
 
             Close();
         }
+
         public void ReserveringPlaatsen(int gebruikerid, int plaatsid, DateTime datumVan, DateTime datumTot)
         {
             int userid = gebruikerid;
@@ -190,7 +197,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
 
             Connect();
             string query = "INSERT INTO Reservering VALUES (@KampeerPlaats, @GebruikrID, @DatumVan, @DatumTot, @Betaling)";
-            using (command = new SqlCommand(query, SQLcon))
+            using (command = new SqlCommand(query, sQLcon))
             {
                 command.Parameters.Add(new SqlParameter("@KampeerPlaats", id));
                 command.Parameters.Add(new SqlParameter("@GebruikrID", userid));
@@ -198,92 +205,79 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 command.Parameters.Add(new SqlParameter("@DatumTot", dtot));
                 command.Parameters.Add(new SqlParameter("@Betaling", false));
 
-
                 command.ExecuteNonQuery();
             }
 
             Close();
         }
 
-        public Reservering HaalReserveringOpNaAanmaken(int gebruikerid, int plaatsid, DateTime datumVan, DateTime datumTot)
+        public Reservering HaalReserveringOpNaAanmaken(int gebruikerid, int plaatsid, DateTime datumvan, DateTime datumtot)
         {
             Reservering reservering = new Reservering();
 
-            int Gebruikerid = gebruikerid;
-            int Plaatsid = plaatsid;
-            DateTime DatumVan = datumVan;
-            DateTime DatumTot = datumTot;
+            int gebruikerId = gebruikerid;
+            int plaatsId = plaatsid;
+            DateTime datumVan = datumvan;
+            DateTime datumTot = datumtot;
             bool betaald;
 
             Connect();
             string query = "SELECT * FROM Reservering WHERE GebruikerID = @Gebruikerid AND KampeerPlaats = @Plaatsid AND DatumVan = @DatumVan AND DatumTot = @DatumTot";
-            using (command = new SqlCommand(query, SQLcon))
+            using (command = new SqlCommand(query, sQLcon))
             {
-                command.Parameters.Add(new SqlParameter("@Gebruikerid", Gebruikerid));
-                command.Parameters.Add(new SqlParameter("@Plaatsid", Plaatsid));
-                command.Parameters.Add(new SqlParameter("@DatumVan", DatumVan));
-                command.Parameters.Add(new SqlParameter("@DatumTot", DatumTot));
+                command.Parameters.Add(new SqlParameter("@Gebruikerid", gebruikerId));
+                command.Parameters.Add(new SqlParameter("@Plaatsid", plaatsId));
+                command.Parameters.Add(new SqlParameter("@DatumVan", datumVan));
+                command.Parameters.Add(new SqlParameter("@DatumTot", datumTot));
 
                 reader = command.ExecuteReader();
 
-
                 while (reader.Read())
                 {
-
-                    int GebruikerID = Convert.ToInt32(reader["GebruikerID"]);
-                    int PlaatsID = Convert.ToInt32(reader["KampeerPlaats"]);
-                    int ID = Convert.ToInt32(reader["ID"]);
-                    DateTime DatumTOT = Convert.ToDateTime(reader["DatumTot"]);
-                    DateTime DatumVAN = Convert.ToDateTime(reader["DatumVan"]);
-                    if ((bool)(reader["Betaald"]) == false)
+                    int gebruikerID = Convert.ToInt32(reader["GebruikerID"]);
+                    int plaatsID = Convert.ToInt32(reader["KampeerPlaats"]);
+                    int iD = Convert.ToInt32(reader["ID"]);
+                    DateTime datumTOT = Convert.ToDateTime(reader["DatumTot"]);
+                    DateTime datumVAN = Convert.ToDateTime(reader["DatumVan"]);
+                    if ((bool)reader["Betaald"] == false)
                     {
                         betaald = false;
 
-
-                        reservering.ReserveringID = ID;
-                        reservering.BezoekerID = GebruikerID;
-                        reservering.KampeerplaatsID = PlaatsID;
-                        reservering.DatumVan = DatumVAN;
-                        reservering.DatumTot = DatumTOT;
+                        reservering.ReserveringID = iD;
+                        reservering.BezoekerID = gebruikerID;
+                        reservering.KampeerplaatsID = plaatsID;
+                        reservering.DatumVan = datumVAN;
+                        reservering.DatumTot = datumTOT;
                         reservering.Betaald = betaald;
-
                     }
-
                     else
                     {
-
                         betaald = true;
 
-                        reservering.ReserveringID = ID;
-                        reservering.BezoekerID = GebruikerID;
-                        reservering.KampeerplaatsID = PlaatsID;
-                        reservering.DatumVan = DatumVAN;
-                        reservering.DatumTot = DatumTOT;
+                        reservering.ReserveringID = iD;
+                        reservering.BezoekerID = gebruikerID;
+                        reservering.KampeerplaatsID = plaatsID;
+                        reservering.DatumVan = datumVAN;
+                        reservering.DatumTot = datumTOT;
                         reservering.Betaald = betaald;
                     }
-
-
                 }
-
-
             }
 
             Close();
             return reservering;
-
         }
 
         public void ReserveringgroepToevoegen(int verantwoordelijke, int gebruiker, int kampeerplaats, int reservering)
         {
             Connect();
             string query = "INSERT INTO ReserveringGroep VALUES (@ReserveringsVerantwoordelijke, @Gebruiker, @Kampeerplaats, @Reservering)";
-            using (command = new SqlCommand(query, SQLcon))
+            using (command = new SqlCommand(query, sQLcon))
             {
                 command.Parameters.Add(new SqlParameter("@ReserveringsVerantwoordelijke", verantwoordelijke));
                 command.Parameters.Add(new SqlParameter("@Gebruiker", gebruiker));
                 command.Parameters.Add(new SqlParameter("@Kampeerplaats", kampeerplaats));
                 command.Parameters.Add(new SqlParameter("@Reservering", reservering));
-
 
                 command.ExecuteNonQuery();
             }
@@ -295,14 +289,12 @@ namespace EyeCT4EventsMVC.Models.Persistencies
         {
             Connect();
             string query = "INSERT INTO Uitgeleend_Materiaal VALUES (@Materiaalid, @Gebruikerid, @Datum, @Aantal)";
-            using (command = new SqlCommand(query, SQLcon))
+            using (command = new SqlCommand(query, sQLcon))
             {
                 command.Parameters.Add(new SqlParameter("@Materiaalid", materiaalid));
                 command.Parameters.Add(new SqlParameter("@Gebruikerid", gebruikerid));
                 command.Parameters.Add(new SqlParameter("@Datum", datum));
                 command.Parameters.Add(new SqlParameter("@Aantal", aantal));
-
-
 
                 command.ExecuteNonQuery();
             }
@@ -314,11 +306,10 @@ namespace EyeCT4EventsMVC.Models.Persistencies
         {
             Connect();
             string query = "UPDATE Materiaal SET HuidigeVoorraad = @Voorraad WHERE ID = @ID";
-            using (command = new SqlCommand(query, SQLcon))
+            using (command = new SqlCommand(query, sQLcon))
             {
                 command.Parameters.Add(new SqlParameter("@Voorraad", voorraad));
                 command.Parameters.Add(new SqlParameter("@ID", id));
-
 
                 command.ExecuteNonQuery();
             }

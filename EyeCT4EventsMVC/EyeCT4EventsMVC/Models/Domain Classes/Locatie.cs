@@ -1,23 +1,32 @@
-﻿using EyeCT4EventsMVC.Models.Persistencies;
-using EyeCT4EventsMVC.Models.Repositories;
+﻿// <copyright file="Locatie.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using EyeCT4EventsMVC.Models.Persistencies;
+using EyeCT4EventsMVC.Models.Repositories;
 
 namespace EyeCT4EventsMVC.Models.Domain_Classes
 {
     public class Locatie
     {
         public int ID { get; private set; }
-        public string  Naam { get; private set; }
-        public string Straat { get; private set; }
-        public int Huisnummer { get; private set; }
-        public string Postcode { get; private set; }
-        public string Woonplaats { get; private set; }
-        private RepositoryLocatie RepoLocatie;
 
-        public Locatie(int id,string naam, string straat, int huisnummer,string postcode, string woonplaats)
+        public string Naam { get; private set; }
+
+        public string Straat { get; private set; }
+
+        public int Huisnummer { get; private set; }
+
+        public string Postcode { get; private set; }
+
+        public string Woonplaats { get; private set; }
+
+        private RepositoryLocatie repoLocatie;
+
+        public Locatie(int id, string naam, string straat, int huisnummer, string postcode, string woonplaats)
         {
             ID = id;
             Naam = naam;
@@ -29,19 +38,18 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
 
         public Locatie()
         {
-
         }
 
         public List<Locatie> AlleLocaties()
         {
-            RepoLocatie = new RepositoryLocatie(new MSSQLLocatie());
-            return RepoLocatie.AlleLocaties();
+            repoLocatie = new RepositoryLocatie(new MSSQLLocatie());
+            return repoLocatie.AlleLocaties();
         }
 
         public int LocatieBijNaam(string naam)
         {
-            RepoLocatie = new RepositoryLocatie(new MSSQLLocatie());
-            return RepoLocatie.LocatieBijNaam(naam);
+            repoLocatie = new RepositoryLocatie(new MSSQLLocatie());
+            return repoLocatie.LocatieBijNaam(naam);
         }
     }
 }

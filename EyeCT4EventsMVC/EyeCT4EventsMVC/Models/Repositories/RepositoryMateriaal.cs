@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="RepositoryMateriaal.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,7 +12,7 @@ namespace EyeCT4EventsMVC.Models.Repositories
 {
     public class RepositoryMateriaal
     {
-        IMateriaal IM;
+        public IMateriaal IM;
 
         public RepositoryMateriaal(IMateriaal im)
         {
@@ -20,11 +23,12 @@ namespace EyeCT4EventsMVC.Models.Repositories
         {
             IM.ToevoegenMateriaal(naam, prijs, voorraad);
         }
+
         public List<Materiaal> HaalMaterialenOp()
         {
             return IM.HaalMaterialenOp();
         }
-
+        
         public void ReserveerMateriaal(int gebruikerid, int materiaalid, int aantal, DateTime datum)
         {
             IM.ReserveerMateriaal(gebruikerid, materiaalid, aantal, datum);
