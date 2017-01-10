@@ -27,6 +27,7 @@ namespace EyeCT4EventsMVC.Controllers
                 try
                 {
                     ViewBag.AlleMedia = rsms.AlleMediaOpvragen();
+                    ViewBag.AlleReacties = rsms.AlleReactiesOpvragen();
                 }
                 catch (Exception e)
                 {

@@ -78,14 +78,14 @@
                 if (i < weergeefAantal)
                 {
                     <b>@media.AlleReacties()[i].GeplaatstDoorGebruiker():</b>
-                    <p>
-                        @media.AlleReacties()[i].Inhoud
-                    </p>
-                    <form method="post">
-                        @Html.ActionLink(" Likes: " + media.AlleReacties()[i].Likes, "LikeReactie", new {reactieID = media.AlleReacties()[i].ReactieID}, new {@class = ""})
-                        @Html.ActionLink("Rapporteer", "RapporteerReactie", new {reactieID = media.AlleReacties()[i].ReactieID}, new {@class = ""})
-                    </form>
-                    <hr/>
+                        <p>
+                            @media.AlleReacties()[i].Inhoud
+                        </p>
+                        <form method="post">
+                            @Html.ActionLink(" Likes: " + media.AlleReacties()[i].Likes, "LikeReactie", new { reactieID = media.AlleReacties()[i].ReactieID }, new { @class = "" })
+                            @Html.ActionLink("Rapporteer", "RapporteerReactie", new { reactieID = media.AlleReacties()[i].ReactieID }, new { @class = "" })
+                        </form>
+                        <hr />
                 }
                 else
                 {
@@ -96,14 +96,14 @@
                                 @for (int a = weergeefAantal; a < media.AlleReacties().Count; a++)
                                 {
                                     <b>@media.AlleReacties()[a].GeplaatstDoorGebruiker():</b>
-                                    <p>
-                                        @media.AlleReacties()[a].Inhoud
-                                    </p>
-                                    <form method="post">
-                                        @Html.ActionLink("Likes: " + media.AlleReacties()[a].Likes, "LikeReactie", new {reactieID = media.AlleReacties()[a].ReactieID}, new {@class = ""})
-                                        @Html.ActionLink("Rapporteer", "RapporteerReactie", new {reactieID = media.AlleReacties()[a].ReactieID}, new {@class = ""})
-                                    </form>
-                                    <hr/>
+                                        <p>
+                                            @media.AlleReacties()[a].Inhoud
+                                        </p>
+                                        <form method="post">
+                                            @Html.ActionLink("Likes: " + media.AlleReacties()[a].Likes, "LikeReactie", new { reactieID = media.AlleReacties()[a].ReactieID }, new { @class = "" })
+                                            @Html.ActionLink("Rapporteer", "RapporteerReactie", new { reactieID = media.AlleReacties()[a].ReactieID }, new { @class = "" })
+                                        </form>
+                                        <hr />
                                 }
                             </div>
                         </div>
