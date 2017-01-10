@@ -422,7 +422,6 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 command.Parameters.AddWithValue("@Aanwezig", 0);
                 command.Parameters.AddWithValue("@Emailadres", gebruiker.Email);
                 command.Parameters.AddWithValue("@Gebruikersnaam", gebruiker.Gebruikersnaam);
-
                 command.ExecuteNonQuery();
             }
 

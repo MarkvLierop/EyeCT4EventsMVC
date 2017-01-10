@@ -20,11 +20,6 @@ namespace EyeCT4EventsMVC.Models.Repositories
             ISMS = isms;
         }
 
-        public void VerwijderMedia(int mediaID)
-        {
-            ISMS.VerwijderMedia(mediaID);
-        }
-
         public void SchoolAbusievelijkTaalgebruikOp()
         {
             ISMS.SchoolAbusievelijkTaalgebruikOp();
@@ -119,6 +114,11 @@ namespace EyeCT4EventsMVC.Models.Repositories
         public void ToevoegenReactie(Reactie reactie)
         {
             ISMS.ToevoegenReactie(reactie);
+        }
+
+        public void VerwijderMedia(Media media)
+        {
+            ISMS.VerwijderMedia(media);
         }
     }
 }
