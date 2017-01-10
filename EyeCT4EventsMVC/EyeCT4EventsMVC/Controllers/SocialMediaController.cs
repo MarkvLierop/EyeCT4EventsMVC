@@ -20,7 +20,7 @@ namespace EyeCT4EventsMVC.Controllers
         public ActionResult SocialMedia()
         {
             Gebruiker g = new Bezoeker();
-            g.ID = 5;
+            g.ID = 1;
             Session["Gebruiker"] = g;
             if (Url.RequestContext.RouteData.Values["id"] == null)
             {
@@ -78,6 +78,7 @@ namespace EyeCT4EventsMVC.Controllers
         {
             try
             {
+                media.GeplaatstDoor = ((Gebruiker)Session["Gebruiker"]).ID;
                 rsms.ToevoegenMedia(media);
             }
             catch (Exception e)
@@ -90,13 +91,16 @@ namespace EyeCT4EventsMVC.Controllers
 
         public ActionResult LikeMedia(int mediaID)
         {
-            try
+            if (!rsms.CheckOfLikeBestaat((Gebruiker)Session["Gebruiker"], mediaID, int.MinValue))
             {
-                rsms.ToevoegenLikeInMediaOfReactie((Gebruiker)Session["Gebruiker"], mediaID, int.MinValue);
-            }
-            catch (Exception e)
-            {
-                ViewBag.Error = e.Message;
+                try
+                {
+                    rsms.ToevoegenLikeInMediaOfReactie((Gebruiker)Session["Gebruiker"], mediaID, int.MinValue);
+                }
+                catch (Exception e)
+                {
+                    ViewBag.Error = e.Message;
+                }
             }
 
             return RedirectToAction("SocialMedia");
@@ -120,7 +124,7 @@ namespace EyeCT4EventsMVC.Controllers
         {
             try
             {
-                rsms.ToevoegenRapporterenMediaReactie(reactieID, reactieID);
+                rsms.ToevoegenRapporterenMediaReactie(int.MinValue, reactieID);
             }
             catch (Exception e)
             {
@@ -130,17 +134,20 @@ namespace EyeCT4EventsMVC.Controllers
             return RedirectToAction("SocialMedia");
         }
 
-        public ActionResult LikeReactie(int reactieID)
+        public ActionResult LikeReactie(int reactieID, int mediaID)
         {
-            try
-            {
-                rsms.ToevoegenLikeInMediaOfReactie((Gebruiker)Session["Gebruiker"], int.MinValue, reactieID);
-            }
-            catch (Exception e)
-            {
-                ViewBag.Error = e.Message;
-            }
 
+            if (!rsms.CheckOfLikeBestaat((Gebruiker)Session["Gebruiker"], mediaID, reactieID))
+            {
+                try
+                {
+                    rsms.ToevoegenLikeInMediaOfReactie((Gebruiker)Session["Gebruiker"], mediaID, reactieID);
+                }
+                catch (Exception e)
+                {
+                    ViewBag.Error = e.Message;
+                }
+            }
             return RedirectToAction("SocialMedia");
         }
 
@@ -192,6 +199,22 @@ namespace EyeCT4EventsMVC.Controllers
             }
 
             return RedirectToAction("CategorieToevoegen");
+        }
+        public ActionResult LoadResource(string pad, string ext, string type)
+        {
+            if (type == "Afbeelding")
+            {
+                return File(@"E:\School\SE Jaar1\Proftaak\EyeCT4EventsMVC\EyeCT4EventsMVC\Resources\" + pad, "image/" + ext);
+            }
+            else if (type == "Video")
+            {
+                return File(@"E:\School\SE Jaar1\Proftaak\EyeCT4EventsMVC\EyeCT4EventsMVC\Resources\" + pad, "video/mp4");
+            }
+            else if (type == "Audio")
+            {
+                return File(@"E:\School\SE Jaar1\Proftaak\EyeCT4EventsMVC\EyeCT4EventsMVC\Resources\" + pad, "image/jpeg");
+            }
+            return null;
         }
     }
 }

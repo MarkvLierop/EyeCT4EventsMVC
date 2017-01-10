@@ -121,7 +121,52 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 return Convert.ToDecimal(data[data.Count() - 1]);
             }
         }
+        public bool CheckOfLikeBestaat(Gebruiker gebruiker, int mediaID, int reactieID)
+        {
+            Connect();
+            try
+            {
+                if (reactieID == int.MinValue)
+                {
+                    string query = "SELECT * FROM Likes WHERE Gebruiker_ID = @gebruiker AND Media_ID = @mediaID";
+                    using (command = new SqlCommand(query, sQLcon))
+                    {
+                        command.Parameters.Add(new SqlParameter("@gebruiker", gebruiker.ID));  
+                        command.Parameters.Add(new SqlParameter("@mediaID", mediaID));   
+                        reader = command.ExecuteReader();
 
+                        while (reader.Read())
+                        {
+                            Close();
+                            return true;
+                        }
+                    }
+                }
+                else if (reactieID != int.MinValue && mediaID != int.MinValue)
+                {
+                    string query = "SELECT * FROM Likes WHERE Gebruiker_ID = @gebruiker AND Media_ID = @mediaID AND Reactie_ID = @reactieID";
+                    using (command = new SqlCommand(query, sQLcon))
+                    {
+                        command.Parameters.Add(new SqlParameter("@gebruiker", gebruiker.ID));
+                        command.Parameters.Add(new SqlParameter("@mediaID", mediaID));
+                        command.Parameters.Add(new SqlParameter("@reactieID", reactieID));
+                        reader = command.ExecuteReader();
+
+                        while (reader.Read())
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Close();
+                throw new FoutBijUitvoerenQueryException(e.Message);
+            }
+            return false;
+            Close();
+        }
         public List<Media> AlleMediaOpvragen()
         {
             List<Media> mediaList = new List<Media>();
@@ -130,7 +175,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT * FROM Media WHERE Flagged < @VerbergThreshhold ORDER BY ID DESC";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@VerbergThreshhold", 10));   //AANPASSEN
                     reader = command.ExecuteReader();
@@ -174,7 +219,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 {
                     Connect();
                     string query = "SELECT * FROM Media WHERE Beschrijving LIKE @zoekterm";
-                    using (command = new SqlCommand(query, SQLcon))
+                    using (command = new SqlCommand(query, sQLcon))
                     {
                         command.Parameters.Add(new SqlParameter("@zoekterm", "%" + s + "%"));
                         reader = command.ExecuteReader();
@@ -201,7 +246,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 {
                     Connect();
                     string query = "SELECT * FROM Reactie WHERE Inhoud LIKE @zoekterm";
-                    using (command = new SqlCommand(query, SQLcon))
+                    using (command = new SqlCommand(query, sQLcon))
                     {
                         command.Parameters.Add(new SqlParameter("@zoekterm", "%" + s + "%"));
                         reader = command.ExecuteReader();
@@ -240,7 +285,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT * FROM Media WHERE Flagged >= @VerbergThreshhold ORDER BY ID DESC";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.AddWithValue("@VerbergThreshhold", 0); //Moet nog aangepast worden
                     reader = command.ExecuteReader();
@@ -265,7 +310,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT * FROM Media WHERE ID = @ID";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@ID", ID));
                     reader = command.ExecuteReader();
@@ -289,13 +334,13 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Connect();
             try
             {
-                string query = "INSERT INTO Media VALUES (@GeplaatstDoor, @Categorie, @Beschrijving, @Pad, @Type, 0, 0)";
-                using (command = new SqlCommand(query, SQLcon))
+                string query = "INSERT INTO Media VALUES (@GeplaatstDoor, @Categorie, @Pad, @Type, 0, (SELECT GETDATE()), @Beschrijving, 0)";
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@GeplaatstDoor", media.GeplaatstDoor));
                     command.Parameters.Add(new SqlParameter("@Categorie", media.Categorie));
                     command.Parameters.Add(new SqlParameter("@Pad", media.Pad));
-                    command.Parameters.Add(new SqlParameter("@Type", BestandsTypeDefinieren(media.Type)));
+                    command.Parameters.Add(new SqlParameter("@Type", BestandsTypeDefinieren(media.GetBestandsExtentie())));
                     command.Parameters.Add(new SqlParameter("@Beschrijving", media.Beschrijving));
 
                     command.ExecuteNonQuery();
@@ -316,48 +361,50 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 try
                 {
                     string query = "UPDATE Media SET Likes= (SELECT Likes FROM Media WHERE ID = @mediaID)+1 WHERE ID = @mediaID";
-                    using (command = new SqlCommand(query, SQLcon))
+                    using (command = new SqlCommand(query, sQLcon))
                     {
                         command.Parameters.Add(new SqlParameter("@mediaID", mediaID));
 
                         command.ExecuteNonQuery();
                     }
-                    //string insert = @"INSERT INTO [Like](GebruikerID,MediaID) VALUES(@gebruikerID, @mediaID)";
-                    //using (command = new SqlCommand(insert, SQLcon))
-                    //{
-                    //    command.Parameters.Add(new SqlParameter("@gebruikerID", 1)); // AANPASSEN ALS LOGIN WERKT gebruiker.GebruikersID
-                    //    command.Parameters.Add(new SqlParameter("@mediaID", mediaID));
+                    string insert = @"INSERT INTO [Likes](Gebruiker_ID,Media_ID) VALUES(@gebruikerID, @mediaID)";
+                    using (command = new SqlCommand(insert, sQLcon))
+                    {
+                        command.Parameters.Add(new SqlParameter("@gebruikerID", gebruiker.ID)); 
+                        command.Parameters.Add(new SqlParameter("@mediaID", mediaID));
 
-                    //    command.ExecuteNonQuery();
-                    //}
+                        command.ExecuteNonQuery();
+                    }
                 }
                 catch (SqlException e)
                 {
+
                     throw new FoutBijUitvoerenQueryException(e.Message);
                 }
                 Close();
             }
             // INSERT +1 Like INTO Reactie
-            else if (mediaID == int.MinValue)
+            else if (mediaID != int.MinValue && reactieID != int.MinValue)
             {
                 Connect();
                 try
                 {
                     string query = "UPDATE Reactie SET Likes= (SELECT Likes FROM Reactie WHERE ID = @reactieID)+1 WHERE ID = @reactieID";
-                    using (command = new SqlCommand(query, SQLcon))
+                    using (command = new SqlCommand(query, sQLcon))
                     {
                         command.Parameters.Add(new SqlParameter("@reactieID", reactieID));
 
                         command.ExecuteNonQuery();
                     }
-                    //string insert = "INSERT INTO [Like](GebruikerID, ReactieID) VALUES(@gebruikerID, @reactieID)";
-                    //using (command = new SqlCommand(insert, SQLcon))
-                    //{
-                    //    command.Parameters.Add(new SqlParameter("@gebruikerID", 1)); // AANPASSEN ALS LOGIN WERKT gebruiker.GebruikersID
-                    //    command.Parameters.Add(new SqlParameter("@reactieID", reactieID));
+                    string insert = "INSERT INTO [Likes] VALUES(@gebruikerID, @mediaID, @reactieID)";
+                    using (command = new SqlCommand(insert, sQLcon))
+                    {
+                        command.Parameters.Add(new SqlParameter("@gebruikerID", gebruiker.ID));
+                        command.Parameters.Add(new SqlParameter("@mediaID", mediaID));
+                        command.Parameters.Add(new SqlParameter("@reactieID", reactieID));
 
-                    //    command.ExecuteNonQuery();
-                    //}
+                        command.ExecuteNonQuery();
+                    }
                 }
                 catch (SqlException e)
                 {
@@ -375,7 +422,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 try
                 {
                     string query = "UPDATE Media SET Flagged= (SELECT Flagged FROM Media WHERE ID = @mediaID)+1 WHERE ID = @mediaID";
-                    using (command = new SqlCommand(query, SQLcon))
+                    using (command = new SqlCommand(query, sQLcon))
                     {
                         command.Parameters.Add(new SqlParameter("@mediaID", mediaID));
 
@@ -394,7 +441,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 try
                 {
                     string query = "UPDATE Reactie SET Flagged= (SELECT Flagged FROM Reactie WHERE ID = @reactieID)+1 WHERE ID = @reactieID";
-                    using (command = new SqlCommand(query, SQLcon))
+                    using (command = new SqlCommand(query, sQLcon))
                     {
                         command.Parameters.Add(new SqlParameter("@reactieID", reactieID));
 
@@ -416,7 +463,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT * FROM Media WHERE Flagged < @Threshhold AND (Categorie_ID = @ID) ORDER BY ID DESC";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@zoekterm", "%" + zoekterm + "%"));
                     command.Parameters.Add(new SqlParameter("@ID", ID));
@@ -452,7 +499,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "UPDATE Media SET Flagged = 0 WHERE ID = @mediaID";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@mediaID", media.ID));
 
@@ -479,7 +526,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "DELETE FROM Media WHERE ID = @ID";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@ID", media.ID));
                     command.ExecuteNonQuery();
@@ -498,7 +545,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT MAX(ID) maxID FROM Media";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     reader = command.ExecuteReader();
 
@@ -535,7 +582,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 query = "SELECT COUNT(*) 'aantalCategorien' FROM Categorie";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     reader = command.ExecuteReader();
 
@@ -555,7 +602,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 query = "SELECT * FROM Categorie";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     reader = command.ExecuteReader();
 
@@ -601,7 +648,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "INSERT INTO Categorie VALUES (@Naam, @ParentCat)";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@Naam", cat.Naam));
                     command.Parameters.Add(new SqlParameter("@ParentCat", cat.Parent));
@@ -622,7 +669,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT * FROM Categorie WHERE Naam = @naam";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@naam", naam));
                     reader = command.ExecuteReader();
@@ -652,7 +699,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT * FROM Categorie WHERE Naam LIKE @naam";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@naam", "%" + naam + "%"));
                     reader = command.ExecuteReader();
@@ -682,7 +729,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "DELETE FROM Reactie WHERE ID = @ID";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@ID", reactie.ReactieID));
                     command.ExecuteNonQuery();
@@ -701,7 +748,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT * FROM Reactie WHERE Media_ID = @mediaID ORDER BY ID DESC";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@mediaID", media.ID));
                     reader = command.ExecuteReader();
@@ -734,7 +781,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT * FROM Reactie ORDER BY ID DESC";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     reader = command.ExecuteReader();
 
@@ -747,6 +794,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         reactie.Inhoud = reader["Inhoud"].ToString();
                         reactie.MediaID = Convert.ToInt32(reader["Media_ID"]);
                         reactie.ReactieID = Convert.ToInt32(reader["ID"]);
+                        reactie.Likes = Convert.ToInt32(reader["Likes"]);
                         reactieLijst.Add(reactie);
                     }
                 }
@@ -765,7 +813,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "INSERT INTO Reactie VALUES (@geplaatstDoor, @mediaID, 0, @inhoud, @datetime, 0)";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@geplaatstDoor", 1)); // Later aanpassen
                     command.Parameters.Add(new SqlParameter("@mediaID", reactie.MediaID));
@@ -787,7 +835,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "INSERT INTO Event VALUES (@locatie, @datumVan, @titel, @beschrijving, @datumTot)";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@locatie", ev.Locatie));
                     command.Parameters.Add(new SqlParameter("@datumVan", ev.DatumVan));
@@ -812,7 +860,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT * FROM Event ORDER BY DatumVan DESC";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     reader = command.ExecuteReader();
 
@@ -846,7 +894,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             query[1] = "DELETE FROM Reactie WHERE Media_ID = @MediaID";
             for(int i =0; i< query.Length; i++)
             {
-                using(command = new SqlCommand(query[i], SQLcon))
+                using(command = new SqlCommand(query[i], sQLcon))
                 {
                     command.Parameters.AddWithValue("@MediaID", MediaID);
                     command.ExecuteNonQuery();

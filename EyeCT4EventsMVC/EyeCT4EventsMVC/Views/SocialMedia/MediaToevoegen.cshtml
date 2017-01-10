@@ -7,15 +7,23 @@
 }
 
 <h2>Media toevoegen</h2>
-
-<form method="get" action="@Url.Action("InsertMedia", "SocialMedia")">
-    <div class="form-group">
-        <label class="control-label" for="inputDefault">Beschrijving:</label>
-        @Html.TextBoxFor(m => m.Beschrijving, new { @class = "form-control" })<br />
-        <label class="control-label" for="inputDefault">Bestand:</label>
-        @Html.TextBoxFor(m => m.Pad, new { @class = "form-control", type="file" })<br />
-        @Html.TextBoxFor(m => m.GeplaatstDoor, new { @class = "form-control", type = "hidden", value = ((Gebruiker)Session["Gebruiker"]).ID })<br />
-        @Html.TextBoxFor(m => m.Categorie, new { @class = "form-control", type = "hidden", value = Url.RequestContext.RouteData.Values["id"].ToString() })<br />
-        <input type="submit" value="Toevoegen" class="btn btn-default" />
-    </div>
-</form>
+@if (Url.RequestContext.RouteData.Values["id"] != null)
+{
+    <form method="get" action="@Url.Action("InsertMedia", "SocialMedia")">
+        <div class="form-group">
+            <label class="control-label" for="inputDefault">Beschrijving:</label>
+            @Html.TextBoxFor(m => m.Beschrijving, new { @class = "form-control" })<br />
+            <label class="control-label" for="inputDefault">Bestand:</label>
+            @Html.TextBoxFor(m => m.Pad, new { @class = "form-control", type="file" })<br />
+            <input type="hidden" value="@Url.RequestContext.RouteData.Values["id"]" name="Categorie" />
+            <input type="submit" value="Toevoegen" class="btn btn-default" />
+        </div>
+    </form>
+}
+else
+{
+    <script>
+        alert("Selecteer eerst een categorie.");
+        window.location.href = "http://localhost:37356/SocialMedia/SocialMedia";
+    </script>
+}

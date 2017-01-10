@@ -18,10 +18,10 @@ namespace EyeCT4EventsMVC.Models.Interfaces
 
         List<Media> AlleGerapporteerdeMediaOpvragen();
 
+        List<Reactie> AlleReactiesOpvragen();
         List<Reactie> AlleReactiesOpvragen(Media media);
-
         List<Event> AlleEventsOpvragen();
-
+        bool CheckOfLikeBestaat(Gebruiker gebruiker, int mediaID, int reactieID);
         void ToevoegenCategorie(Categorie cat);
 
         void ToevoegenEvent(Event ev);

@@ -24,7 +24,10 @@ namespace EyeCT4EventsMVC.Models.Repositories
         {
             ISMS.VerwijderMedia(mediaID);
         }
-
+        public bool CheckOfLikeBestaat(Gebruiker gebruiker, int mediaID, int reactieID)
+        {
+            return ISMS.CheckOfLikeBestaat(gebruiker, mediaID, reactieID);
+        }
         public void SchoolAbusievelijkTaalgebruikOp()
         {
             ISMS.SchoolAbusievelijkTaalgebruikOp();
@@ -61,6 +64,10 @@ namespace EyeCT4EventsMVC.Models.Repositories
             ISMS.ToevoegenMedia(media);
         }
 
+        public List<Reactie> AlleReactiesOpvragen(Media media)
+        {
+            return ISMS.AlleReactiesOpvragen(media);
+        }
         public void ZetAantalKerenGerapporteerdOp0(Media media)
         {
             ISMS.ZetAantalKerenGerapporteerdOp0(media);
@@ -111,9 +118,9 @@ namespace EyeCT4EventsMVC.Models.Repositories
             return ISMS.AlleGerapporteerdeMediaOpvragen();
         }
 
-        public List<Reactie> AlleReactiesOpvragen(Media media)
+        public List<Reactie> AlleReactiesOpvragen()
         {
-            return ISMS.AlleReactiesOpvragen(media);
+            return ISMS.AlleReactiesOpvragen();
         }
 
         public void ToevoegenReactie(Reactie reactie)

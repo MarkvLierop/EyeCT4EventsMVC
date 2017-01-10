@@ -4,12 +4,11 @@
     Layout = "~/Views/Shared/_NoHeaderLayout.cshtml";
     ViewBag.Title = "Social Media Sharing";
 
-    int weergeefAantal = 4;
+    int weergeefAantal = 2;
 }
 <h2>Social Media Sharing</h2>
-<form>
-    @Html.ActionLink("Media plaatsen", "MediaToevoegen", new { id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "btn btn-default" })<br />
-</form>
+@Html.ActionLink("Media plaatsen", "MediaToevoegen", new { id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "btn btn-default" })<br /><br />
+
 @ViewBag.Error
 
 @section Sidebar
@@ -32,24 +31,50 @@
     </div>
 }
 
-@foreach (Media media in (List<Media>) ViewBag.AlleMedia)
+@foreach (Media media in (List<Media>)ViewBag.AlleMedia)
 {
     bool weergeven = true;
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title">@media.GeplaatstDoorGebruiker() heeft @media.Type geplaatst</h3>
             <form method="post">
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target='#@(@media.ID+media.ID)'>Reageer</button>
-                @Html.ActionLink("Likes: " + @media.Likes, "LikeMedia", new {mediaID = media.ID}, new {@class = "btn btn-default floatRight"})
-                @Html.ActionLink("Rapporteer", "RapporteerMedia", new {mediaID = media.ID}, new {@class = "btn btn-danger floatRight"})
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target='#@(@media.ID + media.ID)'>Reageer</button>
+                @Html.ActionLink("Likes: " + @media.Likes, "LikeMedia", new { mediaID = media.ID }, new { @class = "btn btn-default floatRight" })
+                @Html.ActionLink("Rapporteer", "RapporteerMedia", new { mediaID = media.ID }, new { @class = "btn btn-danger floatRight" })
             </form>
         </div>
 
         <div class="panel-body">
             <h4>Beschrijving:</h4>
-            @media.Beschrijving
+            @media.Beschrijving<br />
+
+            <!-- EMBEDDING MEDIA-->
+            @if (media.Type == "Afbeelding")
+            {
+                <img src="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" alt="@media.Pad" /><br />
+                <br />
+
+                <a href="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" target="_blank">Download @media.Type</a>
+            }
+            else if (media.Type == "Video" && media.GetBestandsExtentie() == ".mp4")
+            {
+                <video width="400" controls>
+                    <source src="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" type="video/@media.GetBestandsExtentie().Replace(".","")">
+                    <source src="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" type="video/ogg">
+                    Your browser does not support HTML5 video.
+                </video><br />
+
+                <a href="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" target="_blank">Download @media.Type</a>
+            }
+            else if (media.Type == "Audio")
+            {
+
+            }
+
+            <!-- END EMBEDDING MEDIA-->
+
             <form method="get" action="@Url.Action("ReactieToevoegen")">
-                <!-- Modal -->
+            <!-- Modal -->
                 <div id='@(@media.ID + media.ID)' class="modal fade" role="dialog">
                     <div class="modal-dialog">
 
@@ -72,20 +97,22 @@
                     </div>
                 </div>
             </form>
+            <!-- END MODAL-->
+
             <h4>Reacties:</h4>
             @for (int i = 0; i < media.AlleReacties().Count; i++)
             {
                 if (i < weergeefAantal)
                 {
                     <b>@media.AlleReacties()[i].GeplaatstDoorGebruiker():</b>
-                        <p>
-                            @media.AlleReacties()[i].Inhoud
-                        </p>
-                        <form method="post">
-                            @Html.ActionLink(" Likes: " + media.AlleReacties()[i].Likes, "LikeReactie", new { reactieID = media.AlleReacties()[i].ReactieID }, new { @class = "" })
-                            @Html.ActionLink("Rapporteer", "RapporteerReactie", new { reactieID = media.AlleReacties()[i].ReactieID }, new { @class = "" })
-                        </form>
-                        <hr />
+                    <p>
+                        @media.AlleReacties()[i].Inhoud
+                    </p>
+                    <form method="post">
+                        @Html.ActionLink(" Likes: " + media.AlleReacties()[i].Likes, "LikeReactie", new { reactieID = media.AlleReacties()[i].ReactieID, mediaID = media.ID }, new { @class = "" })
+                        @Html.ActionLink("Rapporteer", "RapporteerReactie", new { reactieID = media.AlleReacties()[i].ReactieID }, new { @class = "" })
+                    </form>
+                    <hr />
                 }
                 else
                 {
@@ -115,7 +142,7 @@
                                 <div id="titletext">
                                     <h4 class="panel-title">
                                         <a data-toggle="collapse" href='#@media.ID' aria-expanded="false" aria-controls='@media.ID'>
-                                            <u>Meer reacties weergeven</u>
+                                            <u><span onclick="replaceword(this, 'Minder reacties weergeven', 'Meer reacties weergeven');">Meer reacties weergeven</span></u>
                                         </a>
                                     </h4>
                                 </div>
@@ -129,3 +156,8 @@
         
     </div>
 }
+<script>
+    function replaceword(that, word, oword) {
+        that.textContent = that.textContent == oword ? word : oword;
+    }
+</script>

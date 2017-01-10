@@ -117,7 +117,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
             smsr.VerwijderMedia(mediaID);
         }
 
-        private string GetBestandsExtentie()
+        public string GetBestandsExtentie()
         {
             string[] splitPad = Pad.Split('.');
             return "." + splitPad[splitPad.Count() - 1];
