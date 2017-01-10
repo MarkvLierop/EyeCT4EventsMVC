@@ -1,34 +1,37 @@
-﻿using EyeCT4EventsMVC.Models.Domain_Classes;
-using EyeCT4EventsMVC.Models.Interfaces;
+﻿// <copyright file="RepositoryEvent.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using EyeCT4EventsMVC.Models.Domain_Classes;
+using EyeCT4EventsMVC.Models.Interfaces;
 
 namespace EyeCT4EventsMVC.Models.Repositories
 {
     public class RepositoryEvent
     {
-        private IEvent Context;
+        private IEvent context;
 
         public RepositoryEvent(IEvent context)
         {
-            Context = context;
+            this.context = context;
         }
 
         public void EventAanmaken(Event events)
         {
-            Context.EventAanmaken(events);
+            context.EventAanmaken(events);
         }
 
         public List<Event> AlleEvents()
         {
-            return Context.AlleEvents();
+            return context.AlleEvents();
         }
 
-        public void EventVerwijderen(int EventID)
+        public void EventVerwijderen(int eventID)
         {
-            Context.EventVerwijderen(EventID);
+            context.EventVerwijderen(eventID);
         }
     }
 }

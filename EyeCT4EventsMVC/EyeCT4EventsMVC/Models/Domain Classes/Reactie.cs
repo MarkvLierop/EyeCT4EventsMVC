@@ -13,7 +13,8 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
     public class Reactie
     {
         private Repositories.RepositoryGebruiker rg;
-        private RepositoryReactie RepoReactie;
+        private RepositoryReactie repoReactie;
+
         public DateTime DatumTijd { get; set; }
 
         public int Flagged { get; set; }
@@ -27,6 +28,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         public int MediaID { get; set; }
 
         public int ReactieID { get; set; }
+
         public int GebruikerID { get; private set; }
 
         public Reactie()
@@ -34,7 +36,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
             rg = new Repositories.RepositoryGebruiker(new MSSQLGebruiker());
         }
 
-        public Reactie(int reactieID,int gebruikerID,int mediaID, int likes, string inhoud, DateTime datumTijd)
+        public Reactie(int reactieID, int gebruikerID, int mediaID, int likes, string inhoud, DateTime datumTijd)
         {
             rg = new Repositories.RepositoryGebruiker(new MSSQLGebruiker());
             ReactieID = reactieID;
@@ -49,15 +51,16 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         {
             return "Geplaatst Door: " + rg.GetGebruikerByID(GeplaatstDoor).ToString() + " | Reactie: " + Inhoud;
         }
+
         public string GeplaatstDoorGebruiker()
         {
             return rg.GetGebruikerByID(GeplaatstDoor).ToString();
         }
 
-        public List<Reactie> ReactieBijMedia(int MediaID)
+        public List<Reactie> ReactieBijMedia(int mediaID)
         {
-            RepoReactie = new RepositoryReactie(new MSSQLReactie());
-            return RepoReactie.ReactieBijMedia(MediaID);
+            repoReactie = new RepositoryReactie(new MSSQLReactie());
+            return repoReactie.ReactieBijMedia(mediaID);
         }
     }
 }

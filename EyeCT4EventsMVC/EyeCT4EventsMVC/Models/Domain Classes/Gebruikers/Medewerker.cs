@@ -12,12 +12,10 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers
     {
         public Medewerker()
         {
-
         }
+
         public Medewerker(Gebruiker gebruiker)
         {
-
         }
-
     }
 }

@@ -14,8 +14,6 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
 {
     public class Media
     {
-        int hoogsteID;
-
         public int Categorie { get; set; }
 
         public int Flagged { get; set; }
@@ -31,12 +29,13 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         public string Pad { get; set; }
 
         public string Beschrijving { get; set; }
+
         public DateTime Geplaats { get; set; }
         
         private readonly List<Reactie> reacties = new List<Reactie>();
-
-        RepositorySocialMediaSharing smsr;
-        RepositoryGebruiker rg;
+        private int hoogsteID;
+        private RepositorySocialMediaSharing smsr;
+        private RepositoryGebruiker rg;
 
         public Media()
         {
@@ -108,20 +107,20 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
             return bestandsnaam[bestandsnaam.Count() - 1];
         }
 
-        private string GetBestandsExtentie()
-        {
-            string[] splitPad = Pad.Split('.');
-            return "." + splitPad[splitPad.Count() - 1];
-        }
-
         public List<Media> GerapporteerdeMedia()
         {
             return smsr.AlleGerapporteerdeMediaOpvragen();
         }
 
-        public void MediaVerwijderen(int MediaID)
+        public void MediaVerwijderen(int mediaID)
         {
-            smsr.VerwijderMedia(MediaID);
+            smsr.VerwijderMedia(mediaID);
+        }
+
+        private string GetBestandsExtentie()
+        {
+            string[] splitPad = Pad.Split('.');
+            return "." + splitPad[splitPad.Count() - 1];
         }
     }
 }

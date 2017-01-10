@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="SocialMediaController.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -35,7 +38,7 @@ namespace EyeCT4EventsMVC.Controllers
             {
                 try
                 {
-                    ViewBag.AlleMedia = rsms.ZoekenMedia("", Convert.ToInt32(Url.RequestContext.RouteData.Values["id"]));
+                    ViewBag.AlleMedia = rsms.ZoekenMedia(" ", Convert.ToInt32(Url.RequestContext.RouteData.Values["id"]));
                 }
                 catch (Exception e)
                 {
@@ -56,6 +59,7 @@ namespace EyeCT4EventsMVC.Controllers
                     ViewBag.Error = e.Message;
                 }
             }
+
             return View();
         }
 
@@ -80,13 +84,15 @@ namespace EyeCT4EventsMVC.Controllers
             {
                 ViewBag.Error = e.Message;
             }
+
             return RedirectToAction("SocialMedia");
         }
+
         public ActionResult LikeMedia(int mediaID)
         {
             try
             {
-                rsms.ToevoegenLikeInMediaOfReactie((Gebruiker)Session["Gebruiker"], mediaID, Int32.MinValue);
+                rsms.ToevoegenLikeInMediaOfReactie((Gebruiker)Session["Gebruiker"], mediaID, int.MinValue);
             }
             catch (Exception e)
             {
@@ -95,6 +101,7 @@ namespace EyeCT4EventsMVC.Controllers
 
             return RedirectToAction("SocialMedia");
         }
+
         public ActionResult RapporteerMedia(int mediaID)
         {
             try
@@ -119,8 +126,10 @@ namespace EyeCT4EventsMVC.Controllers
             {
                 ViewBag.Error = e.Message;
             }
+
             return RedirectToAction("SocialMedia");
         }
+
         public ActionResult LikeReactie(int reactieID)
         {
             try
@@ -131,6 +140,7 @@ namespace EyeCT4EventsMVC.Controllers
             {
                 ViewBag.Error = e.Message;
             }
+
             return RedirectToAction("SocialMedia");
         }
 
@@ -146,12 +156,12 @@ namespace EyeCT4EventsMVC.Controllers
                 cat.Parent = Convert.ToInt32(Url.RequestContext.RouteData.Values["id"]);
                 return View(cat);
             }
+
             return RedirectToAction("SocialMedia");
         }
 
         public ActionResult ZoekenCategorie(string categorie)
         {
-
             return RedirectToAction("SocialMedia", "SocialMedia");
         }
 
@@ -163,11 +173,12 @@ namespace EyeCT4EventsMVC.Controllers
             Reactie reactie = new Reactie();
             reactie.MediaID = id;
             reactie.DatumTijd = DateTime.Now;
-            reactie.GeplaatstDoor = ((Gebruiker) Session["Gebruiker"]).ID;
+            reactie.GeplaatstDoor = ((Gebruiker)Session["Gebruiker"]).ID;
             reactie.Inhoud = inhoud;
             rsms.ToevoegenReactie(reactie);
             return RedirectToAction("SocialMedia");
         }
+
         public ActionResult InsertCategorie(Categorie cat)
         {
             try
@@ -179,6 +190,7 @@ namespace EyeCT4EventsMVC.Controllers
             {
                 ViewBag.Error = e.Message;
             }
+
             return RedirectToAction("CategorieToevoegen");
         }
     }

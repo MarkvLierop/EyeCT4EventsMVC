@@ -48,6 +48,5 @@ namespace EyeCT4EventsMVC.Controllers
 
             return View();
         }
-
     }
 }

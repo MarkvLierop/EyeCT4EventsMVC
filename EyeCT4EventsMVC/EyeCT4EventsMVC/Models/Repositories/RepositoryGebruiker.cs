@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="RepositoryGebruiker.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,69 +12,81 @@ namespace EyeCT4EventsMVC.Models.Repositories
 {
     public class RepositoryGebruiker
     {
-        IGebruikerAdministratie context;
+        public IGebruikerAdministratie Context;
 
         public RepositoryGebruiker(IGebruikerAdministratie context)
         {
-            this.context = context;
+            Context = context;
         }
+
         public bool CheckOfGebruikerBestaat(string gebruikersnaam)
         {
-            return context.CheckOfGebruikerBestaat(gebruikersnaam);
+            return Context.CheckOfGebruikerBestaat(gebruikersnaam);
         }
+
         public List<Gebruiker> GesorteerdeGeberuikers(string filter)
         {
-            return context.GesorteerdeGeberuikers(filter);
+            return Context.GesorteerdeGeberuikers(filter);
         }
-        public List<Gebruiker> ZoekenGebruiker(string GezochtenNaam)
+
+        public List<Gebruiker> ZoekenGebruiker(string gezochteNaam)
         {
-            return context.ZoekenGebruiker(GezochtenNaam);
+            return Context.ZoekenGebruiker(gezochteNaam);
         }
-        public void Betaal(int RFID)
+
+        public void Betaal(int rfid)
         {
-            context.Betaal(RFID);
+            Context.Betaal(rfid);
         }
+
         public List<string> GetBetalingsGegevens(Gebruiker g)
         {
-            return context.GetBetalingsGegevens(g);
+            return Context.GetBetalingsGegevens(g);
         }
-        public Gebruiker GetGebruikerByRFID(int RFID)
+
+        public Gebruiker GetGebruikerByRFID(int rfid)
         {
-            return context.GetGebruikerByRFID(RFID);
+            return Context.GetGebruikerByRFID(rfid);
         }
+
         public List<Gebruiker> LijstAanwezigeBezoekers()
         {
-            return context.LijstAanwezigePersonen();
+            return Context.LijstAanwezigePersonen();
         }
-        public void ZetGebruikerOpAanwezig(int RFID)
+
+        public void ZetGebruikerOpAanwezig(int rfid)
         {
-            context.ZetBezoekerOpAanwezig(RFID);
+            Context.ZetBezoekerOpAanwezig(rfid);
         }
+
         public void ZetGebruikerOpAfwezig(int gebruikerID)
         {
-            context.ZetBezoekerOpAfwezig(gebruikerID);
+            Context.ZetBezoekerOpAfwezig(gebruikerID);
         }
+
         public Gebruiker GebruikerInloggen(string gebruikersnaam, string wachtwoord)
         {
-            return context.Inloggen(gebruikersnaam, wachtwoord);
+            return Context.Inloggen(gebruikersnaam, wachtwoord);
         }
+
         public Gebruiker GetGebruikerByGebruikersnaam(string gebruikersnaam)
         {
-            return context.GetGebruikerByGebruikersnaam(gebruikersnaam);
+            return Context.GetGebruikerByGebruikersnaam(gebruikersnaam);
         }
-        public Gebruiker GetGebruikerByID(int ID)
+
+        public Gebruiker GetGebruikerByID(int id)
         {
-            return context.GetGebruikerByID(ID);
+            return Context.GetGebruikerByID(id);
         }
 
         public List<Gebruiker> GezochteBezoekersOphalen(string zoekopdracht)
         {
-            return context.GezochteBezoekersOphalen(zoekopdracht);
+            return Context.GezochteBezoekersOphalen(zoekopdracht);
         }
 
         public void GebruikerRegistreren(Gebruiker gebruiker)
         {
-            context.GebruikerRegistreren(gebruiker);
+            Context.GebruikerRegistreren(gebruiker);
         }
     }
 }

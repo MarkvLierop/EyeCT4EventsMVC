@@ -13,13 +13,12 @@ namespace EyeCT4EventsMVC.Controllers
 {
     public class ReserveringController : Controller
     {
-        RepositoryKampeerPlaatsen rkp = new RepositoryKampeerPlaatsen(new MSSQLReserveren());
+        public RepositoryKampeerPlaatsen Rkp = new RepositoryKampeerPlaatsen(new MSSQLReserveren());
 
         // GET: Reservering
         public ActionResult Reservering()
         {
-            ViewBag.AlleKampeerplaatsen = rkp.AlleKampeerplaatsenOpvragen();  
-                     
+            ViewBag.AlleKampeerplaatsen = Rkp.AlleKampeerplaatsenOpvragen();           
             return View();
         }
     }

@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="MSSQLServer.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -13,7 +16,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
     {
         protected string connString;
         protected SqlCommand command;
-        protected SqlConnection SQLcon;
+        protected SqlConnection sQLcon;
         protected SqlDataReader reader;
 
         protected Gebruiker gebruiker;
@@ -24,20 +27,21 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 this.connString = "Data Source=192.168.10.21,20;Initial Catalog=EyeCT4Events;Persist Security Info=True;User ID=sa;Password=PTS16";
-                SQLcon = new SqlConnection(connString);
-                SQLcon.Open();
+                sQLcon = new SqlConnection(connString);
+                sQLcon.Open();
             }
             catch (SqlException e)
             {
                 throw new NoDatabaseConnectionException(e.Message);
             }
         }
+
         public void Close()
         {
             try
             {
-                SQLcon.Close();
-                SQLcon.Dispose();
+                sQLcon.Close();
+                sQLcon.Dispose();
             }
             catch (SqlException e)
             {

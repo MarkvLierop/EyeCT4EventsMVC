@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="MSSQLGebruiker.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -13,29 +16,15 @@ namespace EyeCT4EventsMVC.Models.Persistencies
 {
     public class MSSQLGebruiker : MSSQLServer, IGebruikerAdministratie
     {
-        private string EncryptString(string toEncrypt)
-        {
-            SHA256Managed crypt = new SHA256Managed();
-            System.Text.StringBuilder hash = new StringBuilder();
-            byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(toEncrypt), 0, Encoding.UTF8.GetByteCount(toEncrypt));
-            foreach (byte theByte in crypto)
-            {
-                hash.Append(theByte.ToString("x2"));
-            }
-            return hash.ToString();
-        }
-
-        // Public Methods.
-        public void Betaal(int RFID)
+        public void Betaal(int rfid)
         {
             Connect();
             try
             {
                 string query = "UPDATE Reservering SET Betaald = 1 WHERE GebruikerID = (SELECT ReserveringVerantwoordelijke FROM ReserveringGroep WHERE Gebruiker = (SELECT ID FROM Gebruiker WHERE RFID = @RFID))";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@RFID", RFID));
-
+                    command.Parameters.Add(new SqlParameter("@RFID", rfid));
                     command.ExecuteNonQuery();
                 }
             }
@@ -43,12 +32,14 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
+
             Close();
         }
+
         public List<Gebruiker> GesorteerdeGeberuikers(string filter)
         {
             List<Gebruiker> gebruikersLijst = new List<Gebruiker>();
-            string query = "";
+            string query = " ";
             if (filter == "ID")
             {
                 query = "SELECT * FROM Gebruiker";
@@ -73,8 +64,9 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 query = "SELECT * FROM Gebruiker";
             }
+
             Connect();
-            using (command = new SqlCommand(query, SQLcon))
+            using (command = new SqlCommand(query, sQLcon))
             {
                 reader = command.ExecuteReader();
 
@@ -92,6 +84,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                     {
                         gebruiker = new Medewerker();
                     }
+
                     gebruiker.ID = Convert.ToInt32(reader["ID"]);
                     gebruiker.RFID = Convert.ToInt32(reader["RFID"]);
                     gebruiker.Gebruikersnaam = reader["Gebruikersnaam"].ToString();
@@ -99,6 +92,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                     gebruiker.Voornaam = reader["Voornaam"].ToString();
                     gebruiker.Tussenvoegsel = reader["Tussenvoegsel"].ToString();
                     gebruiker.Achternaam = reader["Achternaam"].ToString();
+
                     if (Convert.ToInt32(reader["Aanwezig"]) == 1)
                     {
                         gebruiker.Aanwezig = true;
@@ -107,20 +101,22 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                     {
                         gebruiker.Aanwezig = false;
                     }
-                    gebruikersLijst.Add(gebruiker);
 
+                    gebruikersLijst.Add(gebruiker);
                 }
             }
+
             return gebruikersLijst;
         }
-        public List<Gebruiker> ZoekenGebruiker(string GezochtenNaam)
+
+        public List<Gebruiker> ZoekenGebruiker(string gezochteNaam)
         {
             List<Gebruiker> gebruikersLijst = new List<Gebruiker>();
             Connect();
             string query = "Select * FROM Gebruiker WHERE Voornaam LIKE @txtZoeken";
-            using (command = new SqlCommand(query, SQLcon))
+            using (command = new SqlCommand(query, sQLcon))
             {
-                command.Parameters.Add(new SqlParameter("@txtZoeken", "%" + GezochtenNaam + "%"));
+                command.Parameters.Add(new SqlParameter("@txtZoeken", "%" + gezochteNaam + "%"));
                 reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -136,6 +132,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                     {
                         gebruiker = new Medewerker();
                     }
+
                     gebruiker.ID = Convert.ToInt32(reader["ID"]);
                     gebruiker.RFID = Convert.ToInt32(reader["RFID"]);
                     gebruiker.Gebruikersnaam = reader["Gebruikersnaam"].ToString();
@@ -151,12 +148,14 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                     {
                         gebruiker.Aanwezig = false;
                     }
-                    gebruikersLijst.Add(gebruiker);
 
+                    gebruikersLijst.Add(gebruiker);
                 }
             }
+
             return gebruikersLijst;
         }
+
         public List<string> GetBetalingsGegevens(Gebruiker gebruiker)
         {
             List<string> betalingsGegevens = new List<string>();
@@ -164,7 +163,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT rg.ReserveringVerantwoordelijke, r.Betaald FROM Reservering r, ReserveringGroep rg WHERE rg.Reservering = r.ID AND rg.Gebruiker = @ID";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@ID", gebruiker.ID));
                     reader = command.ExecuteReader();
@@ -180,18 +179,20 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
+
             Close();
             return betalingsGegevens;
         }
-        public Gebruiker GetGebruikerByID(int ID)
+
+        public Gebruiker GetGebruikerByID(int id)
         {
             Connect();
             try
             {
                 string query = "SELECT * FROM Gebruiker WHERE ID = @ID";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@ID", ID));
+                    command.Parameters.Add(new SqlParameter("@ID", id));
                     reader = command.ExecuteReader();
 
                     while (reader.Read())
@@ -208,6 +209,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         {
                             gebruiker = new Medewerker();
                         }
+
                         gebruiker.ID = Convert.ToInt32(reader["ID"]);
                         gebruiker.Gebruikersnaam = reader["Gebruikersnaam"].ToString();
                         gebruiker.Voornaam = reader["Voornaam"].ToString();
@@ -228,18 +230,20 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
+
             Close();
             return gebruiker;
         }
-        public Gebruiker GetGebruikerByRFID(int RFID)
+
+        public Gebruiker GetGebruikerByRFID(int rfid)
         {
             Connect();
             try
             {
                 string query = "SELECT * FROM Gebruiker WHERE RFID = @RFID";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@RFID", RFID));
+                    command.Parameters.Add(new SqlParameter("@RFID", rfid));
                     reader = command.ExecuteReader();
 
                     while (reader.Read())
@@ -267,19 +271,21 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
+
             Close();
             return gebruiker;
         }
-        public Gebruiker Inloggen(string Gebruikersnaam, string wachtwoord)
+
+        public Gebruiker Inloggen(string gebruikersnaam, string wachtwoord)
         {
             Gebruiker gebruiker = null;
             Connect();
             try
             {
                 string query = "SELECT * FROM Gebruiker WHERE gebruikersnaam = @Gebruiker AND Wachtwoord = @Wachtwoord";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@Gebruiker", Gebruikersnaam));
+                    command.Parameters.Add(new SqlParameter("@Gebruiker", gebruikersnaam));
                     command.Parameters.Add(new SqlParameter("@Wachtwoord", EncryptString(wachtwoord)));
                     reader = command.ExecuteReader();
 
@@ -297,17 +303,22 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         {
                             gebruiker = new Medewerker();
                         }
+
                         gebruiker.ID = Convert.ToInt32(reader["ID"]);
 
                         if (reader["RFID"].GetType() != typeof(DBNull))
+                        {
                             gebruiker.RFID = Convert.ToInt32(reader["RFID"]);
+                        }
 
                         gebruiker.Gebruikersnaam = reader["Gebruikersnaam"].ToString();
                         gebruiker.Wachtwoord = reader["Wachtwoord"].ToString();
                         gebruiker.Voornaam = reader["Voornaam"].ToString();
 
                         if (reader["Tussenvoegsel"].GetType() != typeof(DBNull))
+                        {
                             gebruiker.Tussenvoegsel = reader["Tussenvoegsel"].ToString();
+                        }
 
                         gebruiker.Achternaam = reader["Achternaam"].ToString();
                         if (Convert.ToInt32(reader["Aanwezig"]) == 1)
@@ -325,9 +336,11 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
+
             Close();
             return gebruiker;
         }
+
         public bool CheckOfGebruikerBestaat(string gebruikersnaam)
         {
             bool gebruikerBestaat = false;
@@ -335,7 +348,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT * FROM Gebruiker WHERE gebruikersnaam = @Gebruiker";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@Gebruiker", gebruikersnaam));
                     reader = command.ExecuteReader();
@@ -354,17 +367,22 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         {
                             gebruiker = new Medewerker();
                         }
+
                         gebruiker.ID = Convert.ToInt32(reader["ID"]);
 
                         if (reader["RFID"].GetType() != typeof(DBNull))
+                        {
                             gebruiker.RFID = Convert.ToInt32(reader["RFID"]);
+                        }
 
                         gebruiker.Gebruikersnaam = reader["Gebruikersnaam"].ToString();
                         gebruiker.Wachtwoord = reader["Wachtwoord"].ToString();
                         gebruiker.Voornaam = reader["Voornaam"].ToString();
 
                         if (reader["Tussenvoegsel"].GetType() != typeof(DBNull))
+                        {
                             gebruiker.Tussenvoegsel = reader["Tussenvoegsel"].ToString();
+                        }
 
                         gebruiker.Achternaam = reader["Achternaam"].ToString();
                         if (Convert.ToInt32(reader["Aanwezig"]) == 1)
@@ -375,6 +393,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         {
                             gebruiker.Aanwezig = false;
                         }
+
                         gebruikerBestaat = true;
                     }
                 }
@@ -383,15 +402,17 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
+
             Close();
             return gebruikerBestaat;
         }
+
         public void GebruikerRegistreren(Gebruiker gebruiker)
         {
             Connect();
             string query = "INSERT INTO Gebruiker(Wachtwoord,Voornaam,Tussenvoegsel,Achternaam,GebruikerType,Aanwezig,Emailadres,Gebruikersnaam)" +
                 "VALUES (@Wachtwoord,@Voornaam, @Tussenvoegsel, @Achternaam, @GebruikerType, @Aanwezig,@Emailadres,@Gebruikersnaam)";
-            using (command = new SqlCommand(query, SQLcon))
+            using (command = new SqlCommand(query, sQLcon))
             {
                 command.Parameters.AddWithValue("@Wachtwoord", gebruiker.Wachtwoord);
                 command.Parameters.AddWithValue("@Voornaam", gebruiker.Voornaam);
@@ -404,15 +425,17 @@ namespace EyeCT4EventsMVC.Models.Persistencies
 
                 command.ExecuteNonQuery();
             }
+
             Close();
         }
+
         public Gebruiker GetGebruikerByGebruikersnaam(string gebruikersnaam)
         {
             Connect();
             try
             {
                 string query = "SELECT * FROM Gebruiker WHERE Gebruikersnaam = @GEBRUIKERSNAAM";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@GEBRUIKERSNAAM", gebruikersnaam));
                     reader = command.ExecuteReader();
@@ -431,6 +454,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         {
                             gebruiker = new Medewerker();
                         }
+
                         gebruiker.ID = Convert.ToInt32(reader["ID"]);
                         gebruiker.Gebruikersnaam = reader["Gebruikersnaam"].ToString();
                         gebruiker.Voornaam = reader["Voornaam"].ToString();
@@ -456,6 +480,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Close();
             return gebruiker;
         }
+
         public List<Gebruiker> LijstAanwezigePersonen()
         {
             List<Gebruiker> bezoekerLijst = new List<Gebruiker>();
@@ -464,7 +489,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 string query = "SELECT * FROM Gebruiker WHERE LOWER(GebruikerType) = 'bezoeker' AND Aanwezig = 1";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     reader = command.ExecuteReader();
 
@@ -495,19 +520,21 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
+
             Close();
             return bezoekerLijst;
         }
+
         public List<Gebruiker> GezochteBezoekersOphalen(string zoekopdracht)
         {
             string gezochtebezoeker = zoekopdracht;
-            List<Gebruiker> Bezoekers = new List<Gebruiker>();
+            List<Gebruiker> bezoekers = new List<Gebruiker>();
 
             Connect();
             try
             {
                 string query = "SELECT * FROM Gebruiker WHERE GebruikerType = 'bezoeker' AND Gebruikersnaam LIKE @gezochtebezoeker";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@gezochtebezoeker", "%" + gezochtebezoeker + "%"));
                     reader = command.ExecuteReader();
@@ -521,13 +548,13 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         bezoeker.Gebruikersnaam = reader["Gebruikersnaam"].ToString();
                         bezoeker.Tussenvoegsel = reader["Tussenvoegsel"].ToString();
                         bezoeker.RFID = Convert.ToInt32(reader["RFID"]);
-                        if ((Convert.ToInt32(reader["Aanwezig"]) == 1))
+                        if (Convert.ToInt32(reader["Aanwezig"]) == 1)
                         {
                             bezoeker.Aanwezig = true;
                         }
-                        bezoeker.Aanwezig = false;
-                        Bezoekers.Add(bezoeker);
 
+                        bezoeker.Aanwezig = false;
+                        bezoekers.Add(bezoeker);
                     }
                 }
             }
@@ -537,18 +564,18 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             }
 
             Close();
-            return Bezoekers;
+            return bezoekers;
         }
 
-        public void ZetBezoekerOpAfwezig(int RFID)
+        public void ZetBezoekerOpAfwezig(int rfid)
         {
             Connect();
             try
             {
                 string query = "UPDATE Gebruiker SET Aanwezig = 0 WHERE RFID = @RFID ";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@RFID", RFID));
+                    command.Parameters.Add(new SqlParameter("@RFID", rfid));
 
                     command.ExecuteNonQuery();
                 }
@@ -557,17 +584,19 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
+
             Close();
         }
-        public void ZetBezoekerOpAanwezig(int RFID)
+
+        public void ZetBezoekerOpAanwezig(int rfid)
         {
             Connect();
             try
             {
                 string query = "UPDATE Gebruiker SET Aanwezig = 1 WHERE RFID = @RFID ";
-                using (command = new SqlCommand(query, SQLcon))
+                using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@RFID", RFID));
+                    command.Parameters.Add(new SqlParameter("@RFID", rfid));
 
                     command.ExecuteNonQuery();
                 }
@@ -576,7 +605,21 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             {
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
+
             Close();
+        }
+
+        private string EncryptString(string toEncrypt)
+        {
+            SHA256Managed crypt = new SHA256Managed();
+            System.Text.StringBuilder hash = new StringBuilder();
+            byte[] crypto = crypt.ComputeHash(Encoding.UTF8.GetBytes(toEncrypt), 0, Encoding.UTF8.GetByteCount(toEncrypt));
+            foreach (byte theByte in crypto)
+            {
+                hash.Append(theByte.ToString("x2"));
+            }
+
+            return hash.ToString();
         }
     }
 }

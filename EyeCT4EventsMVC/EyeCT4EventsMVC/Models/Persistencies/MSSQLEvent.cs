@@ -1,20 +1,23 @@
-﻿using EyeCT4EventsMVC.Models.Domain_Classes;
-using EyeCT4EventsMVC.Models.Interfaces;
+﻿// <copyright file="MSSQLEvent.cs" company="Unitech">
+//     Company copyright tag.
+// </copyright>
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using EyeCT4EventsMVC.Models.Domain_Classes;
+using EyeCT4EventsMVC.Models.Interfaces;
 
 namespace EyeCT4EventsMVC.Models.Persistencies
 {
-    public class MSSQLEvent:MSSQLServer, IEvent 
+    public class MSSQLEvent : MSSQLServer, IEvent 
     {
         public void EventAanmaken(Event events)
         {
             Connect();
             string query = "INSERT INTO EventInfo(Locatie_ID,DatumVan,DatumTot,Titel,Beschrijving)Values(@LocatieID,@DatumVan,@DatumTot,@Titel,@Beschrijving)";
-            using(command = new SqlCommand(query, SQLcon))
+            using (command = new SqlCommand(query, sQLcon))
             {
                 command.Parameters.AddWithValue("@LocatieID", events.LocatieID);
                 command.Parameters.AddWithValue("@DatumVan", events.DatumVan);
@@ -27,28 +30,29 @@ namespace EyeCT4EventsMVC.Models.Persistencies
 
         public List<Event> AlleEvents()
         {
-            List<Event> AlleEvents = new List<Event>();
+            List<Event> alleEvents = new List<Event>();
             Connect();
             string query = "SELECT l.Naam, e.* FROM EventInfo e, Locatie l WHERE l.ID = e.Locatie_ID AND e.DatumTot >= @Nu";
-            using (command = new SqlCommand(query, SQLcon))
+            using (command = new SqlCommand(query, sQLcon))
             {
                 command.Parameters.AddWithValue("@Nu", DateTime.Now);
                 reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    AlleEvents.Add(CreateEventFromReader(reader));
+                    alleEvents.Add(CreateEventFromReader(reader));
                 }
             }
-            return AlleEvents;
+
+            return alleEvents;
         }
 
-        public void EventVerwijderen(int EventID)
+        public void EventVerwijderen(int eventID)
         {
             Connect();
             string query = "DELETE FROM EventInfo WHERE ID = @EventID";
-            using(command = new SqlCommand(query, SQLcon))
+            using (command = new SqlCommand(query, sQLcon))
             {
-                command.Parameters.AddWithValue("@EventID", EventID);
+                command.Parameters.AddWithValue("@EventID", eventID);
                 command.ExecuteNonQuery();
             }
         }
