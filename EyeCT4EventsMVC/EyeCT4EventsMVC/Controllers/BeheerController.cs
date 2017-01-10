@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using EyeCT4EventsMVC.Models.Domain_Classes;
 using EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers;
+using System.Data.SqlClient;
 
 namespace EyeCT4EventsMVC.Controllers
 {
@@ -30,7 +31,7 @@ namespace EyeCT4EventsMVC.Controllers
         public ActionResult EventAanmaken()
         {
             Locatie = new Locatie();
-            ViewBag.locatie = Locatie.AlleLocaties();
+            ViewBag.Locatie = Locatie.AlleLocaties();
             return View();
         }
 
@@ -54,32 +55,48 @@ namespace EyeCT4EventsMVC.Controllers
             return View();
         }
 
-        public ActionResult MaakBeheerderAan(string voornaam, string tussenvoegsel, string achternaam, string email, string gebruikersnaam, string wachtwoord, string type)
-        {           
-            if (type == "Beheerder")
+        public ActionResult MaakBeheerderAan(string voornaam, string tussenvoegsel, string achternaam, string email, string gebruikersnaam, string wachtwoord, 
+            string WachtwoordBevestigen, string type)
+        {
+            if (wachtwoord == WachtwoordBevestigen)
             {
-                gebruiker = new Beheerder(gebruiker);
+                try
+                {
+                    if (type == "Beheerder")
+                    {
+                        gebruiker = new Beheerder(gebruiker);
+                    }
+
+                    if (type == "Medewerker")
+                    {
+                        gebruiker = new Medewerker(gebruiker);
+                    }
+
+                    gebruiker.Voornaam = voornaam;
+                    gebruiker.Tussenvoegsel = tussenvoegsel;
+                    gebruiker.Achternaam = achternaam;
+                    gebruiker.Email = email;
+                    gebruiker.Gebruikersnaam = gebruikersnaam;
+                    gebruiker.Wachtwoord = wachtwoord;
+                    gebruiker.GebruikerRegistreren(gebruiker);
+                    return RedirectToAction("Index", "Beheer");
+                }
+                catch(SqlException)
+                {
+                    Session["Message"] = "Emailadres is al in gebruik";
+                    return RedirectToAction("BeheerderAanmaken", "Beheer");
+                }
             }
 
-            if (type == "Medewerker")
+            else
             {
-                gebruiker = new Medewerker(gebruiker);
+                Session["Message"] = "Wachtwoordvelden komen niet overeen";
+                return RedirectToAction("BeheerderAanmaken", "Beheer");
             }
-
-            gebruiker.Voornaam = voornaam;
-            gebruiker.Tussenvoegsel = tussenvoegsel;
-            gebruiker.Achternaam = achternaam;
-            gebruiker.Email = email;
-            gebruiker.Gebruikersnaam = gebruikersnaam;
-            gebruiker.Wachtwoord = wachtwoord;
-
-            gebruiker.GebruikerRegistreren(gebruiker);
-            return RedirectToAction("Index", "Beheer");
         }
 
         public ActionResult GerapporteerdeMedia()
         {
-            Session["Bool"] = false;
             media = new Media();
             ViewBag.GerapporteerdeMedia = media.GerapporteerdeMedia();
             return View();
@@ -95,24 +112,13 @@ namespace EyeCT4EventsMVC.Controllers
         public ActionResult VerwijderenMedia(int mediaID)
         {
             media = new Media();
-            media.MediaVerwijderen(mediaID);
-            return RedirectToAction("GerapporteerdeMedia", "Beheer");
-        }
-
-        public ActionResult BekijkReacties(int mediaID)
-        {
-            if ((bool)Session["Bool"] == false)
+            foreach(Media media in media.GerapporteerdeMedia())
             {
-                Session["Bool"] = true;
+                if(media.ID == mediaID)
+                {
+                    media.VerwijderMedia(media);
+                }
             }
-
-            if ((bool)Session["Bool"] == true)
-            {
-                Session["Bool"] = false;
-            }
-
-            Reactie reactie = new Reactie();
-            ViewBag.Reacties = reactie.ReactieBijMedia(mediaID);
             return RedirectToAction("GerapporteerdeMedia", "Beheer");
         }
     }

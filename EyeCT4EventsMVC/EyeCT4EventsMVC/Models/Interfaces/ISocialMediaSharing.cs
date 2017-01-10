@@ -35,6 +35,7 @@ namespace EyeCT4EventsMVC.Models.Interfaces
         void ToevoegenReactie(Reactie reactie);
 
         void ToevoegenRapporterenMediaReactie(int mediaID, int reactieID);
+        void VerwijderMedia(Media media);
 
         Categorie GetCategorieMetNaam(string naam);
 

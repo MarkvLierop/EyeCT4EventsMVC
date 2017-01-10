@@ -112,15 +112,15 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
             return smsr.AlleGerapporteerdeMediaOpvragen();
         }
 
-        public void MediaVerwijderen(int mediaID)
-        {
-            smsr.VerwijderMedia(mediaID);
-        }
-
-        public string GetBestandsExtentie()
+        private string GetBestandsExtentie()
         {
             string[] splitPad = Pad.Split('.');
             return "." + splitPad[splitPad.Count() - 1];
+        }
+
+        public void VerwijderMedia(Media media)
+        {
+            smsr.VerwijderMedia(media);
         }
     }
 }
