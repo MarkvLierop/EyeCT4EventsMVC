@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers;
@@ -123,14 +124,6 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 throw new Exception();
             }
         }
-        public void GebruikerToevoegenGroep(string gebruiker, string groepNaam) // werkt niet
-        {
-            DirectoryEntry ent = LDAPConnectie(ConnectieGroepenOU());
-            ent.AuthenticationType = AuthenticationTypes.Secure;
-
-            ent.Invoke("remove", new object[] { GebruikerDirectoryEntry(gebruiker) });
-            ent.CommitChanges();
-        }        // Foutmelding: server is unwilling to process the request.
 
         public List<Gebruiker> GetAlleGebruikers()
         {
@@ -220,23 +213,25 @@ namespace EyeCT4EventsMVC.Models.Persistencies
         }
         public void ToevoegenAanGroep(string gebruikersnaam, string groepnaam)
         {
-            DirectoryEntry ouEntry = LDAPConnectie(ConnectieGroepenOU());
-
             try
             {
-                DirectoryEntry childEntry = ouEntry.Children.Add("CN=" + gebruikersnaam + ",CN=" + groepnaam, "group");
-                childEntry.CommitChanges();
-                ouEntry.CommitChanges();
+                DirectoryEntry userGroup = LDAPConnectie(ConnectieGroepenOU());
+                
+                userGroup.Invoke("Add", new object[] { "LDAP://192.168.15.10/CN=Jan,OU=Gebruikers,OU=EyeCT4Events,DC=EyeCT4Events,DC=nl" });
+                userGroup.CommitChanges();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-
-        string IActiveDirectory.CreateUserAccount(string userName, string userPassword)
+        public void GebruikerToevoegenGroep(string gebruiker, string groepNaam) // werkt niet
         {
-            throw new NotImplementedException();
-        }
+            DirectoryEntry ent = LDAPConnectie(ConnectieGroepenOU());
+            ent.AuthenticationType = AuthenticationTypes.Secure;
+
+            ent.Invoke("remove", new object[] { GebruikerDirectoryEntry(gebruiker) });
+            ent.CommitChanges();
+        }        // Foutmelding: server is unwilling to process the request.
     }
 }

@@ -727,7 +727,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Close();
             return reactieLijst;
         }
-        private List<Reactie> AlleReactiesOpvragen()
+        public List<Reactie> AlleReactiesOpvragen()
         {
             List<Reactie> reactieLijst = new List<Reactie>();
             Connect();
