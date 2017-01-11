@@ -10,6 +10,7 @@ using EyeCT4EventsMVC.Models.Domain_Classes;
 using EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers;
 using EyeCT4EventsMVC.Models.Persistencies;
 using EyeCT4EventsMVC.Models.Repositories;
+using System.IO;
 
 namespace EyeCT4EventsMVC.Controllers
 {
@@ -17,16 +18,29 @@ namespace EyeCT4EventsMVC.Controllers
     {
         private RepositorySocialMediaSharing rsms = new RepositorySocialMediaSharing(new MSSQLSocialMediaSharing());
 
+        List<Categorie> breadcrumbs = new List<Categorie>();
+        private void getParent(int c)
+        {
+            Categorie cat = rsms.GetParentCategorie(c);
+            breadcrumbs.Add(cat);
+            if (cat.Parent != 0)
+            {
+                getParent(cat.Parent);
+            } 
+        }
         public ActionResult SocialMedia()
         {
             Gebruiker g = new Bezoeker();
-            g.ID = 5;
+            g.ID = 1;
             Session["Gebruiker"] = g;
+            rsms.SchoolAbusievelijkTaalgebruikOp();
+
             if (Url.RequestContext.RouteData.Values["id"] == null)
             {
                 try
                 {
                     ViewBag.AlleMedia = rsms.AlleMediaOpvragen();
+                    ViewBag.AlleReacties = rsms.AlleReactiesOpvragen();
                 }
                 catch (Exception e)
                 {
@@ -45,7 +59,29 @@ namespace EyeCT4EventsMVC.Controllers
                 }
             }
 
-            ViewBag.Categorien = rsms.AlleCategorienOpvragen();
+            getParent(Convert.ToInt32(Url.RequestContext.RouteData.Values["id"]));
+            breadcrumbs.Reverse();
+            ViewBag.BreadCrumbs = breadcrumbs;
+
+            if (Url.RequestContext.RouteData.Values["id"] == null)
+            {
+                List<Categorie> catlist = rsms.AlleCategorienOpvragen().ToList();
+                List<Categorie> finalList = new List<Categorie>();
+                foreach (Categorie c in catlist)
+                {
+                    if (c.Parent == 0)
+                    {
+                        finalList.Add(c);
+                    }
+                }
+                ViewBag.Categorien = finalList.ToArray();
+            }
+            else
+            {
+                Categorie c = rsms.GetCategorieMetID(Convert.ToInt32(Url.RequestContext.RouteData.Values["id"]));
+
+                ViewBag.Categorien = rsms.GetSubCategorien(c).ToArray();
+            }
 
             if (Request.QueryString["categorie"] != null)
             {
@@ -73,10 +109,39 @@ namespace EyeCT4EventsMVC.Controllers
             return View(media);
         }
 
-        public ActionResult InsertMedia(Media media)
+        [HttpPost]
+        public ActionResult InsertMedia(Media media, HttpPostedFileBase file)
         {
             try
             {
+                media.GeplaatstDoor = ((Gebruiker)Session["Gebruiker"]).ID;
+                #region bestandopslaan
+                // Verify that the user selected a file
+                if (file != null && file.ContentLength > 0)
+                {
+                    int hoogsteID;
+                    if (rsms.SelectHoogsteMediaID().ID == 1)
+                    {
+                        hoogsteID = 1;
+                    }
+                    else
+                    {
+                        hoogsteID = rsms.SelectHoogsteMediaID().ID + 1;
+                    }
+                    string directory = @"C:\AdwCleaner\" + hoogsteID.ToString() + @"\";  // MAP DIRECTORY AANPASSEN NAAR SERVER
+
+                    // Map aanmapen
+                    System.IO.Directory.CreateDirectory(@"C:\AdwCleaner\" + hoogsteID.ToString() + @"\");
+
+                    // extract only the filename
+                    var fileName = Path.GetFileName(file.FileName);
+                    // store the file inside ~/App_Data/uploads folder
+                    var path = Path.Combine(directory, fileName);
+                    file.SaveAs(path);
+
+                    media.Pad = path;
+                }            
+                #endregion
                 rsms.ToevoegenMedia(media);
             }
             catch (Exception e)
@@ -89,13 +154,16 @@ namespace EyeCT4EventsMVC.Controllers
 
         public ActionResult LikeMedia(int mediaID)
         {
-            try
+            if (!rsms.CheckOfLikeBestaat((Gebruiker)Session["Gebruiker"], mediaID, int.MinValue))
             {
-                rsms.ToevoegenLikeInMediaOfReactie((Gebruiker)Session["Gebruiker"], mediaID, int.MinValue);
-            }
-            catch (Exception e)
-            {
-                ViewBag.Error = e.Message;
+                try
+                {
+                    rsms.ToevoegenLikeInMediaOfReactie((Gebruiker)Session["Gebruiker"], mediaID, int.MinValue);
+                }
+                catch (Exception e)
+                {
+                    ViewBag.Error = e.Message;
+                }
             }
 
             return RedirectToAction("SocialMedia");
@@ -119,7 +187,7 @@ namespace EyeCT4EventsMVC.Controllers
         {
             try
             {
-                rsms.ToevoegenRapporterenMediaReactie(reactieID, reactieID);
+                rsms.ToevoegenRapporterenMediaReactie(int.MinValue, reactieID);
             }
             catch (Exception e)
             {
@@ -129,17 +197,20 @@ namespace EyeCT4EventsMVC.Controllers
             return RedirectToAction("SocialMedia");
         }
 
-        public ActionResult LikeReactie(int reactieID)
+        public ActionResult LikeReactie(int reactieID, int mediaID)
         {
-            try
-            {
-                rsms.ToevoegenLikeInMediaOfReactie((Gebruiker)Session["Gebruiker"], int.MinValue, reactieID);
-            }
-            catch (Exception e)
-            {
-                ViewBag.Error = e.Message;
-            }
 
+            if (!rsms.CheckOfLikeBestaat((Gebruiker)Session["Gebruiker"], mediaID, reactieID))
+            {
+                try
+                {
+                    rsms.ToevoegenLikeInMediaOfReactie((Gebruiker)Session["Gebruiker"], mediaID, reactieID);
+                }
+                catch (Exception e)
+                {
+                    ViewBag.Error = e.Message;
+                }
+            }
             return RedirectToAction("SocialMedia");
         }
 
@@ -161,6 +232,7 @@ namespace EyeCT4EventsMVC.Controllers
 
         public ActionResult ZoekenCategorie(string categorie)
         {
+            rsms.ZoekenCategorie(categorie);
             return RedirectToAction("SocialMedia", "SocialMedia");
         }
 
@@ -191,6 +263,22 @@ namespace EyeCT4EventsMVC.Controllers
             }
 
             return RedirectToAction("CategorieToevoegen");
+        }
+        public ActionResult LoadResource(string pad, string ext, string type)
+        {
+            if (type == "Afbeelding")
+            {
+                return File(pad, "image/jpg");
+            }
+            else if (type == "Video")
+            {
+                return File(pad, "video/mp4");
+            }
+            else if (type == "Audio")
+            {
+                return File(pad, "audio/mpeg");
+            }
+            return null;
         }
     }
 }

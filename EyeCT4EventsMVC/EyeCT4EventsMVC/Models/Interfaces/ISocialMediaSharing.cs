@@ -13,15 +13,17 @@ namespace EyeCT4EventsMVC.Models.Interfaces
     public interface ISocialMediaSharing
     {
         Categorie[] AlleCategorienOpvragen();
-
+        Categorie GetParentCategorie(int c);
+        List<Categorie> GetSubCategorien(Categorie cat, List<Categorie> catlist);
+        Categorie GetCategorieMetID(int ID);
         List<Media> AlleMediaOpvragen();
 
         List<Media> AlleGerapporteerdeMediaOpvragen();
 
+        List<Reactie> AlleReactiesOpvragen();
         List<Reactie> AlleReactiesOpvragen(Media media);
-
         List<Event> AlleEventsOpvragen();
-
+        bool CheckOfLikeBestaat(Gebruiker gebruiker, int mediaID, int reactieID);
         void ToevoegenCategorie(Categorie cat);
 
         void ToevoegenEvent(Event ev);
@@ -35,6 +37,7 @@ namespace EyeCT4EventsMVC.Models.Interfaces
         void ToevoegenReactie(Reactie reactie);
 
         void ToevoegenRapporterenMediaReactie(int mediaID, int reactieID);
+        void VerwijderMedia(Media media);
 
         Categorie GetCategorieMetNaam(string naam);
 

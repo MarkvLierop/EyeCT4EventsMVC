@@ -9,6 +9,7 @@
     <title>Beheerder Aanmaken</title>
 </head>
 <body>
+    @((string)Session["Message"])
     <div class="container">
         <form class="form-horizontal" role="form" action="/Beheer/MaakBeheerderAan">
             <h2>Registreren</h2>
@@ -64,7 +65,7 @@
             <div class="form-group">
                 <label for="WachtwoordBevestigen" class="col-sm-3 control-label">Wachtwoord bevestigen</label>
                 <div class="col-sm-9">
-                    <input type="password" id="WachtwoordBevestigen" placeholder="Wachtwoord bevestigen" class="form-control" autofocus />
+                    <input type="password" id="WachtwoordBevestigen" placeholder="Wachtwoord bevestigen" name="WachtwoordBevestigen" class="form-control" autofocus />
                 </div>
             </div>
       
