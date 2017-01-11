@@ -52,5 +52,7 @@ namespace EyeCT4EventsMVC.Models.Interfaces
         void ZetAantalKerenGerapporteerdOp0(Media media);
 
         void VerwijderReactie(Reactie reactie);
+
+        void VerwijderMedia(int mediaID);
     }
 }

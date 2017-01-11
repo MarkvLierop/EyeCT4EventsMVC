@@ -29,7 +29,6 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers
         public string Wachtwoord { get; set; }
 
         public bool Aanwezig { get; set; }
-        public bool Betaald { get; set; }
 
         private List<Media> mediaList;
         private List<Reactie> reactieList;
@@ -72,25 +71,6 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers
         public override string ToString()
         {
             return Voornaam + " " + Tussenvoegsel + " " + Achternaam;
-        }
-
-        public Gebruiker GebruikerBijBarcode(string barcode)
-        {
-            repoGebruiker = new RepositoryGebruiker(new MSSQLGebruiker());
-            return repoGebruiker.GetGebruikerByBarcode(barcode);
-        }
-
-        public void AfwezigAanwezig(Gebruiker gebruiker)
-        {
-            repoGebruiker = new RepositoryGebruiker(new MSSQLGebruiker());
-            if(gebruiker.Aanwezig == true)
-            {
-                repoGebruiker.ZetGebruikerOpAfwezig(gebruiker.ID);
-            }
-            else
-            {
-                repoGebruiker.ZetGebruikerOpAanwezig(gebruiker.ID);
-            }
         }
     }
 }

@@ -44,9 +44,9 @@ namespace EyeCT4EventsMVC.Models.Repositories
             return Context.GetBetalingsGegevens(g);
         }
 
-        public Gebruiker GetGebruikerByBarcode(string barcode)
+        public Gebruiker GetGebruikerByRFID(int rfid)
         {
-            return Context.GetGebruikerByBarcode(barcode);
+            return Context.GetGebruikerByRFID(rfid);
         }
 
         public List<Gebruiker> LijstAanwezigeBezoekers()
