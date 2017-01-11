@@ -12,6 +12,7 @@ namespace EyeCT4EventsMVC.Models.Interfaces
 {
     public interface IReactie
     {
-        List<Reactie> ReactieBijMedia(int mediaID);
+        List<Reactie> ReactieBijGerapporteerdeMedia();
+        List<Reactie> GerapporteerdeReactie();
     }
 }

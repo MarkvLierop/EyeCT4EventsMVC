@@ -235,27 +235,28 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             return gebruiker;
         }
 
-        public Gebruiker GetGebruikerByRFID(int rfid)
+        public Gebruiker GetGebruikerByBarcode(string barcode)
         {
             Connect();
             try
             {
-                string query = "SELECT * FROM Gebruiker WHERE RFID = @RFID";
+                string query = "select g.*, r.Betaald from Gebruiker g join PolsbandjeGebruiker pg on pg.Gebruiker_ID = g.ID join Polsbandje p on p.ID = pg.Polsbandje_ID join Reservering r on r.Gebruiker_ID = g.ID where p.Barcode = @Barcode";
                 using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@RFID", rfid));
+                    command.Parameters.Add(new SqlParameter("@Barcode", barcode));
                     reader = command.ExecuteReader();
 
                     while (reader.Read())
                     {
                         gebruiker = new Bezoeker();
                         gebruiker.ID = Convert.ToInt32(reader["ID"]);
-                        gebruiker.RFID = Convert.ToInt32(reader["RFID"]);
                         gebruiker.Gebruikersnaam = reader["Gebruikersnaam"].ToString();
                         gebruiker.Wachtwoord = reader["Wachtwoord"].ToString();
                         gebruiker.Voornaam = reader["Voornaam"].ToString();
                         gebruiker.Tussenvoegsel = reader["Tussenvoegsel"].ToString();
                         gebruiker.Achternaam = reader["Achternaam"].ToString();
+                        gebruiker.Email = reader["Emailadres"].ToString();
+                        gebruiker.Betaald = Convert.ToBoolean(reader["Betaald"]);
                         if (Convert.ToInt32(reader["Aanwezig"]) == 1)
                         {
                             gebruiker.Aanwezig = true;
@@ -566,15 +567,15 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             return bezoekers;
         }
 
-        public void ZetBezoekerOpAfwezig(int rfid)
+        public void ZetBezoekerOpAfwezig(int gebruikerID)
         {
             Connect();
             try
             {
-                string query = "UPDATE Gebruiker SET Aanwezig = 0 WHERE RFID = @RFID ";
+                string query = "UPDATE Gebruiker SET Aanwezig = 0 WHERE ID = @GebruikerID ";
                 using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@RFID", rfid));
+                    command.Parameters.Add(new SqlParameter("@GebruikerID", gebruikerID));
 
                     command.ExecuteNonQuery();
                 }
@@ -587,15 +588,15 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Close();
         }
 
-        public void ZetBezoekerOpAanwezig(int rfid)
+        public void ZetBezoekerOpAanwezig(int gebruikerID)
         {
             Connect();
             try
             {
-                string query = "UPDATE Gebruiker SET Aanwezig = 1 WHERE RFID = @RFID ";
+                string query = "UPDATE Gebruiker SET Aanwezig = 1 WHERE ID = @GebruikerID ";
                 using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@RFID", rfid));
+                    command.Parameters.Add(new SqlParameter("@GebruikerID", gebruikerID));
 
                     command.ExecuteNonQuery();
                 }

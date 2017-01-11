@@ -19,12 +19,19 @@ namespace EyeCT4EventsMVC.Controllers
         private Event Event; // Event with capital Letter because there is a event keyword in visual studio.
 
         private Media media;
+        private Reactie reactie;
 
         private Gebruiker gebruiker;
 
         // GET: Beheer
         public ActionResult Index()
         {
+            Event = new Event();
+            ViewBag.Events = Event.AlleEvents();
+            if (Event.AlleEvents().Count == 0)
+            {
+                Session["GeenEvents"] = "Er zijn geen events om weer te geven";
+            }
             return View();
         }
 
@@ -40,16 +47,10 @@ namespace EyeCT4EventsMVC.Controllers
             Locatie = new Locatie();
             Event events = new Event(Locatie.LocatieBijNaam(locatie), datumVan, datumTot, titel, beschrijving);
             events.EventAanmaken(events);
-            return RedirectToAction("AlleEvents", "Beheer");
+            return RedirectToAction("Index", "Beheer");
         }
 
-        public ActionResult AlleEvents()
-        {
-            Event = new Event();
-            ViewBag.Events = Event.AlleEvents();
-            return View();
-        }
-
+        
         public ActionResult BeheerderAanmaken()
         {
             return View();
@@ -97,8 +98,29 @@ namespace EyeCT4EventsMVC.Controllers
 
         public ActionResult GerapporteerdeMedia()
         {
+                media = new Media();
+                ViewBag.GerapporteerdeMedia = media.GerapporteerdeMedia();
+            if (media.GerapporteerdeMedia().Count == 0)
+            {
+                Session["ErrorMedia"] = "Er is geen media om weer te geven";
+            }
+            reactie = new Reactie();
+            ViewBag.Reacties = reactie.ReactieBijGerapporteerdeMedia();
+            Session["ErrorReactie"] = "Er zijn geen reacties bij deze media";
+            return View();
+        }
+
+        public ActionResult GerapporteerdeReactie()
+        {
+            reactie = new Reactie();
+            ViewBag.Reactie = reactie.GerapporteerdeReactie();
+            if(reactie.GerapporteerdeReactie().Count == 0)
+            {
+                Session["ErrorReactie"] = "Er zijn geen reacties om weer te geven"; 
+            }
+
             media = new Media();
-            ViewBag.GerapporteerdeMedia = media.GerapporteerdeMedia();
+            ViewBag.Media = media.AlleMedia();
             return View();
         }
 
@@ -106,7 +128,7 @@ namespace EyeCT4EventsMVC.Controllers
         {
             Event = new Event();
             Event.EventVerwijderen(eventID);
-            return RedirectToAction("AlleEvents", "Beheer");
+            return RedirectToAction("Index", "Beheer");
         }
 
         public ActionResult VerwijderenMedia(int mediaID)
@@ -117,6 +139,19 @@ namespace EyeCT4EventsMVC.Controllers
                 if(media.ID == mediaID)
                 {
                     media.VerwijderMedia(media);
+                }
+            }
+            return RedirectToAction("GerapporteerdeMedia", "Beheer");
+        }
+        public ActionResult VerwijderReactie(int reactieID)
+        {
+            reactie = new Reactie();
+            media = new Media();
+            foreach(Reactie reactie in reactie.ReactieBijGerapporteerdeMedia())
+            {
+                if(reactie.ReactieID == reactieID)
+                {
+                    media.VerwijderReactie(reactie);
                 }
             }
             return RedirectToAction("GerapporteerdeMedia", "Beheer");

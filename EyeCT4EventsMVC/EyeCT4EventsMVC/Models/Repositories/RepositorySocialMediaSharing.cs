@@ -20,9 +20,9 @@ namespace EyeCT4EventsMVC.Models.Repositories
             ISMS = isms;
         }
 
-        public void VerwijderMedia(int mediaID)
+        public void VerwijderMedia(Media media)
         {
-            ISMS.VerwijderMedia(mediaID);
+            ISMS.VerwijderMedia(media);
         }
         public bool CheckOfLikeBestaat(Gebruiker gebruiker, int mediaID, int reactieID)
         {

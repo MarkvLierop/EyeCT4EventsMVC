@@ -79,13 +79,13 @@ namespace EyeCT4EventsMVC.Models.Persistencies
         private List<string> GetNietGeaccepteerdeWoorden()
         {
             List<string> nietGeaccepteerdeWoorden = new List<string>();
-            using (StreamReader reader = new StreamReader("NietGeaccepteerdeWoorden.txt", false))
-            {
-                while (!reader.EndOfStream)
-                {
-                    nietGeaccepteerdeWoorden.Add(reader.ReadLine());
-                }
-            }
+          //using (StreamReader reader = new StreamReader("NietGeaccepteerdeWoorden.txt", false))
+          //{
+          //    while (!reader.EndOfStream)
+          //    {
+          //        nietGeaccepteerdeWoorden.Add(reader.ReadLine());
+          //    }
+          //}
 
             return nietGeaccepteerdeWoorden;
         }
@@ -187,7 +187,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Connect();
             try
             {
-                string query = "SELECT * FROM Media WHERE Flagged < @VerbergThreshhold ORDER BY ID DESC";
+                string query = "SELECT * FROM Media WHERE Flagged > @VerbergThreshhold ORDER BY ID DESC";
                 using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@VerbergThreshhold", 10));   //AANPASSEN
@@ -344,6 +344,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Close();
             return mediaList;
         }
+
         public Media GetMediaByID(int ID)
         {
             Media media = null;
@@ -967,22 +968,6 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Close();
 
             return eventList;
-        }
-
-        public void VerwijderMedia(int MediaID)
-        {
-            Connect();
-            string[] query = new string[2];
-            query[0] = "DELETE FROM Media WHERE ID = @MediaID";
-            query[1] = "DELETE FROM Reactie WHERE Media_ID = @MediaID";
-            for(int i =0; i< query.Length; i++)
-            {
-                using(command = new SqlCommand(query[i], sQLcon))
-                {
-                    command.Parameters.AddWithValue("@MediaID", MediaID);
-                    command.ExecuteNonQuery();
-                }
-            }
         }
 
         public Media CreateMediaFromReader(SqlDataReader reader)
