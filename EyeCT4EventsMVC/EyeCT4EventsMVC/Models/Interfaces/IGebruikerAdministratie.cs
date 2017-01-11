@@ -31,7 +31,7 @@ namespace EyeCT4EventsMVC.Models.Interfaces
 
         Gebruiker GetGebruikerByID(int id);
 
-        Gebruiker GetGebruikerByRFID(int rfid);
+        Gebruiker GetGebruikerByBarcode(string barcode);
 
         void GebruikerRegistreren(Gebruiker gebruiker);
 

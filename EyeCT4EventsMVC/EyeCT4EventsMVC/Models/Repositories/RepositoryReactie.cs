@@ -19,9 +19,14 @@ namespace EyeCT4EventsMVC.Models.Repositories
             Context = context;
         }
 
-        public List<Reactie> ReactieBijMedia(int mediaID)
+        public List<Reactie> ReactieBijGerapporteerdeMedia()
         {
-            return Context.ReactieBijMedia(mediaID);
+            return Context.ReactieBijGerapporteerdeMedia();
+        }
+
+        public List<Reactie> GerapporteerdeReactie()
+        {
+            return Context.GerapporteerdeReactie();
         }
     }
 }

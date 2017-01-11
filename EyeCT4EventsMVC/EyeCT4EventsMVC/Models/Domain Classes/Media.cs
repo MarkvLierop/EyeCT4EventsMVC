@@ -120,7 +120,17 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
 
         public void VerwijderMedia(Media media)
         {
-            //smsr.VerwijderMedia(media);
+            smsr.VerwijderMedia(media);
+        }
+
+        public List<Media> AlleMedia()
+        {
+            return smsr.AlleMediaOpvragen();
+        }
+
+   public void VerwijderReactie(Reactie reactie)
+        {
+            smsr.VerwijderReactie(reactie);
         }
     }
 }

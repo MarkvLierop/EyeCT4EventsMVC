@@ -130,6 +130,7 @@
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
     <None Include="scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="scripts\JavaScriptBeheer.js" />
     <Content Include="scripts\jquery-1.10.2.js" />
     <Content Include="scripts\jquery-1.10.2.min.js" />
     <Content Include="scripts\modernizr-2.6.2.js" />
@@ -146,6 +147,7 @@
     <Compile Include="Controllers\GebruikerController.cs" />
     <Compile Include="Controllers\ReserveringController.cs" />
     <Compile Include="Controllers\SocialMediaController.cs" />
+    <Compile Include="Controllers\ToegangsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -211,13 +213,15 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Beheer\EventAanmaken.cshtml" />
-    <Content Include="Views\Beheer\AlleEvents.cshtml" />
     <Content Include="Views\Beheer\BeheerderAanmaken.cshtml" />
     <Content Include="Views\SocialMedia\SocialMedia.cshtml" />
     <Content Include="Views\Beheer\Index.cshtml" />
     <Content Include="Views\Beheer\GerapporteerdeMedia.cshtml" />
     <Content Include="Views\SocialMedia\CategorieToevoegen.cshtml" />
     <Content Include="Views\SocialMedia\MediaToevoegen.cshtml" />
+    <Content Include="Views\Beheer\GerapporteerdeReactie.cshtml" />
+    <Content Include="Views\Toegangs\Index.cshtml" />
+    <Content Include="Views\Reservering\ReserveringSubmit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
