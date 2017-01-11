@@ -87,7 +87,7 @@
                 <img src="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" alt="@media.Pad" style="height:300px;width:auto" /><br />
                 <br />
 
-                <a href="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" target="_blank">Download @media.Type</a>
+                <a href="@Url.Action("DownloadResoure", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" target="_blank">Download @media.Type</a>
             }
             else if (media.Type == "Video")
             {

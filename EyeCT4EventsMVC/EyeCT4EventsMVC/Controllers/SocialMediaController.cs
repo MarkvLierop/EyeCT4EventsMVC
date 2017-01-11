@@ -277,5 +277,12 @@ namespace EyeCT4EventsMVC.Controllers
             }
             return null;
         }
+        public ActionResult DownloadResource(string pad)
+        {
+            Response.AddHeader("Content-Disposition", "attachment;filename="+ pad);
+            Response.WriteFile(pad);
+            Response.End();
+            return null;
+        }
     }
 }
