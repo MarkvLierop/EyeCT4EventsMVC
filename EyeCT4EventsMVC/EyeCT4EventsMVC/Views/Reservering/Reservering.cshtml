@@ -4,24 +4,24 @@
     ViewBag.Title = "Reservering";
 }
 <h2>Reservering</h2>
-<form method="get" action="@Url.Action("ReserveringSubmit", new { AantalPersonen = Request.QueryString["AantalPersonen"] })">
+<form>
     <div class="form-group">
         <label for="AantalPersonen">Aantal Personen</label>
-        <input type="number" class="form-control" name="AantalPersonen">
+        <input type="number" class="form-control" id="AantalPersonen">
     </div>
     <div class="form-group">
         <label for="inputName">Naam</label>
-        <input type="text" class="form-control" name="inputName" placeholder="Naam">
+        <input type="text" class="form-control" id="inputName" placeholder="Naam">
         <label for="InputEmail">Emailadres</label>
-        <input type="email" class="form-control" name="InputEmail" placeholder="Emailadres" />
+        <input type="email" class="form-control" id="InputEmail" placeholder="Emailadres" />
     </div>
     <div class="form-group">
         <label for="DatumVan">Start Datum</label>
-        <input type="date" class="form-control" name="DatumVan">
+        <input type="date" class="form-control" id="DatumVan">
     </div>
     <div class="form-group">
         <label for="DatumTot">Eind Datum</label>
-        <input type="date" class="form-control" name="DatumTot">
+        <input type="date" class="form-control" id="DatumTot">
     </div>
 
     <div class="floatRight">
@@ -37,9 +37,6 @@
             }
 
         </select>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Ga Verder" class="form-control"/>
     </div>
 
 </form>
