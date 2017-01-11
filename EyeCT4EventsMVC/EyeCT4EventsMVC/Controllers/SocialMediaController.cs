@@ -33,7 +33,14 @@ namespace EyeCT4EventsMVC.Controllers
             Gebruiker g = new Bezoeker();
             g.ID = 1;
             Session["Gebruiker"] = g;
-            rsms.SchoolAbusievelijkTaalgebruikOp();
+            try
+            {
+                rsms.SchoolAbusievelijkTaalgebruikOp();
+            }
+            catch (Exception e)
+            {
+                ViewBag.Error = e.Message;
+            }
 
             if (Url.RequestContext.RouteData.Values["id"] == null)
             {
@@ -214,22 +221,6 @@ namespace EyeCT4EventsMVC.Controllers
             return RedirectToAction("SocialMedia");
         }
 
-        public ActionResult CategorieToevoegen()
-        {
-            if (Url.RequestContext.RouteData.Values["id"] == null)
-            {
-                ViewBag.Error = "Navigeer eerst naar een categorie.";
-            }
-            else
-            {
-                Categorie cat = new Categorie();
-                cat.Parent = Convert.ToInt32(Url.RequestContext.RouteData.Values["id"]);
-                return View(cat);
-            }
-
-            return RedirectToAction("SocialMedia");
-        }
-
         public ActionResult ZoekenCategorie(string categorie)
         {
             rsms.ZoekenCategorie(categorie);
@@ -250,19 +241,25 @@ namespace EyeCT4EventsMVC.Controllers
             return RedirectToAction("SocialMedia");
         }
 
-        public ActionResult InsertCategorie(Categorie cat)
+        public ActionResult InsertCategorie(int id, string naam)
         {
             try
             {
-                rsms.ToevoegenCategorie(cat);
-                return RedirectToAction("SocialMedia");
+                if (id != int.MinValue)
+                {
+                    Categorie cat = new Categorie();
+                    cat.Parent = id;
+                    cat.Naam = naam;
+                    rsms.ToevoegenCategorie(cat);
+                    return RedirectToAction("SocialMedia");
+                }
             }
             catch (Exception e)
             {
                 ViewBag.Error = e.Message;
             }
 
-            return RedirectToAction("CategorieToevoegen");
+            return RedirectToAction("SocialMedia");
         }
         public ActionResult LoadResource(string pad, string ext, string type)
         {
