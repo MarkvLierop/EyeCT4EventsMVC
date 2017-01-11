@@ -141,11 +141,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\BeheerController.cs" />
-    <Compile Include="Controllers\EventController.cs" />
-    <Compile Include="Controllers\GebruikerController.cs" />
-    <Compile Include="Controllers\ReserveringController.cs" />
-    <Compile Include="Controllers\SocialMediaController.cs" />
+    <Compile Include="Models\Controllers\BeheerController.cs" />
+    <Compile Include="Models\Controllers\EventController.cs" />
+    <Compile Include="Models\Controllers\GebruikerController.cs" />
+    <Compile Include="Models\Controllers\ReserveringController.cs" />
+    <Compile Include="Models\Controllers\SocialMediaController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
