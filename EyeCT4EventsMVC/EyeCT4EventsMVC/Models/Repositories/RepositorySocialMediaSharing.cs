@@ -57,7 +57,20 @@ namespace EyeCT4EventsMVC.Models.Repositories
         {
             ISMS.ToevoegenCategorie(cat);
         }
+        public Categorie GetParentCategorie(int c)
+        {
+            return ISMS.GetParentCategorie(c);
+        }
+        public List<Categorie> GetSubCategorien(Categorie cat)
+        {
+            List<Categorie> catlist = new List<Categorie>();
 
+            return ISMS.GetSubCategorien(cat, catlist);
+        }
+        public Categorie GetCategorieMetID(int ID)
+        {
+            return ISMS.GetCategorieMetID(ID);
+        }
         // media.BestandOpslaan();
         public void ToevoegenMedia(Media media)  // AANPASSEN
         {

@@ -84,7 +84,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
                 Directory.CreateDirectory(directory);
                 File.Copy(fileName, directory + safeFileName);
             }
-                        catch (Exception e)
+            catch (Exception e)
             {
                 throw new FoutBijOpslaanBestandException(e.Message);
             }
@@ -112,7 +112,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
             return smsr.AlleGerapporteerdeMediaOpvragen();
         }
 
-        private string GetBestandsExtentie()
+        public string GetBestandsExtentie()
         {
             string[] splitPad = Pad.Split('.');
             return "." + splitPad[splitPad.Count() - 1];
@@ -120,7 +120,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
 
         public void VerwijderMedia(Media media)
         {
-            smsr.VerwijderMedia(media);
+            //smsr.VerwijderMedia(media);
         }
     }
 }

@@ -7,6 +7,14 @@
     int weergeefAantal = 2;
 }
 <h2>Social Media Sharing</h2>
+
+<ul class="breadcrumb" >
+    @foreach (Categorie c in (List<Categorie>)ViewBag.BreadCrumbs)
+    {
+        <li><a href="@c.ID">@c.Naam</a></li>
+    }
+</ul>
+
 @Html.ActionLink("Media plaatsen", "MediaToevoegen", new { id = Url.RequestContext.RouteData.Values["id"] }, new { @class = "btn btn-default" })<br /><br />
 
 @ViewBag.Error
@@ -20,6 +28,7 @@
             <input type="submit" value="Zoeken" class="btn btn-default"/><br/>
             <input type="text" name="categorie" /> <br/>
         </form>
+        <b><a href="~/SocialMedia/SocialMedia">Alle media weergeven</a></b><br />
         @foreach (Categorie c in (Categorie[]) ViewBag.Categorien)
         {
             @Html.ActionLink(c.Naam, "SocialMedia", new {id = c.ID})<br/>
@@ -51,24 +60,39 @@
             <!-- EMBEDDING MEDIA-->
             @if (media.Type == "Afbeelding")
             {
-                <img src="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" alt="@media.Pad" /><br />
+                <img src="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" alt="@media.Pad" style="height:300px;width:auto" /><br />
                 <br />
 
                 <a href="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" target="_blank">Download @media.Type</a>
             }
-            else if (media.Type == "Video" && media.GetBestandsExtentie() == ".mp4")
+            else if (media.Type == "Video")
             {
-                <video width="400" controls>
-                    <source src="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" type="video/@media.GetBestandsExtentie().Replace(".","")">
-                    <source src="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" type="video/ogg">
-                    Your browser does not support HTML5 video.
-                </video><br />
-
-                <a href="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" target="_blank">Download @media.Type</a>
+                if (media.GetBestandsExtentie() == ".mp4")
+                {
+                    <video width="400" controls>
+                        <source src="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                    </video>
+                }
+                else
+                {
+                    <a href="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" target="_blank">Download @media.Type</a>
+                }
             }
             else if (media.Type == "Audio")
             {
-
+                if (media.GetBestandsExtentie().ToLower() == ".mp3" || media.GetBestandsExtentie() == ".wav")
+                {
+                    <audio controls>
+                        <source src="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" type="audio/ogg">
+                        <source src="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                }
+                else
+                {
+                    <a href="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" target="_blank">Download @media.Type</a>
+                }
             }
 
             <!-- END EMBEDDING MEDIA-->

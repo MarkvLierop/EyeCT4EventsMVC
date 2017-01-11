@@ -10,6 +10,7 @@ using EyeCT4EventsMVC.Models.Domain_Classes;
 using EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers;
 using EyeCT4EventsMVC.Models.Persistencies;
 using EyeCT4EventsMVC.Models.Repositories;
+using System.IO;
 
 namespace EyeCT4EventsMVC.Controllers
 {
@@ -17,11 +18,23 @@ namespace EyeCT4EventsMVC.Controllers
     {
         private RepositorySocialMediaSharing rsms = new RepositorySocialMediaSharing(new MSSQLSocialMediaSharing());
 
+        List<Categorie> breadcrumbs = new List<Categorie>();
+        private void getParent(int c)
+        {
+            Categorie cat = rsms.GetParentCategorie(c);
+            breadcrumbs.Add(cat);
+            if (cat.Parent != 0)
+            {
+                getParent(cat.Parent);
+            } 
+        }
         public ActionResult SocialMedia()
         {
             Gebruiker g = new Bezoeker();
             g.ID = 1;
             Session["Gebruiker"] = g;
+            rsms.SchoolAbusievelijkTaalgebruikOp();
+
             if (Url.RequestContext.RouteData.Values["id"] == null)
             {
                 try
@@ -46,7 +59,29 @@ namespace EyeCT4EventsMVC.Controllers
                 }
             }
 
-            ViewBag.Categorien = rsms.AlleCategorienOpvragen();
+            getParent(Convert.ToInt32(Url.RequestContext.RouteData.Values["id"]));
+            breadcrumbs.Reverse();
+            ViewBag.BreadCrumbs = breadcrumbs;
+
+            if (Url.RequestContext.RouteData.Values["id"] == null)
+            {
+                List<Categorie> catlist = rsms.AlleCategorienOpvragen().ToList();
+                List<Categorie> finalList = new List<Categorie>();
+                foreach (Categorie c in catlist)
+                {
+                    if (c.Parent == 0)
+                    {
+                        finalList.Add(c);
+                    }
+                }
+                ViewBag.Categorien = finalList.ToArray();
+            }
+            else
+            {
+                Categorie c = rsms.GetCategorieMetID(Convert.ToInt32(Url.RequestContext.RouteData.Values["id"]));
+
+                ViewBag.Categorien = rsms.GetSubCategorien(c).ToArray();
+            }
 
             if (Request.QueryString["categorie"] != null)
             {
@@ -74,11 +109,39 @@ namespace EyeCT4EventsMVC.Controllers
             return View(media);
         }
 
-        public ActionResult InsertMedia(Media media)
+        [HttpPost]
+        public ActionResult InsertMedia(Media media, HttpPostedFileBase file)
         {
             try
             {
                 media.GeplaatstDoor = ((Gebruiker)Session["Gebruiker"]).ID;
+                #region bestandopslaan
+                // Verify that the user selected a file
+                if (file != null && file.ContentLength > 0)
+                {
+                    int hoogsteID;
+                    if (rsms.SelectHoogsteMediaID().ID == 1)
+                    {
+                        hoogsteID = 1;
+                    }
+                    else
+                    {
+                        hoogsteID = rsms.SelectHoogsteMediaID().ID + 1;
+                    }
+                    string directory = @"C:\AdwCleaner\" + hoogsteID.ToString() + @"\";  // MAP DIRECTORY AANPASSEN NAAR SERVER
+
+                    // Map aanmapen
+                    System.IO.Directory.CreateDirectory(@"C:\AdwCleaner\" + hoogsteID.ToString() + @"\");
+
+                    // extract only the filename
+                    var fileName = Path.GetFileName(file.FileName);
+                    // store the file inside ~/App_Data/uploads folder
+                    var path = Path.Combine(directory, fileName);
+                    file.SaveAs(path);
+
+                    media.Pad = path;
+                }            
+                #endregion
                 rsms.ToevoegenMedia(media);
             }
             catch (Exception e)
@@ -169,6 +232,7 @@ namespace EyeCT4EventsMVC.Controllers
 
         public ActionResult ZoekenCategorie(string categorie)
         {
+            rsms.ZoekenCategorie(categorie);
             return RedirectToAction("SocialMedia", "SocialMedia");
         }
 
@@ -204,15 +268,15 @@ namespace EyeCT4EventsMVC.Controllers
         {
             if (type == "Afbeelding")
             {
-                return File(@"E:\School\SE Jaar1\Proftaak\EyeCT4EventsMVC\EyeCT4EventsMVC\Resources\" + pad, "image/" + ext);
+                return File(pad, "image/jpg");
             }
             else if (type == "Video")
             {
-                return File(@"E:\School\SE Jaar1\Proftaak\EyeCT4EventsMVC\EyeCT4EventsMVC\Resources\" + pad, "video/mp4");
+                return File(pad, "video/mp4");
             }
             else if (type == "Audio")
             {
-                return File(@"E:\School\SE Jaar1\Proftaak\EyeCT4EventsMVC\EyeCT4EventsMVC\Resources\" + pad, "image/jpeg");
+                return File(pad, "audio/mpeg");
             }
             return null;
         }

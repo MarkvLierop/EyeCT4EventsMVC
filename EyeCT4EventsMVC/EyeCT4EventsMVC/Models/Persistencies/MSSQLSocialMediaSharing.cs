@@ -70,7 +70,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                     type = "Audio";
                     break;
                 default:
-                    type = "Bericht";
+                    type = "Bestand";
                     break;
             }
             return type;
@@ -79,16 +79,29 @@ namespace EyeCT4EventsMVC.Models.Persistencies
         private List<string> GetNietGeaccepteerdeWoorden()
         {
             List<string> nietGeaccepteerdeWoorden = new List<string>();
-
-            using (StreamReader srVerbergThreshHold = new StreamReader("NietGeaccepteerdeWoorden.txt", false))
+            using (StreamReader reader = new StreamReader("NietGeaccepteerdeWoorden.txt", false))
             {
-                while (srVerbergThreshHold.ReadLine() != null)
+                while (!reader.EndOfStream)
                 {
-                    nietGeaccepteerdeWoorden.Add(srVerbergThreshHold.ReadLine().ToLower());
+                    nietGeaccepteerdeWoorden.Add(reader.ReadLine());
                 }
             }
 
             return nietGeaccepteerdeWoorden;
+        }
+        public List<Categorie> GetSubCategorien(Categorie cat, List<Categorie> catlist)
+        {
+            Categorie[] catarray = AlleCategorienOpvragen();
+
+            foreach (Categorie c in catarray)
+            {
+                if (cat.ID == c.Parent)
+                {
+                    catlist.Add(c);
+                }
+            }
+
+            return catlist;
         }
         private void CheckVoorSubCategorien(List<Categorie> catLijst, Categorie[] catArray, Categorie cat)
         {
@@ -276,7 +289,35 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 VerwijderReactie(r);
             }
         }
+        public Categorie GetParentCategorie(int c)
+        {
+            Categorie cat = new Categorie();
+            Connect();
+            try
+            {
+                string query = "SELECT * FROM Categorie WHERE ID = @id";
+                using (command = new SqlCommand(query, sQLcon))
+                {
+                    command.Parameters.AddWithValue("@id", c);
+                    reader = command.ExecuteReader();
 
+                    while (reader.Read())
+                    {
+                        cat.Naam = reader["Naam"].ToString();
+                        cat.Parent = Convert.ToInt32(reader["Categorie_ID"]);
+                        cat.ID = Convert.ToInt32(reader["ID"]);                        
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Close();
+                throw new FoutBijUitvoerenQueryException(e.Message);
+            }
+            Close();
+
+            return cat;
+        }
         public List<Media> AlleGerapporteerdeMediaOpvragen()
         {
             List<Media> mediaList = new List<Media>();
@@ -339,8 +380,22 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 {
                     command.Parameters.Add(new SqlParameter("@GeplaatstDoor", media.GeplaatstDoor));
                     command.Parameters.Add(new SqlParameter("@Categorie", media.Categorie));
-                    command.Parameters.Add(new SqlParameter("@Pad", media.Pad));
-                    command.Parameters.Add(new SqlParameter("@Type", BestandsTypeDefinieren(media.GetBestandsExtentie())));
+                    if (media.Pad != null)
+                    {
+                        command.Parameters.Add(new SqlParameter("@Pad", media.Pad));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqlParameter("@Pad", DBNull.Value));
+                    }
+                    if (media.Pad != null)
+                    {
+                        command.Parameters.Add(new SqlParameter("@Type", BestandsTypeDefinieren(media.GetBestandsExtentie())));
+                    }
+                    else
+                    {
+                        command.Parameters.Add(new SqlParameter("@Type", "Bericht"));
+                    }
                     command.Parameters.Add(new SqlParameter("@Beschrijving", media.Beschrijving));
 
                     command.ExecuteNonQuery();
@@ -691,7 +746,35 @@ namespace EyeCT4EventsMVC.Models.Persistencies
 
             return cat;
         }
+        public Categorie GetCategorieMetID(int ID)
+        {
+            Categorie cat = null;
+            Connect();
+            try
+            {
+                string query = "SELECT * FROM Categorie WHERE ID = @id";
+                using (command = new SqlCommand(query, sQLcon))
+                {
+                    command.Parameters.Add(new SqlParameter("@id", ID));
+                    reader = command.ExecuteReader();
 
+                    while (reader.Read())
+                    {
+                        cat = new Categorie();
+                        cat.ID = Convert.ToInt32(reader["ID"]);
+                        cat.Naam = reader["Naam"].ToString();
+                        cat.Parent = Convert.ToInt32(reader["Categorie_ID"]);
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                throw new FoutBijUitvoerenQueryException(e.Message);
+            }
+            Close();
+
+            return cat;
+        }
         public List<Categorie> ZoekenCategorie(string naam)
         {
             List<Categorie> catlist = new List<Categorie>();
@@ -709,7 +792,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         Categorie cat = new Categorie();
                         cat.ID = Convert.ToInt32(reader["ID"]);
                         cat.Naam = reader["Naam"].ToString();
-                        cat.Parent = Convert.ToInt32(reader["ParentCategorie"]);
+                        cat.Parent = Convert.ToInt32(reader["Categorie_ID"]);
                         catlist.Add(cat);
                     }
                 }

@@ -13,7 +13,9 @@ namespace EyeCT4EventsMVC.Models.Interfaces
     public interface ISocialMediaSharing
     {
         Categorie[] AlleCategorienOpvragen();
-
+        Categorie GetParentCategorie(int c);
+        List<Categorie> GetSubCategorien(Categorie cat, List<Categorie> catlist);
+        Categorie GetCategorieMetID(int ID);
         List<Media> AlleMediaOpvragen();
 
         List<Media> AlleGerapporteerdeMediaOpvragen();
