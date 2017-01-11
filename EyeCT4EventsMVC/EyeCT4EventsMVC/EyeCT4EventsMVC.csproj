@@ -217,6 +217,7 @@
     <Content Include="Views\Beheer\GerapporteerdeMedia.cshtml" />
     <Content Include="Views\SocialMedia\CategorieToevoegen.cshtml" />
     <Content Include="Views\SocialMedia\MediaToevoegen.cshtml" />
+    <Content Include="Views\Reservering\ReserveringSubmit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
