@@ -220,7 +220,6 @@
     <Content Include="Views\SocialMedia\MediaToevoegen.cshtml" />
     <Content Include="Views\Beheer\GerapporteerdeReactie.cshtml" />
     <Content Include="Views\Toegangs\Index.cshtml" />
-    <Content Include="Views\Reservering\ReserveringSubmit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
