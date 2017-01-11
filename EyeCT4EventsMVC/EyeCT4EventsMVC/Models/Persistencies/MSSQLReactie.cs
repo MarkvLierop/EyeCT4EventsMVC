@@ -13,14 +13,14 @@ namespace EyeCT4EventsMVC.Models.Persistencies
 {
     public class MSSQLReactie : MSSQLServer, IReactie 
     {
-        List<Reactie> reacties;
-        public List<Reactie> ReactieBijGerapporteerdeMedia()
+        public List<Reactie> ReactieBijMedia(int mediaID)
         {
-            reacties = new List<Reactie>();
+            List<Reactie> reacties = new List<Reactie>();
             Connect();
-            string query = "Select * From Reactie";
+            string query = "Select * From Reactie where Media_ID = @MediaID";
             using (command = new SqlCommand(query, sQLcon))
             {
+                command.Parameters.AddWithValue("@MediaID", mediaID);
                 reader = command.ExecuteReader();
                 while (reader.Read())
                 {
@@ -28,23 +28,6 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 }
             }
 
-            return reacties;
-        }
-
-        public List<Reactie> GerapporteerdeReactie()
-        {
-            reacties = new List<Reactie>();
-            Connect();
-            string query = "Select * from Reactie where Flagged > @AantalGerapporteerd;";
-            using(command = new SqlCommand(query, sQLcon))
-            {
-                command.Parameters.AddWithValue("@AantalGerapporteerd", 0);
-                reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    reacties.Add(CreateReactieFromReader(reader));
-                }
-            }
             return reacties;
         }
 

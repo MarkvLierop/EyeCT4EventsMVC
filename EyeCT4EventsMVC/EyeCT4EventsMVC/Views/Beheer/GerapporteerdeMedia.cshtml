@@ -5,39 +5,7 @@
 <!DOCTYPE Html>
 <html>
 <body>
-    <header>
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="@Url.Action("Index","Beheer")">Beheersysteem</a>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gerapporteerde: <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/Beheer/GerapporteerdeMedia">Media</a></li>
-                                <li><a href="/Beheer/GerapporteerdeReactie">Reactie</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="/Beheer/EventAanmaken">Event aanmaken</a></li>
-                        <li><a href="/Beheer/BeheerderAanmaken">Beheerder aanmaken</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
     <h2>Gerapporteerde Media</h2>
-    @((string)Session["ErrorMedia"])
     @foreach (var media in ViewBag.GerapporteerdeMedia)
     {
     <div class="panel panel-primary">
@@ -51,67 +19,38 @@
         <div class="panel-primary">
             <p>Aantal Likes: @media.Likes </p> 
             <p>Aantal keer Gerapporteerd: @media.Flagged </p>
-            @if (media.Type == "Afbeelding")
-            {
-                <img src="@Url.Action("LoadResource","SocialMedia", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" alt="@media.Pad" style="height:300px;width:auto" /><br />
-                <br />
-
-                <a href="@Url.Action("LoadResource","SocialMedia", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" target="_blank">Download @media.Type</a>
-            }
-            else if (media.Type == "Video")
-            {
-                if (media.GetBestandsExtentie() == ".mp4")
-                {
-                    <video width="400" controls>
-                        <source src="@Url.Action("LoadResource","SocialMedia", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" type="video/mp4">
-                        Your browser does not support HTML5 video.
-                    </video>
-                }
-                else
-                {
-                    <a href="@Url.Action("LoadResource","SocialMedia", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" target="_blank">Download @media.Type</a>
-                }
-            }
-            else if (media.Type == "Audio")
-            {
-                if (media.GetBestandsExtentie().ToLower() == ".mp3" || media.GetBestandsExtentie() == ".wav")
-                {
-                    <audio controls>
-                        <source src="@Url.Action("LoadResource", "SocialMedia",new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" type="audio/ogg">
-                        <source src="@Url.Action("LoadResource","SocialMedia", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" type="audio/mpeg">
-                        Your browser does not support the audio element.
-                    </audio>
-                }
-                else
-                {
-                    <a href="@Url.Action("LoadResource","SocialMedia", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" target="_blank">Download @media.Type</a>
-                }
-            }
-            <a href="@Url.Action("VerwijderenMedia","Beheer", new { mediaID = @media.ID})">Verwijderen</a>
-                <br />
+            <div class="col-sm-2">
+                <a href="@Url.Action("BekijkReacties","Beheer", new { MediaID = @media.ID})">Reacties</a>
+            </div>
+            <div class="col-sm-2">
+                <a href="@Url.Action("VerwijderenMedia","Beheer", new { mediaID = @media.ID})">Verwijderen</a>
+            </div>
         </div>
+        <ul>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reacties Bekijken</a>
+                <ul>
                 @foreach (var reactie in ViewBag.Reacties)
                 {
                     if (reactie.MediaID == media.ID)
                     {
-                            <div class="panel panel-primary" style="padding-left:10%;padding-right:10%;border:none;">
+                    <li>
+
+                            <div class="panel panel-primary">
                                 <div class="panel-heading">
                                     <h5 class="panel-title">@reactie.GeplaatstDoorGebruiker() heeft een reactie geplaatst</h5>
                                 </div>
                                 <div class="panel-body">
                                     @reactie.Inhoud
-                                    <p>Aantal Likes: @reactie.Likes</p>
-                                    <p>Aantal keer Gerapporteerd: @reactie.Flagged</p>
-                                    <a href="@Url.Action("VerwijderReactie","Beheer", new { reactieID = @reactie.ReactieID})">Verwijderen</a>
                                 </div>
                             </div>
-                    }
-                    else if (reactie.MediaID != media.ID)
-                    {
-                        @((string)Session["ErrorReactie"])
+                    </li>
                     }
                 }
-
+                </ul>
+            </li>
+        </ul>
+       
     </div>
     }
 </body>

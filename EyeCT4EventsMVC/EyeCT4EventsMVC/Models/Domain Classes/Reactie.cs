@@ -29,17 +29,18 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
 
         public int ReactieID { get; set; }
 
+        public int GebruikerID { get; private set; }
+
         public Reactie()
         {
             rg = new Repositories.RepositoryGebruiker(new MSSQLGebruiker());
-
         }
 
-        public Reactie(int reactieID, int geplaatsDoor, int mediaID, int likes, string inhoud, DateTime datumTijd)
+        public Reactie(int reactieID, int gebruikerID, int mediaID, int likes, string inhoud, DateTime datumTijd)
         {
             rg = new Repositories.RepositoryGebruiker(new MSSQLGebruiker());
             ReactieID = reactieID;
-            GeplaatstDoor = geplaatsDoor;
+            GebruikerID = gebruikerID;
             MediaID = mediaID;
             Likes = likes;
             Inhoud = inhoud;
@@ -56,16 +57,10 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
             return rg.GetGebruikerByID(GeplaatstDoor).ToString();
         }
 
-        public List<Reactie> ReactieBijGerapporteerdeMedia()
+        public List<Reactie> ReactieBijMedia(int mediaID)
         {
             repoReactie = new RepositoryReactie(new MSSQLReactie());
-            return repoReactie.ReactieBijGerapporteerdeMedia();
-        }
-
-        public List<Reactie> GerapporteerdeReactie()
-        {
-            repoReactie = new RepositoryReactie(new MSSQLReactie());
-            return repoReactie.GerapporteerdeReactie();
+            return repoReactie.ReactieBijMedia(mediaID);
         }
     }
 }
