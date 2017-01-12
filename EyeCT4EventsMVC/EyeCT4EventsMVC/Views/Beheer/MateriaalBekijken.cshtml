@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "MateriaalBekijken";
+    Layout = "~/Views/Shared/_NoHeaderLayout.cshtml";
+}
+<header>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="@Url.Action("Index","Beheer")">Beheersysteem</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/Beheer/GerapporteerdeMedia">Gerapporteerde Media</a></li>
+                    <li><a href="Toegangs/Index">Toegangscontrole</a></li>
+                    <li><a href="/Beheer/EventAanmaken">Event aanmaken</a></li>
+                    <li><a href="/Beheer/BeheerderAanmaken">Beheerder aanmaken</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Materiaal <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/Beheer/MateriaalToevoegen">Toevoegen</a></li>
+                            <li><a href="/Beheer/MateriaalBekijken">Bekijken</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/Gebruiker/Uitloggen">Uitloggen</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="form-group">
+    <div class="col-sm-10">
+        <h2>MateriaalBekijken</h2>
+        @((string)Session["GeenMateriaal"])
+    </div>
+</div>
+@foreach (var item in ViewBag.Materiaal)
+{
+    <form class="form-horizontal" method="post">
+        <div class="form-group">
+            <div class="col-sm-10">
+                <p>Naam: @item.Naam</p>
+            </div>
+            <div class="col-sm-10">
+                <p>Merk: @item.Merk</p>
+            </div>
+            <div class="col-sm-10">
+                <p>Categorie: @item.Categorie</p>
+            </div>
+            <div class="col-sm-10">
+                <p>Prijs: @item.Prijs</p>
+            </div>
+            <div class="col-sm-10">
+                <p>Aantal: @item.Aantal</p>
+            </div>
+        </div>
+    </form>
+}

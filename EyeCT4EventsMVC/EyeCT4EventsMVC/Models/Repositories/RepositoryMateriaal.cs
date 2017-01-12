@@ -19,11 +19,11 @@ namespace EyeCT4EventsMVC.Models.Repositories
             IM = im;
         }
 
-        public void ToevoegenMateriaal(string naam, decimal prijs, decimal voorraad)
+        public void ToevoegenMateriaal(Materiaal materiaal)
         {
-            IM.ToevoegenMateriaal(naam, prijs, voorraad);
+            IM.ToevoegenMateriaal(materiaal);
         }
-
+        
         public List<Materiaal> HaalMaterialenOp()
         {
             return IM.HaalMaterialenOp();
@@ -33,10 +33,20 @@ namespace EyeCT4EventsMVC.Models.Repositories
         {
             IM.ReserveerMateriaal(gebruikerid, materiaalid, aantal, datum);
         }
-
+        
         public void WerkVoorraadBij(int voorraad, int id)
         {
             IM.WerkVoorraadBij(voorraad, id);
+        }
+
+        public List<string> MateriaalCategorieën()
+        {
+            return IM.MateriaalCategorieën();
+        }
+
+        public int CategorieID(string categorie)
+        {
+            return IM.CategorieID(categorie);
         }
     }
 }

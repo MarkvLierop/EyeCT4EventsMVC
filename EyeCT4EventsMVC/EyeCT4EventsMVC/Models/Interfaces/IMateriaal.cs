@@ -11,12 +11,14 @@ namespace EyeCT4EventsMVC.Models.Interfaces
 {
     public interface IMateriaal
     {
-        List<Materiaal> HaalMaterialenOp();
+       List<Materiaal> HaalMaterialenOp();
 
-        void ReserveerMateriaal(int gebruikerid, int materiaalid, int aantal, DateTime datum);
+       void ReserveerMateriaal(int gebruikerid, int materiaalid, int aantal, DateTime datum);
 
-        void WerkVoorraadBij(int voorraad, int id);
+       void WerkVoorraadBij(int voorraad, int id);
 
-        void ToevoegenMateriaal(string naam, decimal prijs, decimal vooraad);
+       void ToevoegenMateriaal(Materiaal materiaal);
+        List<string> MateriaalCategorieën();
+        int CategorieID(string categorie);
     }
 }

@@ -170,5 +170,38 @@ namespace EyeCT4EventsMVC.Controllers
             return RedirectToAction("GerapporteerdeMedia", "Beheer");
         }
 
+        public ActionResult MateriaalToevoegen()
+        {
+            Materiaal materiaal = new Materiaal();
+            ViewBag.Categorieën = materiaal.MateriaalCategorieën();
+            return View();
+        }
+
+        public ActionResult VoegMateriaalToe(string Naam,string Merk, string categorie, decimal Prijs, int Aantal)
+        {
+            try
+            {
+                Materiaal materiaal = new Materiaal();
+                materiaal.Merk = Merk;
+                materiaal.Categorie = categorie;
+                materiaal.Naam = Naam;
+                materiaal.Prijs = Prijs;
+                materiaal.Aantal = Aantal;
+                materiaal.ToevoegenMateriaal(materiaal);
+                Session["Fout"] = "Materiaal is toegevoegd";
+            }
+            catch (Exception)
+            {
+                Session["Fout"] = "Er is iets misgegaan probeer opnieuw";
+            }
+            return RedirectToAction("MateriaalToevoegen", "Beheer");
+        }
+
+        public ActionResult MateriaalBekijken()
+        {
+            Materiaal materiaal = new Materiaal();
+            ViewBag.Materiaal = materiaal.HaalMateriaalOp();
+            return View();
+        }
     }
 }

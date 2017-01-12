@@ -328,7 +328,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 string query = "SELECT * FROM Media WHERE Flagged >= @VerbergThreshhold ORDER BY ID DESC";
                 using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.AddWithValue("@VerbergThreshhold", 0); //Moet nog aangepast worden
+                    command.Parameters.AddWithValue("@VerbergThreshhold", 5); //Moet nog aangepast worden
                     reader = command.ExecuteReader();
 
                     while (reader.Read())

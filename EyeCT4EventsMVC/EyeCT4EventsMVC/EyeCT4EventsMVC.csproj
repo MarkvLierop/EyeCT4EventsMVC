@@ -220,6 +220,8 @@
     <Content Include="Views\SocialMedia\MediaToevoegen.cshtml" />
     <Content Include="Views\Toegangs\Index.cshtml" />
     <Content Include="Views\SocialMedia\Events.cshtml" />
+    <Content Include="Views\Beheer\MateriaalToevoegen.cshtml" />
+    <Content Include="Views\Beheer\MateriaalBekijken.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
