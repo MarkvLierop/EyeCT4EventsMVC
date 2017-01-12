@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewBag.Title = "MateriaalToevoegen";
+    Layout = "~/Views/Shared/_NoHeaderLayout.cshtml";
+}
+<header>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="@Url.Action("Index","Beheer")">Beheersysteem</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li><a href="/Beheer/GerapporteerdeMedia">Gerapporteerde Media</a></li>
+                    <li><a href="Toegangs/Index">Toegangscontrole</a></li>
+                    <li><a href="/Beheer/EventAanmaken">Event aanmaken</a></li>
+                    <li><a href="/Beheer/AanwezigeBezoekers">Bezoekers</a></li>
+                    <li><a href="/Beheer/BeheerderAanmaken">Beheerder aanmaken</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Materiaal <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/Beheer/MateriaalToevoegen">Toevoegen</a></li>
+                            <li><a href="/Beheer/MateriaalBekijken">Bekijken</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/Gebruiker/Uitloggen">Uitloggen</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<h2>Materiaal Toevoegen</h2>
+@((string)Session["Fout"])
+<div class="container">
+    <form class="form-horizontal" role="form" action="/Beheer/VoegMateriaalToe">
+        <h2>Registreren</h2>
+        <div class="form-group">
+            <label for="type" class="col-sm-3 control-label">Categorie</label>
+            <div class="col-sm-9">
+                <select name="categorie">
+                        @foreach (string item in ViewBag.Categorieën)
+                        {
+                            <option>
+                                @item
+                            </option>
+                        }
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Voornaam" class="col-sm-3 control-label">Merk</label>
+            <div class="col-sm-9">
+                <input type="text" id="Voornaam" placeholder="Merk" class="form-control" name="Merk" autofocus required="" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Tussenvoegsel" class="col-sm-3 control-label">Naam</label>
+            <div class="col-sm-9">
+                <input type="text" id="Tussenvoegsel" placeholder="Naam" class="form-control" name="Naam" autofocus required="" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Achternaam" class="col-sm-3 control-label">Prijs</label>
+            <div class="col-sm-9">
+                <input type="number" step="0.01" id="Achternaam" placeholder="Prijs" class="form-control" name="Prijs" autofocus required="" />
+            </div> 
+        </div>
+        <div class="form-group">
+            <label for="email" class="col-sm-3 control-label">Aantal</label>
+            <div class="col-sm-9">
+                <input type="number" id="email" placeholder="Aantal" class="form-control" name="Aantal" autofocus required="" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-9 col-sm-offset-3">
+                <input type="submit" value="Invoeren" />
+            </div>
+        </div>
+    </form> <!-- /form -->
+</div>

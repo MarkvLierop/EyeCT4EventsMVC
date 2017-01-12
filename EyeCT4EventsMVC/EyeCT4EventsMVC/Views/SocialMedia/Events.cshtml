@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Events";
+    Layout = "~/Views/Shared/_NoHeaderLayout.cshtml";
+}
+
+<h2>Aankomende events.</h2>
+@ViewBag.Error
+
+@foreach (EyeCT4EventsMVC.Models.Domain_Classes.Event e in (List<EyeCT4EventsMVC.Models.Domain_Classes.Event>)ViewBag.Events)
+{
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3>@e.Titel</h3>
+            <div class="floatRight panel-heading">
+                <h5>Van: @e.DatumVan </h5>
+                <h5>Tot: @e.DatumTot</h5>
+                <h5>Locatie: @e.LocatieNaam</h5>
+            </div>
+        </div>
+        <div class="panel-body">
+            @e.Beschrijving
+        </div>
+    </div>
+}

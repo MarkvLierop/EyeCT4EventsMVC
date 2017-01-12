@@ -15,7 +15,20 @@ select,
 textarea {
     max-width: 100%;
 }
+/* Reset
+**************************************************************************/
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { margin: 1rem; }
+h1 { margin: 2rem 0 0; }
 
+
+/* Flexbox Example 
+**************************************************************************/
+.flexbox { display: flex; }
+.flexbox .stretch { flex: 1; }
+.flexbox .normal { flex: 0; margin: 0 0 0 1rem; }
+.flexbox div input { padding: .5em 1em; width: 100%; }
+.flexbox div button { padding: .5em 1em; white-space: nowrap; }
 #sidebar {
     float: left;
 }

@@ -21,7 +21,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Connect();
             try
             {
-                string query = "SELECT * FROM Materiaal WHERE HuidigeVoorraad > 0";
+                string query = "SELECT * FROM Materiaal WHERE Aantal > 0";
                 using (command = new SqlCommand(query, sQLcon))
                 {
                     reader = command.ExecuteReader();
@@ -31,9 +31,10 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         Materiaal materiaal = new Materiaal();
 
                         materiaal.MateriaalID = Convert.ToInt32(reader["ID"]);
-                        materiaal.Naam = reader["Naam"].ToString();
-                        materiaal.Prijs = Convert.ToInt32(reader["Prijs"]);
-                        materiaal.Voorraad = Convert.ToInt32(reader["HuidigeVoorraad"]);
+                        materiaal.Naam = reader["MateriaalType"].ToString();
+                        materiaal.Prijs = Convert.ToDecimal(reader["PrijsPerDag"]);
+                        materiaal.Aantal = Convert.ToInt32(reader["Aantal"]);
+                        materiaal.Merk = Convert.ToString(reader["Merk"]);
 
                         materialen.Add(materiaal);
                     }
@@ -172,16 +173,17 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Close();
         }
 
-        public void ToevoegenMateriaal(string naam, decimal prijs, decimal voorraad)
+        public void ToevoegenMateriaal(Materiaal materiaal)
         {
             Connect();
-            string query = "INSERT INTO Materiaal VALUES (@voorraad, @naam, @prijs)";
+            string query = "INSERT INTO Materiaal(MateriaalCategorie_ID, Merk, MateriaalType,PrijsPerDag,Aantal)Values(@MateriaalCategorie,@Merk,@MateriaalType,@Prijs,@Aantal)";
             using (command = new SqlCommand(query, sQLcon))
             {
-                command.Parameters.Add(new SqlParameter("@voorraad", voorraad));
-                command.Parameters.Add(new SqlParameter("@naam", naam));
-                command.Parameters.Add(new SqlParameter("@prijs", prijs));
-
+                command.Parameters.AddWithValue("@MateriaalCategorie", materiaal.CategorieID(materiaal.Categorie));
+                command.Parameters.AddWithValue("@Merk", materiaal.Merk);
+                command.Parameters.AddWithValue("@MateriaalType", materiaal.Naam);
+                command.Parameters.AddWithValue("@Prijs", materiaal.Prijs);
+                command.Parameters.AddWithValue("@Aantal", materiaal.Aantal);
                 command.ExecuteNonQuery();
             }
 
@@ -315,6 +317,38 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             }
 
             Close();
+        }
+        public List<string> MateriaalCategorieën()
+        {
+            List<string> categorieën = new List<string>();
+            Connect();
+            string query = "Select Categorie from MateriaalCategorie";
+            using (command = new SqlCommand(query, sQLcon))
+            {
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    categorieën.Add(Convert.ToString(reader["Categorie"]));
+                }
+            }
+            return categorieën;
+        }
+
+        public int CategorieID(string categorie)
+        {
+            int categorieID = 0;
+            Connect();
+            string query = "Select ID From MateriaalCategorie Where Categorie = @Categorie;";
+            using(command = new SqlCommand(query, sQLcon))
+            {
+                command.Parameters.AddWithValue("@Categorie", categorie);
+                reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    categorieID = Convert.ToInt32(reader["ID"]);
+                }
+            }
+            return categorieID;
         }
     }
 }

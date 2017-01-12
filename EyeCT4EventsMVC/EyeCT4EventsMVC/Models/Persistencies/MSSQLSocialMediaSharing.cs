@@ -79,13 +79,13 @@ namespace EyeCT4EventsMVC.Models.Persistencies
         private List<string> GetNietGeaccepteerdeWoorden()
         {
             List<string> nietGeaccepteerdeWoorden = new List<string>();
-          //using (StreamReader reader = new StreamReader("NietGeaccepteerdeWoorden.txt", false))
-          //{
-          //    while (!reader.EndOfStream)
-          //    {
-          //        nietGeaccepteerdeWoorden.Add(reader.ReadLine());
-          //    }
-          //}
+            using (StreamReader reader = new StreamReader("NietGeaccepteerdeWoorden.txt", false))
+            {
+                while (!reader.EndOfStream)
+                {
+                    nietGeaccepteerdeWoorden.Add(reader.ReadLine());
+                }
+            }
 
             return nietGeaccepteerdeWoorden;
         }
@@ -177,8 +177,8 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 Close();
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
-            return false;
             Close();
+            return false;
         }
         public List<Media> AlleMediaOpvragen()
         {
@@ -187,7 +187,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Connect();
             try
             {
-                string query = "SELECT * FROM Media WHERE Flagged > @VerbergThreshhold ORDER BY ID DESC";
+                string query = "SELECT * FROM Media WHERE Flagged < @VerbergThreshhold ORDER BY ID DESC";
                 using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@VerbergThreshhold", 10));   //AANPASSEN
@@ -328,7 +328,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 string query = "SELECT * FROM Media WHERE Flagged >= @VerbergThreshhold ORDER BY ID DESC";
                 using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.AddWithValue("@VerbergThreshhold", 0); //Moet nog aangepast worden
+                    command.Parameters.AddWithValue("@VerbergThreshhold", 5); //Moet nog aangepast worden
                     reader = command.ExecuteReader();
 
                     while (reader.Read())
@@ -844,6 +844,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         reactie.Flagged = Convert.ToInt32(reader["Flagged"]);
                         reactie.GeplaatstDoor = Convert.ToInt32(reader["Gebruiker_ID"]);
                         reactie.Inhoud = reader["Inhoud"].ToString();
+                        reactie.Likes = Convert.ToInt32(reader["Likes"]);
                         reactie.MediaID = Convert.ToInt32(reader["Media_ID"]);
                         reactie.ReactieID = Convert.ToInt32(reader["ID"]);
                         reactieLijst.Add(reactie);
@@ -943,7 +944,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Connect();
             try
             {
-                string query = "SELECT * FROM Event ORDER BY DatumVan DESC";
+                string query = "SELECT l.Naam, e.* FROM EventInfo e, Locatie l WHERE DatumVan > GETDATE() AND e.Locatie_ID = l.ID ORDER BY DatumVan DESC";
                 using (command = new SqlCommand(query, sQLcon))
                 {
                     reader = command.ExecuteReader();
@@ -952,8 +953,9 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                     {
                         Event e = new Event();
                         e.Beschrijving = reader["Beschrijving"].ToString();
+                        e.LocatieNaam = reader["Naam"].ToString();
                         e.Titel = reader["Titel"].ToString();
-                        e.Locatie = reader["Locatie"].ToString();
+                        e.Locatie = reader["Locatie_ID"].ToString();
                         e.ID = Convert.ToInt32(reader["ID"]);
                         e.DatumVan = Convert.ToDateTime(reader["DatumVan"]);
                         e.DatumTot = Convert.ToDateTime(reader["DatumTot"]);

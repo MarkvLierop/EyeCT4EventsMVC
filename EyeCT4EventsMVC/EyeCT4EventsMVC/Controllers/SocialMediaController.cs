@@ -28,8 +28,10 @@ namespace EyeCT4EventsMVC.Controllers
                 getParent(cat.Parent);
             }
         }
-        public ActionResult SocialMedia()
+        public ActionResult SocialMedia(bool login = false)  // SESSION AAPASSEN
         {
+            ViewBag.login = login;
+
             Gebruiker g = new Bezoeker();
             g.ID = 1;
             Session["Gebruiker"] = g;
@@ -135,10 +137,10 @@ namespace EyeCT4EventsMVC.Controllers
                     {
                         hoogsteID = rsms.SelectHoogsteMediaID().ID + 1;
                     }
-                    string directory = @"C:\AdwCleaner\" + hoogsteID.ToString() + @"\";  // MAP DIRECTORY AANPASSEN NAAR SERVER
+                    string directory = @"C:\ss\" + hoogsteID.ToString() + @"\";
 
                     // Map aanmapen
-                    System.IO.Directory.CreateDirectory(@"C:\AdwCleaner\" + hoogsteID.ToString() + @"\");
+                    System.IO.Directory.CreateDirectory(@"C:\ss\" + hoogsteID.ToString() + @"\");
 
                     // extract only the filename
                     var fileName = Path.GetFileName(file.FileName);
@@ -261,6 +263,19 @@ namespace EyeCT4EventsMVC.Controllers
 
             return RedirectToAction("SocialMedia");
         }
+        public ActionResult Events()
+        {
+            try
+            {
+                List<Event> list = rsms.AlleEventsOpvragen();
+                ViewBag.Events = list;
+            }
+            catch (Exception e)
+            {
+                ViewBag.Error = e.Message;
+            }
+            return View();
+        }
         public ActionResult LoadResource(string pad, string ext, string type)
         {
             if (type == "Afbeelding")
@@ -279,9 +294,16 @@ namespace EyeCT4EventsMVC.Controllers
         }
         public ActionResult DownloadResource(string pad)
         {
-            Response.AddHeader("Content-Disposition", "attachment;filename="+ pad);
-            Response.WriteFile(pad);
-            Response.End();
+            try
+            {
+                Response.AddHeader("Content-Disposition", "attachment;filename=" + pad);
+                Response.WriteFile(pad);
+                Response.End();
+            }
+            catch (Exception e)
+            {
+                ViewBag.Error = e.Message;
+            }
             return null;
         }
     }

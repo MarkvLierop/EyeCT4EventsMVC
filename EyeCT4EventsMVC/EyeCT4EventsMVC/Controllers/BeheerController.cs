@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using EyeCT4EventsMVC.Models.Domain_Classes;
 using EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers;
 using System.Data.SqlClient;
+using EyeCT4EventsMVC.Models.Repositories;
+using EyeCT4EventsMVC.Models.Persistencies;
 
 namespace EyeCT4EventsMVC.Controllers
 {
@@ -59,16 +61,18 @@ namespace EyeCT4EventsMVC.Controllers
         public ActionResult MaakBeheerderAan(string voornaam, string tussenvoegsel, string achternaam, string email, string gebruikersnaam, string wachtwoord, 
             string WachtwoordBevestigen, string type)
         {
+            //RepositoryActiveDirectory RepoAD = new RepositoryActiveDirectory(new ActiveDirectory());
             if (wachtwoord == WachtwoordBevestigen)
             {
                 try
                 {
+                    //RepoAD.GebruikerAanmaken(gebruikersnaam, wachtwoord);
                     if (type == "Beheerder")
                     {
                         gebruiker = new Beheerder(gebruiker);
                     }
 
-                    if (type == "Medewerker")
+                    else if (type == "Medewerker")
                     {
                         gebruiker = new Medewerker(gebruiker);
                     }
@@ -80,13 +84,22 @@ namespace EyeCT4EventsMVC.Controllers
                     gebruiker.Gebruikersnaam = gebruikersnaam;
                     gebruiker.Wachtwoord = wachtwoord;
                     gebruiker.GebruikerRegistreren(gebruiker);
-                    return RedirectToAction("Index", "Beheer");
+                    if (type == "Beheerder")
+                    {
+                        return RedirectToAction("Index", "Beheer");
+                    }
+
+                    else if(type == "Medewerker")
+                    {
+                        return RedirectToAction("Index", "Toegangs");
+                    }
+                    return View();
                 }
-                catch(SqlException)
-                {
-                    Session["Message"] = "Emailadres is al in gebruik";
-                    return RedirectToAction("BeheerderAanmaken", "Beheer");
-                }
+               catch(SqlException)
+               {
+                   Session["Message"] = "Emailadres is al in gebruik";
+                   return RedirectToAction("BeheerderAanmaken", "Beheer");
+               }
             }
 
             else
@@ -155,6 +168,47 @@ namespace EyeCT4EventsMVC.Controllers
                 }
             }
             return RedirectToAction("GerapporteerdeMedia", "Beheer");
+        }
+
+        public ActionResult MateriaalToevoegen()
+        {
+            Materiaal materiaal = new Materiaal();
+            ViewBag.Categorieën = materiaal.MateriaalCategorieën();
+            return View();
+        }
+
+        public ActionResult VoegMateriaalToe(string Naam,string Merk, string categorie, decimal Prijs, int Aantal)
+        {
+            try
+            {
+                Materiaal materiaal = new Materiaal();
+                materiaal.Merk = Merk;
+                materiaal.Categorie = categorie;
+                materiaal.Naam = Naam;
+                materiaal.Prijs = Prijs;
+                materiaal.Aantal = Aantal;
+                materiaal.ToevoegenMateriaal(materiaal);
+                Session["Fout"] = "Materiaal is toegevoegd";
+            }
+            catch (Exception)
+            {
+                Session["Fout"] = "Er is iets misgegaan probeer opnieuw";
+            }
+            return RedirectToAction("MateriaalToevoegen", "Beheer");
+        }
+
+        public ActionResult MateriaalBekijken()
+        {
+            Materiaal materiaal = new Materiaal();
+            ViewBag.Materiaal = materiaal.HaalMateriaalOp();
+            return View();
+        }
+
+        public ActionResult AanwezigeBezoekers()
+        {
+            RepositoryGebruiker RepoGebruiker = new RepositoryGebruiker(new MSSQLGebruiker());
+            ViewBag.Aanwezig = RepoGebruiker.LijstAanwezigeBezoekers();
+            return View();
         }
     }
 }

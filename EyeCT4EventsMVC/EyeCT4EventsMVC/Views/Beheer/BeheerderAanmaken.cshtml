@@ -26,15 +26,19 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
+                        <li><a href="/Beheer/GerapporteerdeMedia">Gerapporteerde Media</a></li>
+                        <li><a href="Toegangs/Index">Toegangscontrole</a></li>
+                        <li><a href="/Beheer/EventAanmaken">Event aanmaken</a></li>
+                        <li><a href="/Beheer/AanwezigeBezoekers">Bezoekers</a></li>
+                        <li><a href="/Beheer/BeheerderAanmaken">Beheerder aanmaken</a></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gerapporteerde: <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Materiaal <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="/Beheer/GerapporteerdeMedia">Media</a></li>
-                                <li><a href="/Beheer/GerapporteerdeReactie">Reactie</a></li>
+                                <li><a href="/Beheer/MateriaalToevoegen">Toevoegen</a></li>
+                                <li><a href="/Beheer/MateriaalBekijken">Bekijken</a></li>
                             </ul>
                         </li>
-                        <li><a href="/Beheer/EventAanmaken">Event aanmaken</a></li>
-                        <li><a href="/Beheer/BeheerderAanmaken">Beheerder aanmaken</a></li>
+                        <li><a href="/Gebruiker/Uitloggen">Uitloggen</a></li>
                     </ul>
                 </div>
             </div>
@@ -60,7 +64,7 @@
             <div class="form-group">
                 <label for="Voornaam" class="col-sm-3 control-label">Voornaam</label>
                 <div class="col-sm-9">
-                    <input type="text" id="Voornaam" placeholder="Voornaam" class="form-control" name="Voornaam" autofocus />
+                    <input type="text" id="Voornaam" placeholder="Voornaam" class="form-control" name="Voornaam" autofocus required="" />
                 </div>
             </div>
             <div class="form-group">
@@ -72,39 +76,40 @@
             <div class="form-group">
                 <label for="Achternaam" class="col-sm-3 control-label">Achternaam</label>
                 <div class="col-sm-9">
-                    <input type="text" id="Achternaam" placeholder="Achternaam" class="form-control" name="Achternaam" autofocus />
+                    <input type="text" id="Achternaam" placeholder="Achternaam" class="form-control" name="Achternaam" autofocus required="" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="email" class="col-sm-3 control-label">Email</label>
                 <div class="col-sm-9">
-                    <input type="email" id="email" placeholder="Email" class="form-control" name="Email" autofocus />
+                    <input type="email" id="email" placeholder="Email" class="form-control" name="Email" autofocus required="" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="Gebruikersnaam" class="col-sm-3 control-label">Gebruikersnaam</label>
                 <div class="col-sm-9">
-                    <input type="text" id="gebruikersnaam" placeholder="Gebruikersnaam" class="form-control" name="Gebruikersnaam"/>
+                    <input type="text" id="gebruikersnaam" placeholder="Gebruikersnaam" class="form-control" name="Gebruikersnaam" required=""/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="Wachtwoord" class="col-sm-3 control-label">Wachtwoord</label>
                 <div class="col-sm-9">
-                    <input type="password" id="Wachtwoord" placeholder="Wachtwoord" class="form-control" name="Wachtwoord" autofocus />
+                    <input type="password" id="Wachtwoord" placeholder="Wachtwoord" class="form-control" name="Wachtwoord" autofocus required=""/>
                 </div>
             </div>
             <div class="form-group">
                 <label for="WachtwoordBevestigen" class="col-sm-3 control-label">Wachtwoord bevestigen</label>
                 <div class="col-sm-9">
-                    <input type="password" id="WachtwoordBevestigen" placeholder="Wachtwoord bevestigen" name="WachtwoordBevestigen" class="form-control" autofocus />
+                    <input type="password" id="WachtwoordBevestigen" placeholder="Wachtwoord bevestigen" name="WachtwoordBevestigen" class="form-control" autofocus required=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-9 col-sm-offset-3">
+                    <input type="submit" value="Invoeren" />
                 </div>
             </div>
       
-            <div class="form-group">
-                <div class="col-sm-9 col-sm-offset-3">
-                    <button type="submit" class="btn btn-primary btn-block">Aanmaken</button>
-                </div>
-            </div>
+            
         </form> <!-- /form -->
     </div> <!-- ./container -->
 </body>

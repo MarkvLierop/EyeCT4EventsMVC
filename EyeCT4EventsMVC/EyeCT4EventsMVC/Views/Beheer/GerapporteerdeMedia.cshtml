@@ -22,15 +22,19 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
+                        <li><a href="/Beheer/GerapporteerdeMedia">Gerapporteerde Media</a></li>
+                        <li><a href="Toegangs/Index">Toegangscontrole</a></li>
+                        <li><a href="/Beheer/EventAanmaken">Event aanmaken</a></li>
+                        <li><a href="/Beheer/AanwezigeBezoekers">Bezoekers</a></li>
+                        <li><a href="/Beheer/BeheerderAanmaken">Beheerder aanmaken</a></li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Gerapporteerde: <span class="caret"></span></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Materiaal <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="/Beheer/GerapporteerdeMedia">Media</a></li>
-                                <li><a href="/Beheer/GerapporteerdeReactie">Reactie</a></li>
+                                <li><a href="/Beheer/MateriaalToevoegen">Toevoegen</a></li>
+                                <li><a href="/Beheer/MateriaalBekijken">Bekijken</a></li>
                             </ul>
                         </li>
-                        <li><a href="/Beheer/EventAanmaken">Event aanmaken</a></li>
-                        <li><a href="/Beheer/BeheerderAanmaken">Beheerder aanmaken</a></li>
+                        <li><a href="/Gebruiker/Uitloggen">Uitloggen</a></li>
                     </ul>
                 </div>
             </div>
@@ -108,7 +112,7 @@
                     }
                     else if (reactie.MediaID != media.ID)
                     {
-                        @((string)Session["ErrorReactie"])
+                        
                     }
                 }
 
