@@ -30,5 +30,14 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         public Reservering()
         {
         }
+
+        public Reservering(List<Gebruiker> GebruikerList, DateTime DatumTot, DateTime DatumVan, int KampeerplaatsID, bool Betaald)
+        {
+            this.GebruikerList = GebruikerList;
+            this.DatumVan = DatumVan;
+            this.DatumTot = DatumTot;
+            this.KampeerplaatsID = KampeerplaatsID;
+            this.Betaald = Betaald;
+        }
     }
 }

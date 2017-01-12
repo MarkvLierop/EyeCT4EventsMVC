@@ -12,6 +12,7 @@ using EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers;
 using EyeCT4EventsMVC.Models.Exceptions;
 using EyeCT4EventsMVC.Models.Interfaces;
 
+
 namespace EyeCT4EventsMVC.Models.Persistencies
 {
     public class MSSQLGebruiker : MSSQLServer, IGebruikerAdministratie
@@ -408,6 +409,21 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             return gebruikerBestaat;
         }
 
+        public void GebruikerAanmaken(Gebruiker gebruiker)
+        {
+            string wachtwoord = System.Web.Security.Membership.GeneratePassword(8, 2);
+            Connect();
+            string query = "INSERT INTO gebruiker(Gebruikersnaam,Wachtwoord, Emailadres)" + "Values('" + gebruiker.Gebruikersnaam + "', '" + wachtwoord + "', '" + gebruiker.Email + "')";
+            try
+            {
+                command.ExecuteNonQuery();
+            }
+            catch(Exception)
+            {
+                
+            }
+            Close();
+        }
         public void GebruikerRegistreren(Gebruiker gebruiker)
         {
             Connect();

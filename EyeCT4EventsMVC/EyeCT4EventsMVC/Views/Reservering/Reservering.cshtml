@@ -4,39 +4,36 @@
     ViewBag.Title = "Reservering";
 }
 <h2>Reservering</h2>
-<form>
-    <div class="form-group">
-        <label for="AantalPersonen">Aantal Personen</label>
-        <input type="number" class="form-control" id="AantalPersonen">
-    </div>
-    <div class="form-group">
-        <label for="inputName">Naam</label>
-        <input type="text" class="form-control" id="inputName" placeholder="Naam">
-        <label for="InputEmail">Emailadres</label>
-        <input type="email" class="form-control" id="InputEmail" placeholder="Emailadres" />
-    </div>
-    <div class="form-group">
-        <label for="DatumVan">Start Datum</label>
-        <input type="date" class="form-control" id="DatumVan">
-    </div>
-    <div class="form-group">
-        <label for="DatumTot">Eind Datum</label>
-        <input type="date" class="form-control" id="DatumTot">
-    </div>
+    <form method="get" action="@Url.Action("ReserverenSubmit", new { AantalPersonen = Request.QueryString["AantalPersonen"] })">
+        <div class="form-group">
+            <label for="AantalPersonen">Aantal Personen</label>
+            <input type="number" class="form-control" name="AantalPersonen">
+        </div>
+        <div class="form-group">
+            <label for="DatumVan">Start Datum</label>
+            <input type="date" class="form-control" name="DatumVan">
+        </div>
+        <div class="form-group">
+            <label for="DatumTot">Eind Datum</label>
+            <input type="date" class="form-control" name="DatumTot">
+        </div>
 
-    <div class="floatRight">
-        <a target="_blank" href="Camping_ReëenDal.PNG">
-            <img src="~/Resources/Camping_ReeënDal.png" alt="CampingPlattegrond" width="500" height="600">
-        </a>
-    </div>
-    <div>
-        <select>
-            @foreach (Kampeerplaats k in (List<Kampeerplaats>)ViewBag.AlleKampeerplaatsen)
+        <div class="floatRight">
+            <a target="_blank" href="Camping_ReëenDal.PNG">
+                <img src="~/Resources/Camping_ReeënDal.png" alt="CampingPlattegrond" width="500" height="600">
+            </a>
+        </div>
+        <div>
+            <select name="nummer">
+                @foreach (Kampeerplaats k in (List<Kampeerplaats>)ViewBag.AlleKampeerplaatsen)
             {
-                <option value="Kampeerplaats" name="Kampeerplek">@k.Nummer, @k.Type, @k.MaxPersonen</option>
-            }
+                    <option value="@k.Nummer, @k.Type, @k.MaxPersonen" name="nummer">@k.Nummer, @k.Type, @k.MaxPersonen</option>
+                }
 
-        </select>
-    </div>
-
-</form>
+            </select>
+        </div>
+        <div class="form-group">
+                    <input type="submit" value="Ga Verder" class="form-control" />
+            
+        </div>
+    </form>

@@ -188,15 +188,15 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Close();
         }
 
-        public void ReserveringPlaatsen(int gebruikerid, int plaatsid, DateTime datumVan, DateTime datumTot)
+        public void ReserveringPlaatsen(int inputName, int nummer, DateTime datumVan, DateTime datumTot)
         {
-            int userid = gebruikerid;
-            int id = plaatsid;
+            int userid = inputName;
+            int id = nummer;
             DateTime dvan = datumVan;
             DateTime dtot = datumTot;
-
+            
             Connect();
-            string query = "INSERT INTO Reservering VALUES (@KampeerPlaats, @GebruikrID, @DatumVan, @DatumTot, @Betaling)";
+            string query = "INSERT INTO Reservering VALUES (select ID from Kampeerplaats where Nummer = Nummer)@KampeerPlaats,(select ID from Gebruiker where emailadres = emailadres)@GebruikrID, @DatumVan, @DatumTot, @Betaling)";
             using (command = new SqlCommand(query, sQLcon))
             {
                 command.Parameters.Add(new SqlParameter("@KampeerPlaats", id));
