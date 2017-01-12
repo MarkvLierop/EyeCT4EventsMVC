@@ -85,9 +85,8 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             try
             {
                 DirectoryEntry childEntry = ouEntry.Children.Add("CN=" + userName, "user");
-                childEntry.CommitChanges();
-                ouEntry.CommitChanges();
-                childEntry.Invoke("SetPassword", new object[] { "EyeCT4Events" });
+                ouEntry.Username = userName;
+                ouEntry.Password = userPassword;
                 childEntry.CommitChanges();
             }
             catch (Exception)

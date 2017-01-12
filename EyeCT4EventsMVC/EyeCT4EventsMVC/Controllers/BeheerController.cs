@@ -9,6 +9,8 @@ using System.Web.Mvc;
 using EyeCT4EventsMVC.Models.Domain_Classes;
 using EyeCT4EventsMVC.Models.Domain_Classes.Gebruikers;
 using System.Data.SqlClient;
+using EyeCT4EventsMVC.Models.Repositories;
+using EyeCT4EventsMVC.Models.Persistencies;
 
 namespace EyeCT4EventsMVC.Controllers
 {
@@ -59,16 +61,18 @@ namespace EyeCT4EventsMVC.Controllers
         public ActionResult MaakBeheerderAan(string voornaam, string tussenvoegsel, string achternaam, string email, string gebruikersnaam, string wachtwoord, 
             string WachtwoordBevestigen, string type)
         {
+            //RepositoryActiveDirectory RepoAD = new RepositoryActiveDirectory(new ActiveDirectory());
             if (wachtwoord == WachtwoordBevestigen)
             {
                 try
                 {
+                    //RepoAD.GebruikerAanmaken(gebruikersnaam, wachtwoord);
                     if (type == "Beheerder")
                     {
                         gebruiker = new Beheerder(gebruiker);
                     }
 
-                    if (type == "Medewerker")
+                    else if (type == "Medewerker")
                     {
                         gebruiker = new Medewerker(gebruiker);
                     }
@@ -80,13 +84,22 @@ namespace EyeCT4EventsMVC.Controllers
                     gebruiker.Gebruikersnaam = gebruikersnaam;
                     gebruiker.Wachtwoord = wachtwoord;
                     gebruiker.GebruikerRegistreren(gebruiker);
-                    return RedirectToAction("Index", "Beheer");
+                    if (type == "Beheerder")
+                    {
+                        return RedirectToAction("Index", "Beheer");
+                    }
+
+                    else if(type == "Medewerker")
+                    {
+                        return RedirectToAction("Index", "Toegangs");
+                    }
+                    return View();
                 }
-                catch(SqlException)
-                {
-                    Session["Message"] = "Emailadres is al in gebruik";
-                    return RedirectToAction("BeheerderAanmaken", "Beheer");
-                }
+               catch(SqlException)
+               {
+                   Session["Message"] = "Emailadres is al in gebruik";
+                   return RedirectToAction("BeheerderAanmaken", "Beheer");
+               }
             }
 
             else
@@ -156,5 +169,6 @@ namespace EyeCT4EventsMVC.Controllers
             }
             return RedirectToAction("GerapporteerdeMedia", "Beheer");
         }
+
     }
 }
