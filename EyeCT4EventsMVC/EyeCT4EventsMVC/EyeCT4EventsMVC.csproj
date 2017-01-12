@@ -219,6 +219,7 @@
     <Content Include="Views\SocialMedia\CategorieToevoegen.cshtml" />
     <Content Include="Views\SocialMedia\MediaToevoegen.cshtml" />
     <Content Include="Views\Toegangs\Index.cshtml" />
+    <Content Include="Views\SocialMedia\Events.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

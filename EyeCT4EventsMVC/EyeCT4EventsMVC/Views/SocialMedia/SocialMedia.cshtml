@@ -5,6 +5,28 @@
     ViewBag.Title = "Social Media Sharing";
 
     int weergeefAantal = 2;
+    if ((bool)ViewBag.login)
+    {
+        <script>
+            // OPEN EVENT TAB
+            window.open("Events");
+            var query = window.location.search.substring(1)
+
+            // CLEAR URL PARAMETERS
+            if (query.length) {
+                if (window.history != undefined && window.history.pushState != undefined) {
+                    window.history.pushState({}, document.title, window.location.pathname);
+                }
+            }
+            $(document).ready(function () {
+                var classes = ["form-control"]; // the classes you want to add
+                $('.test').each(function (i) { // the element(s) you want to add the class to.
+                    $(this).addClass(classes[Math.floor(Math.random() * classes.length)]);
+                });
+            });
+            
+        </script>
+    }
 }
 <h2>Social Media Sharing</h2>
 
@@ -26,7 +48,7 @@
         
         <form method="get" action="@Url.Action("SocialMedia", "SocialMedia")">
             <input type="submit" value="Zoeken" class="btn btn-default"/><br/>
-            <input type="text" name="categorie" /> <br/>
+            <input type="text" name="categorie" id="test" /> <br/>
         </form>
         <b><a href="~/SocialMedia/SocialMedia">Alle media weergeven</a></b><br />
         @foreach (Categorie c in (Categorie[])ViewBag.Categorien)
@@ -67,9 +89,9 @@
 @foreach (Media media in (List<Media>)ViewBag.AlleMedia)
 {
     bool weergeven = true;
-    <div class="panel panel-primary">
+    <div class="panel" id="">
         <div class="panel-heading">
-            <h3 class="panel-title">@media.GeplaatstDoorGebruiker() heeft @media.Type geplaatst</h3>
+            <h3 class="panel-title">@media.GeplaatstDoorGebruiker() heeft een @media.Type gedeeld</h3>
             <form method="post">
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target='#@(@media.ID + media.ID)'>Reageer</button>
                 @Html.ActionLink("Likes: " + @media.Likes, "LikeMedia", new { mediaID = media.ID }, new { @class = "btn btn-default floatRight" })
@@ -87,7 +109,7 @@
                 <img src="@Url.Action("LoadResource", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" alt="@media.Pad" style="height:300px;width:auto" /><br />
                 <br />
 
-                <a href="@Url.Action("DownloadResoure", new { pad = media.Pad, ext = media.GetBestandsExtentie(), type = media.Type })" target="_blank">Download @media.Type</a>
+                <a href="@Url.Action("DownloadResource", new { pad = media.Pad })">Download @media.Type</a>
             }
             else if (media.Type == "Video")
             {
