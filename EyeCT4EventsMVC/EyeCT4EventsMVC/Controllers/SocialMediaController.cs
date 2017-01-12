@@ -137,10 +137,10 @@ namespace EyeCT4EventsMVC.Controllers
                     {
                         hoogsteID = rsms.SelectHoogsteMediaID().ID + 1;
                     }
-                    string directory = @"C:\AdwCleaner\" + hoogsteID.ToString() + @"\";  // MAP DIRECTORY AANPASSEN NAAR SERVER
+                    string directory = @"C:\ss\" + hoogsteID.ToString() + @"\";
 
                     // Map aanmapen
-                    System.IO.Directory.CreateDirectory(@"C:\AdwCleaner\" + hoogsteID.ToString() + @"\");
+                    System.IO.Directory.CreateDirectory(@"C:\ss\" + hoogsteID.ToString() + @"\");
 
                     // extract only the filename
                     var fileName = Path.GetFileName(file.FileName);

@@ -79,13 +79,13 @@ namespace EyeCT4EventsMVC.Models.Persistencies
         private List<string> GetNietGeaccepteerdeWoorden()
         {
             List<string> nietGeaccepteerdeWoorden = new List<string>();
-          //using (StreamReader reader = new StreamReader("NietGeaccepteerdeWoorden.txt", false))
-          //{
-          //    while (!reader.EndOfStream)
-          //    {
-          //        nietGeaccepteerdeWoorden.Add(reader.ReadLine());
-          //    }
-          //}
+            using (StreamReader reader = new StreamReader("NietGeaccepteerdeWoorden.txt", false))
+            {
+                while (!reader.EndOfStream)
+                {
+                    nietGeaccepteerdeWoorden.Add(reader.ReadLine());
+                }
+            }
 
             return nietGeaccepteerdeWoorden;
         }
@@ -844,6 +844,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         reactie.Flagged = Convert.ToInt32(reader["Flagged"]);
                         reactie.GeplaatstDoor = Convert.ToInt32(reader["Gebruiker_ID"]);
                         reactie.Inhoud = reader["Inhoud"].ToString();
+                        reactie.Likes = Convert.ToInt32(reader["Likes"]);
                         reactie.MediaID = Convert.ToInt32(reader["Media_ID"]);
                         reactie.ReactieID = Convert.ToInt32(reader["ID"]);
                         reactieLijst.Add(reactie);
