@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "MateriaalBekijken";
+    ViewBag.Title = "AanwezigeBezoekers";
     Layout = "~/Views/Shared/_NoHeaderLayout.cshtml";
 }
 <header>
@@ -38,31 +38,28 @@
         </div>
     </nav>
 </header>
-<div class="form-group">
-    <div class="col-sm-10">
-        <h2>MateriaalBekijken</h2>
-        @((string)Session["GeenMateriaal"])
+<h2>Aanwezige Bezoekers</h2>
+<div class="row">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Naam Bezoeker</th>
+                    <th>Aanwezig</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.Aanwezig)
+                {
+                    <tr>
+                        <td>@item.Voornaam @item.Tussenvoegsel @item.Achternaam</td>
+                        <td>@item.Aanwezig</td>
+                        <td>@item.Email</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
-@foreach (var item in ViewBag.Materiaal)
-{
-    <form class="form-horizontal" method="post">
-        <div class="form-group">
-            <div class="col-sm-10">
-                <p>Naam: @item.Naam</p>
-            </div>
-            <div class="col-sm-10">
-                <p>Merk: @item.Merk</p>
-            </div>
-            <div class="col-sm-10">
-                <p>Categorie: @item.Categorie</p>
-            </div>
-            <div class="col-sm-10">
-                <p>Prijs: @item.Prijs</p>
-            </div>
-            <div class="col-sm-10">
-                <p>Aantal: @item.Aantal</p>
-            </div>
-        </div>
-    </form>
-}
+

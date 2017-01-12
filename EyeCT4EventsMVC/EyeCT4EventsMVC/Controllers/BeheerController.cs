@@ -203,5 +203,12 @@ namespace EyeCT4EventsMVC.Controllers
             ViewBag.Materiaal = materiaal.HaalMateriaalOp();
             return View();
         }
+
+        public ActionResult AanwezigeBezoekers()
+        {
+            RepositoryGebruiker RepoGebruiker = new RepositoryGebruiker(new MSSQLGebruiker());
+            ViewBag.Aanwezig = RepoGebruiker.LijstAanwezigeBezoekers();
+            return View();
+        }
     }
 }

@@ -222,6 +222,7 @@
     <Content Include="Views\SocialMedia\Events.cshtml" />
     <Content Include="Views\Beheer\MateriaalToevoegen.cshtml" />
     <Content Include="Views\Beheer\MateriaalBekijken.cshtml" />
+    <Content Include="Views\Beheer\AanwezigeBezoekers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
