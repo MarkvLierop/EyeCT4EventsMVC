@@ -28,25 +28,41 @@ namespace EyeCT4EventsMVC.Controllers
         [HttpPost]
         public ActionResult Login(string gebruikersnaam, string wachtwoord)
         {
-            RepositoryActiveDirectory rad = new RepositoryActiveDirectory(new ActiveDirectory());
+            //RepositoryActiveDirectory rad = new RepositoryActiveDirectory(new ActiveDirectory());
             RepositoryGebruiker rg = new RepositoryGebruiker(new MSSQLGebruiker());
 
             try
             {
-                if (rad.Inloggen(gebruikersnaam, wachtwoord))
+                Gebruiker gebruiker = rg.GebruikerInloggen(gebruikersnaam, wachtwoord);
+                if (gebruiker.ID != 0)
                 {
                     //// if gebruiker heeft polsbandje, naar social media. Anders naar registreer pagina
                     Session["Gebruiker"] = rg.GetGebruikerByGebruikersnaam(gebruikersnaam);
+                    if (gebruiker.GetGebruikerType() == "Bezoeker")
+                    {
+                        return RedirectToAction("SocialMedia", "SocialMedia");
+                    }
+                    else if(gebruiker.GetGebruikerType() == "Beheerder")
+                    {
+                        return RedirectToAction("Index", "Beheer");
+                    }
 
-                    return RedirectToAction("SocialMedia", "SocialMedia");
+                    else if(gebruiker.GetGebruikerType() == "Medewerker")
+                    {
+                        return RedirectToAction("Index", "Toegangs");
+                    }
                 }
             }
             catch (Exception e)
             {
-                ViewBag.Error = e.Message;
+                ViewBag.Error = "Email en/of wachtwoord komen niet overeen";
             }
-
             return View();
+        }
+
+        public ActionResult Uitloggen()
+        {
+            return RedirectToAction("Login", "Gebruiker");
         }
     }
 }

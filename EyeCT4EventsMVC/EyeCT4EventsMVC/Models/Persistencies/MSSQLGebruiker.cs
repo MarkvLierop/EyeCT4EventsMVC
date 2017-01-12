@@ -286,8 +286,8 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 string query = "SELECT * FROM Gebruiker WHERE gebruikersnaam = @Gebruiker AND Wachtwoord = @Wachtwoord";
                 using (command = new SqlCommand(query, sQLcon))
                 {
-                    command.Parameters.Add(new SqlParameter("@Gebruiker", gebruikersnaam));
-                    command.Parameters.Add(new SqlParameter("@Wachtwoord", EncryptString(wachtwoord)));
+                    command.Parameters.AddWithValue("@Gebruiker", gebruikersnaam);
+                    command.Parameters.AddWithValue("@Wachtwoord",EncryptString(wachtwoord));
                     reader = command.ExecuteReader();
 
                     while (reader.Read())
@@ -306,12 +306,6 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                         }
 
                         gebruiker.ID = Convert.ToInt32(reader["ID"]);
-
-                        if (reader["RFID"].GetType() != typeof(DBNull))
-                        {
-                            gebruiker.RFID = Convert.ToInt32(reader["RFID"]);
-                        }
-
                         gebruiker.Gebruikersnaam = reader["Gebruikersnaam"].ToString();
                         gebruiker.Wachtwoord = reader["Wachtwoord"].ToString();
                         gebruiker.Voornaam = reader["Voornaam"].ToString();
@@ -415,7 +409,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 "VALUES (@Wachtwoord,@Voornaam, @Tussenvoegsel, @Achternaam, @GebruikerType, @Aanwezig,@Emailadres,@Gebruikersnaam)";
             using (command = new SqlCommand(query, sQLcon))
             {
-                command.Parameters.AddWithValue("@Wachtwoord", gebruiker.Wachtwoord);
+                command.Parameters.AddWithValue("@Wachtwoord",EncryptString(gebruiker.Wachtwoord));
                 command.Parameters.AddWithValue("@Voornaam", gebruiker.Voornaam);
                 command.Parameters.AddWithValue("@Tussenvoegsel", gebruiker.Tussenvoegsel);
                 command.Parameters.AddWithValue("@Achternaam", gebruiker.Achternaam);
