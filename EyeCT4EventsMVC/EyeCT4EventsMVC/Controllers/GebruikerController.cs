@@ -38,7 +38,7 @@ namespace EyeCT4EventsMVC.Controllers
                     //// if gebruiker heeft polsbandje, naar social media. Anders naar registreer pagina
                     Session["Gebruiker"] = rg.GetGebruikerByGebruikersnaam(gebruikersnaam);
 
-                    return RedirectToAction("SocialMedia", "SocialMedia");
+                    return RedirectToAction("SocialMedia", "SocialMedia", new { login = true });
                 }
             }
             catch (Exception e)

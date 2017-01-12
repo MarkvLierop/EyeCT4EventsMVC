@@ -29,6 +29,7 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         public int LocatieID { get; set; }
 
         private RepositoryEvent repoEvent;
+        private RepositoryLocatie replocatie;
         private Locatie locatie;
 
         public Event()
@@ -85,7 +86,20 @@ namespace EyeCT4EventsMVC.Models.Domain_Classes
         {
             return Titel + "\n Van: " + DatumVan + "\n Locatie: " + Locatie + "\n";
         }
+        public string GetLocatieNaam()
+        {
+            replocatie = new RepositoryLocatie(new MSSQLLocatie());
+            List<Locatie> l = replocatie.AlleLocaties();
 
+            foreach (Locatie locatie in l)
+            {
+                if (locatie.ID == this.LocatieID)
+                {
+                    LocatieNaam = locatie.Naam;
+                }
+            }
+            return LocatieNaam;
+        }
         public string BeschrijvingInsertEnters()
         {
             string beschrijving = Beschrijving;

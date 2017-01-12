@@ -177,8 +177,8 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                 Close();
                 throw new FoutBijUitvoerenQueryException(e.Message);
             }
-            return false;
             Close();
+            return false;
         }
         public List<Media> AlleMediaOpvragen()
         {
@@ -187,7 +187,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Connect();
             try
             {
-                string query = "SELECT * FROM Media WHERE Flagged > @VerbergThreshhold ORDER BY ID DESC";
+                string query = "SELECT * FROM Media WHERE Flagged < @VerbergThreshhold ORDER BY ID DESC";
                 using (command = new SqlCommand(query, sQLcon))
                 {
                     command.Parameters.Add(new SqlParameter("@VerbergThreshhold", 10));   //AANPASSEN
@@ -943,7 +943,7 @@ namespace EyeCT4EventsMVC.Models.Persistencies
             Connect();
             try
             {
-                string query = "SELECT * FROM Event ORDER BY DatumVan DESC";
+                string query = "SELECT l.Naam, e.* FROM EventInfo e, Locatie l WHERE DatumVan > GETDATE() AND e.Locatie_ID = l.ID ORDER BY DatumVan DESC";
                 using (command = new SqlCommand(query, sQLcon))
                 {
                     reader = command.ExecuteReader();
@@ -952,8 +952,9 @@ namespace EyeCT4EventsMVC.Models.Persistencies
                     {
                         Event e = new Event();
                         e.Beschrijving = reader["Beschrijving"].ToString();
+                        e.LocatieNaam = reader["Naam"].ToString();
                         e.Titel = reader["Titel"].ToString();
-                        e.Locatie = reader["Locatie"].ToString();
+                        e.Locatie = reader["Locatie_ID"].ToString();
                         e.ID = Convert.ToInt32(reader["ID"]);
                         e.DatumVan = Convert.ToDateTime(reader["DatumVan"]);
                         e.DatumTot = Convert.ToDateTime(reader["DatumTot"]);
